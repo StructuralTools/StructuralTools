@@ -56,7 +56,7 @@ def convert_to_unit(value):
                 warnings.warn(f"{value} was not evaluated as a unit")
     return value
 
-def get_table_entry(filepath, index) -> dict:
+def get_table_entry(filepath, index: str) -> dict:
     """Returns the specified row from a csv file as a dict. String values that
     are likely to be numeric or contain Pint quantities are evaluated with
     convert_to_unit. A "with" context handler does not need to be used when
@@ -68,7 +68,7 @@ def get_table_entry(filepath, index) -> dict:
     filepath
         Path to the csv file
 
-    index
+    index : str
         First value on the row to return"""
     with open(filepath) as csv_file:
         reader = csv.DictReader(csv_file)

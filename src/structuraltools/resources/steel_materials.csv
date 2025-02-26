@@ -1,4 +1,4 @@
-Name,F_y,F_u,E,G,v,w_s
+name,F_y,F_u,E,G,v,w_s
 A36,36 ksi,58 ksi,29000 ksi,11200 ksi,0.3,490 pcf
 A53GrB,35 ksi,60 ksi,29000 ksi,11200 ksi,0.3,490 pcf
 A500GrB,46 ksi,58 ksi,29000 ksi,11200 ksi,0.3,490 pcf

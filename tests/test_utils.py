@@ -48,7 +48,7 @@ def test_get_table_entry():
     filepath = resources.joinpath("steel_materials.csv")
     data = utils.get_table_entry(filepath, "A36")
     expected_data = {
-        "Name": "A36",
+        "name": "A36",
         "F_y": 36*unit.ksi,
         "F_u": 58*unit.ksi,
         "E": 29000*unit.ksi,
