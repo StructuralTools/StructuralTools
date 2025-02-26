@@ -1,0 +1,213 @@
+# This unit definition file based on the Pint default unit definition file
+# which carries the following license and copyright:
+#
+# Copyright (c) 2012 by Hernan E. Grecco and contributors.
+# See https://github.com/hgrecco/pint/blob/master/AUTHORS for more details.
+#
+# Some rights reserved.
+#
+# Redistribution and use in source and binary forms of the software as well
+# as documentation, with or without modification, are permitted provided
+# that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright
+#   notice, this list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above
+#   copyright notice, this list of conditions and the following
+#   disclaimer in the documentation and/or other materials provided
+#   with the distribution.
+#
+# * The names of the contributors may not be used to endorse or
+#   promote products derived from this software without specific
+#   prior written permission.
+#
+# THIS SOFTWARE AND DOCUMENTATION IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+# NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+# OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE AND DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+# DAMAGE.
+#
+#
+#
+# Modifications made to this file for use in StructuralTools carry the
+# following license and copyright:
+#
+# Copyright 2025 Joe Bears
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+@defaults
+    group = international
+    system = mks
+@end
+
+
+#### PREFIXES ####
+
+# decimal prefixes
+quecto- = 1e-30 = q-
+ronto- = 1e-27 = r-
+yocto- = 1e-24 = y-
+zepto- = 1e-21 = z-
+atto- =  1e-18 = a-
+femto- = 1e-15 = f-
+pico- =  1e-12 = p-
+nano- =  1e-9  = n-
+# The micro (U+00B5) and Greek mu (U+03BC) are both valid prefixes,
+# and they often use the same glyph.
+micro- = 1e-6  = µ- = μ- = u- = mu- = mc-
+milli- = 1e-3  = m-
+centi- = 1e-2  = c-
+deci- =  1e-1  = d-
+deca- =  1e+1  = da- = deka-
+hecto- = 1e2   = h-
+kilo- =  1e3   = k-
+mega- =  1e6   = M-
+giga- =  1e9   = G-
+tera- =  1e12  = T-
+peta- =  1e15  = P-
+exa- =   1e18  = E-
+zetta- = 1e21  = Z-
+yotta- = 1e24  = Y-
+ronna- = 1e27 = R-
+quetta- = 1e30 = Q-
+
+
+#### BASE UNITS ####
+
+meter = [length] = m
+sec = [time] = s = second
+gram = [mass] = g
+radian = [] = rad
+
+
+#### CONSTANTS ####
+
+pi = 3.1415926535897932384626433832795028841971693993751 = π  # pi
+standard_gravity = 9.80665 m/s^2
+
+
+#### UNITS ####
+
+# Angle
+degree = π / 180 * radian = deg = arcdeg = arcdegree = angular_degree
+
+# Ratios
+percent = 0.01 = %
+
+# Length
+inch = 0.0254 * meter = in = inches
+ft = 12 * inch = _ = foot = feet
+yd = 3 * ft = _ = yard = yards
+mile = 5280 * ft = _ = miles
+
+# Mass
+lbm = 453.5923703803783 * gram = _ = pound_mass
+
+# Time
+min = 60 * sec = _ = minute
+hr = 60 * min = _ = hour
+day = 24 * hr
+
+# Area
+[area] = [length] ** 2
+
+# Volume
+[volume] = [length] ** 3
+liter = decimeter ** 3
+
+# Frequency
+[frequency] = 1 / [time]
+hertz = 1 / sec = Hz
+
+# Velocity
+[velocity] = [length] / [time]
+[speed] = [velocity]
+fps = ft / sec = _ = feet_per_second
+mph = mile / hr = _ = mile_per_hour
+
+# Acceleration
+[acceleration] = [velocity] / [time]
+
+# Force
+[force] = [mass] * [acceleration]
+N = kilogram * meter / second ** 2 = _ = newton
+lb = lbm * standard_gravity = _ = pound_force = lbf = pound
+kip = 1000 * lb = _ = kilopound
+
+# Energy
+[energy] = [force] * [length]
+J = newton * meter = _ = joule
+
+# Power
+[power] = [energy] / [time]
+W = joule / second = _ = watt
+
+# Momentum
+[momentum] = [length] * [mass] / [time]
+
+# Density (as auxiliary for pressure)
+[density] = [mass] / [volume]
+
+# Unit weight
+[unit_weight] = [force] / [volume]
+pci = lb / inch ** 3 = _ = pound_per_cubic_inch
+pcf = lb / ft ** 3 = _ = pound_per_cubic_foot
+kci = kip / inch ** 3 = _ = kip_per_cubic_inch
+kcf = kip / ft ** 3 = _ = kip_per_cubic_foot
+
+# Pressure
+[pressure] = [force] / [area]
+Pa = newton / meter ** 2 = _ = pascal
+psi = lb / inch ** 2 = _ = pound_per_square_inch
+psf = lb / ft ** 2 = _ = pound_per_square_foot
+ksi = kip / inch ** 2 = _ = kip_per_square_inch
+ksf = kip / ft ** 2 = _ = kip_per_square_foot
+
+# Line load
+[line_load] = [force] / [length]
+pli = lb / inch = _ = pound_per_inch
+plf = lb / ft = _ = pound_per_foot
+kli = kip / inch = _ = kip_per_inch
+klf = kip / ft = _ = kip_per_foot
+
+# Torque
+[torque] = [force] * [length]
+Nm = newton * meter = _ = newton_meter
+lbin = lb * inch = _ = pound_inch = pound_inches
+lbft = lb * ft = _ = pound_foot = pound_feet
+kipin = kip * inch = _ = kip_inch = kip_inches
+kipft = kip * ft = _ = kip_foot = kip_feet
+
+
+#### UNIT GROUPS ####
+# Mostly for length, area, volume, mass, force
+# (customary or specialized units)
+
+
+#### SYSTEMS OF UNITS ####
+
+@system mks
+    meter
+    kilogram
+    second
+@end
