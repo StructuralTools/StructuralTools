@@ -21,32 +21,32 @@ from structuraltools import _materials_latex as templates
 
 class Concrete:
     """Class to store data for concrete materials and calculate basic material
-       properties."""
+    properties."""
     def __init__(self, f_prime_c, **kwargs):
         """Create a new concrete material instance, calculate the modulus of
-           elasticity, and optionally show the any calculations made.
+        elasticity, and optionally show the any calculations made.
 
-           Parameters
-           ==========
+        Parameters
+        ==========
 
-           f_prime_c : pint pressure quantity
-               Specified compressive strength of the concrete
+        f_prime_c : pint pressure quantity
+            Specified compressive strength of the concrete
 
-           w_c : pint unit weight quantity, optional
-               Concrete unit weight
+        w_c : pint unit weight quantity, optional
+            Concrete unit weight
 
-           max_agg : pint length quantity, optional
-               Nominal maximum aggregate size
+        max_agg : pint length quantity, optional
+            Nominal maximum aggregate size
 
-           v : float, optional
-               Poisson's ration of the concrete
+        v : float, optional
+            Poisson's ration of the concrete
 
-           show : bool, optional
-               Whether to display all calculations made
+        show : bool, optional
+            Whether to display all calculations made
 
-           dec : int, optional
-               Number of decimal places to use in LaTeX representation
-               of calculations"""
+        dec : int, optional
+            Number of decimal places to use in LaTeX representation
+            of calculations"""
         self.f_prime_c = min(round(f_prime_c.to("psi").magnitude), 10000)*unit.psi
         self.w_c = round(kwargs.get("w_c", 150*unit.pcf).to("pcf").magnitude)*unit.pcf
         self.max_agg = kwargs.get("max_agg", 1*unit.inch).to("inch")
@@ -108,21 +108,21 @@ class Rebar:
     def __init__(self, size: int, **kwargs):
         """Create a new rebar class instance
 
-           Parameters
-           ==========
+        Parameters
+        ==========
 
-           size : int
-               Integer indicating common rebar size
+        size : int
+            Integer indicating common rebar size
 
-           f_y : Pint Pressure Quantity, Optional
-               Rebar yield strength. Defaults to 60 ksi
+        f_y : Pint Pressure Quantity, Optional
+            Rebar yield strength. Defaults to 60 ksi
 
-           coated : boolean, Optional
-               Boolean indicating if the rebar is epoxy-coated or zinc and epoxy
-               dual-coated
+        coated : boolean, Optional
+            Boolean indicating if the rebar is epoxy-coated or zinc and epoxy
+            dual-coated
 
-           E_s : pint pressure quantity optional
-               Modulus of elasticity to use for the rebar. Defaults to 29000 ksi"""
+        E_s : pint pressure quantity optional
+            Modulus of elasticity to use for the rebar. Defaults to 29000 ksi"""
         rebar_database = resources.joinpath("ACI_rebar_sizes.csv")
         self.size = size
         self.f_y = round(kwargs.get("f_y", 60000*unit.psi).to("psi").magnitude)*unit.psi
@@ -137,14 +137,14 @@ class Steel:
     """Class to store data for steel materials"""
     def __init__(self, name: str):
         """Initialize a steel from the structuraltools steel database. Custom steel
-           types are not currently supported.
+        types are not currently supported.
 
-           Parameters
-           ==========
+        Parameters
+        ==========
 
-           name : str
-               Name of the steel. Must match a name in the structuraltools steel
-               database."""
+        name : str
+            Name of the steel. Must match a name in the structuraltools steel
+            database."""
         steel_database = resources.joinpath("steel_materials.csv")
         self.name = name
         properties = utils.get_table_entry(steel_database, self.name)
