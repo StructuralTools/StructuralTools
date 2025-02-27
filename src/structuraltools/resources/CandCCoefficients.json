@@ -1,0 +1,871 @@
+{
+    "low-rise": {
+        "flat": {
+            "1_prime+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.4,
+                "c2": -0.1,
+                "high_limit": 100
+            },
+            "1_prime-": {
+                "kind": "single_log",
+                "low_limit": 100,
+                "c1": -1.9,
+                "c2": 0.5,
+                "high_limit": 1000
+            },
+            "1+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.4,
+                "c2": -0.1,
+                "high_limit": 100
+            },
+            "1-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.112,
+                "c2": 0.412,
+                "high_limit": 500
+            },
+            "1V+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.4,
+                "c2": -0.1,
+                "high_limit": 100
+            },
+            "1V-": {
+                "kind": "double_log",
+                "low_limit": 10,
+                "e1c1": -1.8,
+                "e1c2": 0.1,
+                "break_point": 100,
+                "e2c1": -3.3168,
+                "e2c2": 0.8584,
+                "high_limit": 500
+            },
+            "2+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.4,
+                "c2": -0.1,
+                "high_limit": 100
+            },
+            "2-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.8297,
+                "c2": 0.5297,
+                "high_limit": 500
+            },
+            "2V+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.4,
+                "c2": -0.1,
+                "high_limit": 100
+            },
+            "2V-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3.0063,
+                "c2": 0.7063,
+                "high_limit": 500
+            },
+            "3+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.4,
+                "c2": -0.1,
+                "high_limit": 100
+            },
+            "3-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -4.2595,
+                "c2": 1.0595,
+                "high_limit": 500
+            },
+            "3V+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.4,
+                "c2": -0.1,
+                "high_limit": 100
+            },
+            "3V-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -4.436,
+                "c2": 1.236,
+                "high_limit": 500
+            }
+        },
+        "low_gable": {
+            "1+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.8306,
+                "c2": -0.2306,
+                "high_limit": 200
+            },
+            "1-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3.0155,
+                "c2": 1.0155,
+                "high_limit": 300
+            },
+            "2+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.8306,
+                "c2": -0.2306,
+                "high_limit": 200
+            },
+            "2-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -4.0067,
+                "c2": 1.0155,
+                "high_limit": 200
+            },
+            "3+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.8306,
+                "c2": -0.2306,
+                "high_limit": 200
+            },
+            "3-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -5.4,
+                "c2": 1.8,
+                "high_limit": 100
+            }
+        },
+        "mid_gable": {
+            "1+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.8306,
+                "c2": -0.2306,
+                "high_limit": 200
+            },
+            "1-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.0380,
+                "c2": 0.5380,
+                "high_limit": 200
+            },
+            "2+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.8306,
+                "c2": -0.2306,
+                "high_limit": 200
+            },
+            "2-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3.8,
+                "c2": 1.3,
+                "high_limit": 100
+            },
+            "3+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 0.8306,
+                "c2": -0.2306,
+                "high_limit": 200
+            },
+            "3-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -4.6,
+                "c2": 1.6,
+                "high_limit": 100
+            }
+        },
+        "high_gable": {
+            "1+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.2074,
+                "c2": -0.3074,
+                "high_limit": 200
+            },
+            "1-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.8,
+                "c2": 1,
+                "high_limit": 100
+            },
+            "2+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.2074,
+                "c2": -0.3074,
+                "high_limit": 200
+            },
+            "2-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.7686,
+                "c2": 0.76862,
+                "high_limit": 200
+            },
+            "3+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.2074,
+                "c2": -0.3074,
+                "high_limit": 200
+            },
+            "3-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3.6529,
+                "c2": 0.76872,
+                "high_limit": 200
+            }
+        },
+        "low_hip": {
+            "1+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "1-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.5686,
+                "c2": 0.7686,
+                "high_limit": 200
+            },
+            "2+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "2-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3.2455,
+                "c2": 0.8455,
+                "high_limit": 200
+            },
+            "3+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "3-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3.5224,
+                "c2": 0.9223,
+                "high_limit": 200
+            }
+        },
+        "mid_hip": {
+            "1+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "1-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2,
+                "c2": 0.6,
+                "high_limit": 100
+            },
+            "2+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "2-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3,
+                "c2": 1,
+                "high_limit": 100
+            },
+            "3+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "3-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3,
+                "c2": 1,
+                "high_limit": 100
+            }
+        },
+        "high_hip": {
+            "1+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "1-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.3,
+                "c2": 0.8,
+                "high_limit": 100
+            },
+            "2+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "2-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -2.8,
+                "c2": 1,
+                "high_limit": 100
+            },
+            "3+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1,
+                "c2": -0.4,
+                "high_limit": 100
+            },
+            "3-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -3.8,
+                "c2": 1.4,
+                "high_limit": 100
+            }
+        },
+        "low_canopy": {
+            "C+": {
+                "kind": "single_log",
+                "GC_pi": 0,
+                "low_limit": 10,
+                "c1": 1.15,
+                "c2": -0.109,
+                "high_limit": 100
+            },
+            "C-": {
+                "kind": "single_log",
+                "GC_pi": 0,
+                "low_limit": 10,
+                "c1": -0.7,
+                "c2": 0.0434,
+                "high_limit": 100
+            }
+        },
+        "mid_canopy": {
+            "C+": {
+                "kind": "single_log",
+                "GC_pi": 0,
+                "low_limit": 10,
+                "c1": 1.15,
+                "c2": -0.109,
+                "high_limit": 100
+            },
+            "C-": {
+                "kind": "single_log",
+                "GC_pi": 0,
+                "low_limit": 10,
+                "c1": -1.15,
+                "c2": 0.1086,
+                "high_limit": 100
+            }
+        },
+        "high_canopy": {
+            "C+": {
+                "kind": "single_log",
+                "GC_pi": 0,
+                "low_limit": 10,
+                "c1": 1.15,
+                "c2": -0.109,
+                "high_limit": 100
+            },
+            "C-": {
+                "kind": "single_log",
+                "GC_pi": 0,
+                "low_limit": 10,
+                "c1": -1.7,
+                "c2": 0.1303,
+                "high_limit": 100
+            }
+        },
+        "walls": {
+            "4+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1766,
+                "c2": -0.1766,
+                "high_limit": 500
+            },
+            "4-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -1.2766,
+                "c2": 0.1766,
+                "high_limit": 500
+            },
+            "4P+": {
+                "kind": "composite",
+                "use_q_p": true,
+                "GC_pi": 0,
+                "p_min": "32 psf",
+                "positive_zone": "4+",
+                "negative_zone": "2-"
+            },
+            "4P-": {
+                "kind": "composite",
+                "use_q_p": true,
+                "GC_pi": 0,
+                "p_min": "32 psf",
+                "positive_zone": "4-",
+                "negative_zone": "4+"
+            },
+            "5+": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": 1.1766,
+                "c2": -0.1766,
+                "high_limit": 500
+            },
+            "5-": {
+                "kind": "single_log",
+                "low_limit": 10,
+                "c1": -1.7532,
+                "c2": 0.3532,
+                "high_limit": 500
+            },
+            "5P+": {
+                "kind": "composite",
+                "use_q_p": true,
+                "GC_pi": 0,
+                "p_min": "32 psf",
+                "positive_zone": "5+",
+                "negative_zone": "3-"
+            },
+            "5P-": {
+                "kind": "composite",
+                "use_q_p": true,
+                "GC_pi": 0,
+                "p_min": "32 psf",
+                "positive_zone": "5-",
+                "negative_zone": "5+"
+            }
+        }
+    },
+    "mid-rise": {
+    },
+    "open": {
+        "monoslope_clear_0": {
+            "1+": {
+                "kind": "constants",
+                "c1": 1.2,
+                "c2": 1.2,
+                "c3": 1.2
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -1.1,
+                "c2": -1.1,
+                "c3": -1.1
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 1.8,
+                "c2": 1.8,
+                "c3": 1.2
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -1.7,
+                "c2": -1.7,
+                "c3": -1.1
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 2.4,
+                "c2": 1.8,
+                "c3": 1.2
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -3.3,
+                "c2": -1.7,
+                "c3": -1.1
+            }
+        },
+        "monoslope_clear_7.5": {
+            "1+": {
+                "kind": "constants",
+                "c1": 1.6,
+                "c2": 1.6,
+                "c3": 1.6
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -1.4,
+                "c2": -1.4,
+                "c3": -1.4
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 2.4,
+                "c2": 2.4,
+                "c3": 1.6
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -2.1,
+                "c2": -2.1,
+                "c3": -1.4
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 3.2,
+                "c2": 2.4,
+                "c3": 1.6
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -4.2,
+                "c2": -2.1,
+                "c3": -1.4
+            }
+        },
+        "monoslope_clear_15": {
+            "1+": {
+                "kind": "constants",
+                "c1": 1.8,
+                "c2": 1.8,
+                "c3": 1.8
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -1.9,
+                "c2": -1.9,
+                "c3": -1.9
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 2.7,
+                "c2": 2.7,
+                "c3": 1.8
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -2.9,
+                "c2": -2.9,
+                "c3": -1.9
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 3.6,
+                "c2": 2.7,
+                "c3": 1.8
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -3.8,
+                "c2": -2.9,
+                "c3": -1.9
+            }
+        },
+        "monoslope_clear_30": {
+            "1+": {
+                "kind": "constants",
+                "c1": 2.6,
+                "c2": 2.6,
+                "c3": 2.6
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -2.5,
+                "c2": -2.5,
+                "c3": -2.5
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 3.9,
+                "c2": 3.9,
+                "c3": 2.6
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -3.8,
+                "c2": -3.8,
+                "c3": -2.5
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 5.2,
+                "c2": 3.9,
+                "c3": 2.6
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -5,
+                "c2": -3.8,
+                "c3": -2.5
+            }
+        },
+        "monoslope_clear_45": {
+            "1+": {
+                "kind": "constants",
+                "c1": 2.6,
+                "c2": 2.6,
+                "c3": 2.6
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -2.3,
+                "c2": -2.3,
+                "c3": -2.3
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 3.9,
+                "c2": 3.9,
+                "c3": 2.6
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -3.5,
+                "c2": -3.5,
+                "c3": -2.3
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 5.2,
+                "c2": 3.9,
+                "c3": 2.6
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -4.6,
+                "c2": -3.5,
+                "c3": -2.3
+            }
+        },
+        "monoslope_obstructed_0": {
+            "1+": {
+                "kind": "constants",
+                "c1": 0.5,
+                "c2": 0.5,
+                "c3": 0.5
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -1.2,
+                "c2": -1.2,
+                "c3": -1.2
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 0.8,
+                "c2": 0.8,
+                "c3": 0.5
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -1.8,
+                "c2": -1.8,
+                "c3": -1.2
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 1,
+                "c2": 0.8,
+                "c3": 0.5
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -3.6,
+                "c2": -1.8,
+                "c3": -1.2
+            }
+        },
+        "monoslope_obstructed_7.5": {
+            "1+": {
+                "kind": "constants",
+                "c1": 0.8,
+                "c2": 0.8,
+                "c3": 0.8
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -1.7,
+                "c2": -1.7,
+                "c3": -1.7
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 1.2,
+                "c2": 1.2,
+                "c3": 0.8
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -2.6,
+                "c2": -2.6,
+                "c3": -1.7
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 1.6,
+                "c2": 1.2,
+                "c3": 0.8
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -5.1,
+                "c2": -2.6,
+                "c3": -1.7
+            }
+        },
+        "monoslope_obstructed_15": {
+            "1+": {
+                "kind": "constants",
+                "c1": 1.2,
+                "c2": 1.2,
+                "c3": 1.2
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -2.1,
+                "c2": -2.1,
+                "c3": -2.1
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 1.8,
+                "c2": 1.8,
+                "c3": 1.2
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -3.2,
+                "c2": -3.2,
+                "c3": -2.1
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 2.4,
+                "c2": 1.8,
+                "c3": 1.2
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -4.2,
+                "c2": -3.2,
+                "c3": -2.1
+            }
+        },
+        "monoslope_obstructed_30": {
+            "1+": {
+                "kind": "constants",
+                "c1": 1.6,
+                "c2": 1.6,
+                "c3": 1.6
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -2.3,
+                "c2": -2.3,
+                "c3": -2.3
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 2.4,
+                "c2": 2.4,
+                "c3": 1.6
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -3.5,
+                "c2": -3.5,
+                "c3": -2.3
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 3.2,
+                "c2": 2.4,
+                "c3": 1.6
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -4.6,
+                "c2": -3.5,
+                "c3": -2.3
+            }
+        },
+        "monoslope_obstructed_45": {
+            "1+": {
+                "kind": "constants",
+                "c1": 2.1,
+                "c2": 2.1,
+                "c3": 2.1
+            },
+            "1-": {
+                "kind": "constants",
+                "c1": -1.9,
+                "c2": -1.9,
+                "c3": -1.9
+            },
+            "2+": {
+                "kind": "constants",
+                "c1": 3.2,
+                "c2": 3.2,
+                "c3": 2.1
+            },
+            "2-": {
+                "kind": "constants",
+                "c1": -2.9,
+                "c2": -2.9,
+                "c3": -1.9
+            },
+            "3+": {
+                "kind": "constants",
+                "c1": 4.2,
+                "c2": 3.2,
+                "c3": 2.1
+            },
+            "3-": {
+                "kind": "constants",
+                "c1": -3.8,
+                "c2": -2.9,
+                "c3": -1.9
+            }
+        }
+    }
+}
