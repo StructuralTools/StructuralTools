@@ -1,0 +1,11 @@
+name,F_y,F_u,E,G,v,w_s
+A36,36 ksi,58 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A53GrB,35 ksi,60 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A500GrB,46 ksi,58 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A500GrBround,42 ksi,58 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A500GrBrect,46 ksi,58 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A500GrC,50 ksi, 62 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A500GrCround,46 ksi,62 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A500GrCrect,50 ksi,62 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A572Gr50,50 ksi,65 ksi,29000 ksi,11200 ksi,0.3,490 pcf
+A992,50 ksi,65 ksi,29000 ksi,11200 ksi,0.3,490 pcf
