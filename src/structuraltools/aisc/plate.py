@@ -21,23 +21,23 @@ from structuraltools.aisc import _plate_latex as templates
 
 class Plate:
     """Class for calculating steel plate strength. For consistency with the
-       other shapes the x-axis intersects the width of the plate (b) and
-       represents the strong axis for bending."""
+    other shapes the x-axis intersects the width of the plate (b) and
+    represents the strong axis for bending."""
     def __init__(self, d, t, material):
         """Create a new steel plate.
 
-           Parameters
-           ==========
+        Parameters
+        ==========
 
-           b : pint length quantity
-               Plate width. This is specified at instance initialization to
-               make this act more like other shapes.
+        b : pint length quantity
+            Plate width. This is specified at instance initialization to
+            make this act more like other shapes.
 
-           t : pint length quantity
-               Plate thickness
+        t : pint length quantity
+            Plate thickness
 
-           material : structuraltools.materials.Steel instance
-               Material to use for the member"""
+        material : structuraltools.materials.Steel instance
+            Material to use for the member"""
         self.d = d.to("inch")
         self.t = t.to("inch")
         self.material = material
@@ -55,27 +55,27 @@ class Plate:
 
     def moment_capacity(self, L_b=0*unit.inch, C_b: int = 1, **kwargs):
         """Calculate the major axis moment capacity according to
-           AISC 360-22 Section F11
+        AISC 360-22 Section F11
 
-           Parameters
-           ==========
+        Parameters
+        ==========
 
-           L_b : pint length quantity, optional
-               Unbraced length for lateral-torsional buckling
+        L_b : pint length quantity, optional
+            Unbraced length for lateral-torsional buckling
 
-           C_b : float
-               Lateral-torsional buckling modification factor. Defaults to 1.
+        C_b : float
+            Lateral-torsional buckling modification factor. Defaults to 1.
 
-           show : bool, optional
-               Boolean indicating if the calculations shold be shown in
-               Jupyter output
+        show : bool, optional
+            Boolean indicating if the calculations shold be shown in
+            Jupyter output
 
-           return_latex : bool, optional
-               Boolean indicating if the latex string should be returned
+        return_latex : bool, optional
+            Boolean indicating if the latex string should be returned
 
-           decimal_points : int, optional
-               How many decimal places to use when displaying calculations in
-               Jupyter output. Defaults to 3"""
+        decimal_points : int, optional
+            How many decimal places to use when displaying calculations in
+            Jupyter output. Defaults to 3"""
         dec = kwargs.get("decimal_points", 3)
         phi_b = 0.9
         latex = {
@@ -124,27 +124,27 @@ class Plate:
 
     def moment_capacity_minor(self, L_b=0*unit.inch, C_b: int = 1, **kwargs):
         """Calculate the minor axis moment capacity according to
-           AISC 360-22 Section F11
+        AISC 360-22 Section F11
 
-           Parameters
-           ==========
+        Parameters
+        ==========
 
-           L_b : pint length quantity, optional
-               Unbraced length for lateral-torsional buckling
+        L_b : pint length quantity, optional
+            Unbraced length for lateral-torsional buckling
 
-           C_b : float
-               Lateral-torsional buckling modification factor. Defaults to 1.
+        C_b : float
+            Lateral-torsional buckling modification factor. Defaults to 1.
 
-           show : bool, optional
-               Boolean indicating if the calculations shold be shown in
-               Jupyter output
+        show : bool, optional
+            Boolean indicating if the calculations shold be shown in
+            Jupyter output
 
-           return_latex : bool, optional
-               Boolean indicating if the latex string should be returned
+        return_latex : bool, optional
+            Boolean indicating if the latex string should be returned
 
-           decimal_points : int, optional
-               How many decimal places to use when displaying calculations in
-               Jupyter output. Defaults to 3"""
+        decimal_points : int, optional
+            How many decimal places to use when displaying calculations in
+            Jupyter output. Defaults to 3"""
         dec = kwargs.get("decimal_points", 3)
         phi_b = 0.9
         latex = {

@@ -23,30 +23,30 @@ from structuraltools import unit
 def linterp(x_1, y_1, x_2, y_2, x_3):
     """Linear interpolation between two points
 
-       Parameters
-       ==========
+    Parameters
+    ==========
 
-       x1 : int, float, or pint quantity
-           x value of first point for interpolation
+    x1 : int, float, or pint quantity
+        x value of first point for interpolation
 
-       y1 : int, float, or pint quantity
-           y value of first point for interpolation
+    y1 : int, float, or pint quantity
+        y value of first point for interpolation
 
-       x2 : int, float, or pint quantity
-           x value of second point for interpolation
+    x2 : int, float, or pint quantity
+        x value of second point for interpolation
 
-       y2 : int, float, or pint quantity
-           y value of second point for interpolation
+    y2 : int, float, or pint quantity
+        y value of second point for interpolation
 
-       x3 : int, float, or pint quantity
-           x value of point to interpolate y value for."""
+    x3 : int, float, or pint quantity
+        x value of point to interpolate y value for."""
     y_3 = y_1+(y_2-y_1)/(x_2-x_1)*(x_3-x_1)
     return y_3
 
 def convert_to_unit(value):
     """Checks if the given value is likely to be a string of a pint
-       quantity and attempts to read with the set unit registry. This
-       is designed to help with reading .csv data tables."""
+    quantity and attempts to read with the set unit registry. This
+    is designed to help with reading .csv data tables."""
 
     if isinstance(value, str):
         if value.split(" ")[0].replace(".", "").replace("-", "").isdigit():

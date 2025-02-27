@@ -21,43 +21,43 @@ from structuraltools.aci import _development_length_latex as templates
 
 def straight_bar_factors(rebar, concrete, c_c, s, **kwargs):
     """Returns the modification factors for straight bar development
-       length from ACI 318-19 Table 25.4.2.5
+    length from ACI 318-19 Table 25.4.2.5
 
-       Parameters
-       ==========
+    Parameters
+    ==========
 
-       rebar : structuraltools.materials.Rebar instance
-           Rebar to return the modification factors for
+    rebar : structuraltools.materials.Rebar instance
+        Rebar to return the modification factors for
 
-       concrete : structuraltools.materials.Concrete instance
-           Concrete to return the modification factors for
+    concrete : structuraltools.materials.Concrete instance
+        Concrete to return the modification factors for
 
-       c_c : pint length quantity
-           Minimum rebar clear cover
+    c_c : pint length quantity
+        Minimum rebar clear cover
 
-       s : pint length quantity
-           Center to center spacing of bars being developed
+    s : pint length quantity
+        Center to center spacing of bars being developed
 
-       concrete_below : bool, optional
-           Boolean indicating if there is 12 inches or more of fresh
-           concrete placed below horizontal reinforcement
+    concrete_below : bool, optional
+        Boolean indicating if there is 12 inches or more of fresh
+        concrete placed below horizontal reinforcement
 
-       use_psi_s : Bool, optional
-           Boolean indicating if the rebar size factor from
-           ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
-           default because research indicates that using this factor is
-           unconservative.
+    use_psi_s : Bool, optional
+        Boolean indicating if the rebar size factor from
+        ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
+        default because research indicates that using this factor is
+        unconservative.
 
-       show : bool, optional
-           Boolean indicating if the calculations shold be shown in
-           Jupyter output
+    show : bool, optional
+        Boolean indicating if the calculations shold be shown in
+        Jupyter output
 
-       return_latex : bool, optional
-           Boolean indicating if the latex string should be returned
+    return_latex : bool, optional
+        Boolean indicating if the latex string should be returned
 
-       decimal_points : int, optional
-           How many decimal places to use when displaying calculations in
-           Jupyter output. Defaults to 3"""
+    decimal_points : int, optional
+        How many decimal places to use when displaying calculations in
+        Jupyter output. Defaults to 3"""
     c_c = c_c.to("inch")
     s = s.to("inch")
     dec = kwargs.get("decimal_points", 3)
@@ -146,52 +146,52 @@ def straight_bar_factors(rebar, concrete, c_c, s, **kwargs):
 
 def straight_bar(rebar, concrete, c_c, s, **kwargs):
     """Calculate the development length of deformed bars in tension according
-       to ACI 318-19 Section 25.4.2
+    to ACI 318-19 Section 25.4.2
 
-       Parameters
-       ==========
+    Parameters
+    ==========
 
-       rebar : structuraltools.materials.rebar instance
-           Rebar to calculate the development length for
+    rebar : structuraltools.materials.rebar instance
+        Rebar to calculate the development length for
 
-       concrete : structuraltools.materials.concrete instance
-           Concrete that the rebar is embedded in
+    concrete : structuraltools.materials.concrete instance
+        Concrete that the rebar is embedded in
 
-       c_c : pint length quantity
-           Minimum rebar clear cover
+    c_c : pint length quantity
+        Minimum rebar clear cover
 
-       s : pint length quantity
-           Center to center spacing of bars being developed
+    s : pint length quantity
+        Center to center spacing of bars being developed
 
-       n : int, optional
-           Number of bars being developed
+    n : int, optional
+        Number of bars being developed
 
-       A_tr : pint area quantity, optional
-           Total cross-sectional area of all transverse reinforcment within
-           spacing $s$ that crosses the potential plane of splitting through
-           the reinforcement being developed. This can be taken as 0 as a
-           design simplification, and is set to 0 if $n$ is not also set.
+    A_tr : pint area quantity, optional
+        Total cross-sectional area of all transverse reinforcment within
+        spacing $s$ that crosses the potential plane of splitting through
+        the reinforcement being developed. This can be taken as 0 as a
+        design simplification, and is set to 0 if $n$ is not also set.
 
-       concrete_below : bool, optional
-           Boolean indicating if there is 12 inches or more of fresh concrete
-           placed below horizontal reinforcement
+    concrete_below : bool, optional
+        Boolean indicating if there is 12 inches or more of fresh concrete
+        placed below horizontal reinforcement
 
-       use_psi_s : bool, optional
-           Boolean indicating if the rebar size factor from
-           ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
-           default because reseach indicates that using this factor is
-           unconservative.
+    use_psi_s : bool, optional
+        Boolean indicating if the rebar size factor from
+        ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
+        default because reseach indicates that using this factor is
+        unconservative.
 
-       show : bool, optional
-           Boolean indicating if the calculations should be shown in
-           Jupyter output
+    show : bool, optional
+        Boolean indicating if the calculations should be shown in
+        Jupyter output
 
-       return_latex : bool, optional
-           Boolean indicating if the latex string should be returned
+    return_latex : bool, optional
+        Boolean indicating if the latex string should be returned
 
-       decimal_points : int, optional
-           How many decimal places to use when displaying calculations in
-           Jupyter output. Defaults to 3"""
+    decimal_points : int, optional
+        How many decimal places to use when displaying calculations in
+        Jupyter output. Defaults to 3"""
     c_c = c_c.to("inch")
     s = s.to("inch")
     dec = kwargs.get("decimal_points", 3)
@@ -249,43 +249,43 @@ def straight_bar(rebar, concrete, c_c, s, **kwargs):
 
 def standard_hook_factors(rebar, concrete, c_c_side, s, **kwargs):
     """Returns the modification factors for standard hook development length
-       from ACI 318-19 Table 25.4.3.2
+    from ACI 318-19 Table 25.4.3.2
 
-       Parameters
-       ==========
+    Parameters
+    ==========
 
-       rebar : structuraltools.materials.Rebar instance
-           Rebar to return the modification factors for
+    rebar : structuraltools.materials.Rebar instance
+        Rebar to return the modification factors for
 
-       concrete : structuraltools.materials.Concrete instance
-           Concrete to return the modification factors for
+    concrete : structuraltools.materials.Concrete instance
+        Concrete to return the modification factors for
 
-       c_c_side : pint length quantity
-           Rebar clear cover normal to the plane of the hook
+    c_c_side : pint length quantity
+        Rebar clear cover normal to the plane of the hook
 
-       s : pint length quantity
-           Center to center spacing of bars being developed
+    s : pint length quantity
+        Center to center spacing of bars being developed
 
-       n : int, optional
-           Number of hooked bars being developed. Defaults to 1.
+    n : int, optional
+        Number of hooked bars being developed. Defaults to 1.
 
-       A_th : pint area quantity, optional
-           Total cross-sectional area of ties or stirrups confining the hooked
-           bars. Defaults to 0
+    A_th : pint area quantity, optional
+        Total cross-sectional area of ties or stirrups confining the hooked
+        bars. Defaults to 0
 
-       in_column : bool, optional
-           Boolean indicating if the hooked bar terminates inside a column core
+    in_column : bool, optional
+        Boolean indicating if the hooked bar terminates inside a column core
 
-       show : bool, optional
-           Boolean indicating if the calculations should be shown in
-           Jupyter output
+    show : bool, optional
+        Boolean indicating if the calculations should be shown in
+        Jupyter output
 
-       return_latex : bool, optional
-           Boolean indicating if the latex string should be returned
+    return_latex : bool, optional
+        Boolean indicating if the latex string should be returned
 
-       decimal_points : int, optional
-           How many decimal places to use when displaying calculations in
-           Jupyter output. Defaults to 3"""
+    decimal_points : int, optional
+        How many decimal places to use when displaying calculations in
+        Jupyter output. Defaults to 3"""
     c_c_side = c_c_side.to("inch")
     s = s.to("inch")
     A_th = kwargs.get("A_th", 0*unit.inch**2).to("inch**2")
@@ -370,42 +370,42 @@ def standard_hook_factors(rebar, concrete, c_c_side, s, **kwargs):
 
 def standard_hook(rebar, concrete, c_c_side, s, **kwargs):
     """Calculate the development length ($l_{dh}$) for a deformed bar in tension
-       terminating in a standard hook according to ACI 318-19 Section 25.4.3
+    terminating in a standard hook according to ACI 318-19 Section 25.4.3
 
-       Parameters
-       ==========
+    Parameters
+    ==========
 
-       rebar : structuraltools.materials.rebar instance
-           Rebar to calculate the development length for
+    rebar : structuraltools.materials.rebar instance
+        Rebar to calculate the development length for
 
-       concrete : structuraltools.materials.concrete instance
-           Concrete that the rebar is embedded in
+    concrete : structuraltools.materials.concrete instance
+        Concrete that the rebar is embedded in
 
-       c_c_side : pint length quantity
-           Rebar clear cover normal to the plane of the hook
+    c_c_side : pint length quantity
+        Rebar clear cover normal to the plane of the hook
 
-       s : pint length quantity
-           Center to center spacing of bars being developed
+    s : pint length quantity
+        Center to center spacing of bars being developed
 
-       n : int, optional
-           Number of hooked bars being developed. Defaults to 1.
+    n : int, optional
+        Number of hooked bars being developed. Defaults to 1.
 
-       A_th : pint area quantity, optional
-           Total cross-sectional area of ties or stirrups confining hooked bars.
-           Defaults to 0.
+    A_th : pint area quantity, optional
+        Total cross-sectional area of ties or stirrups confining hooked bars.
+        Defaults to 0.
 
-       in_column : bool
-           Boolean indicating if the hooked bar terminates inside a column core
+    in_column : bool
+        Boolean indicating if the hooked bar terminates inside a column core
 
-       show : bool, optional
-           Boolean indicating if the calculations should be shown in Jupyter output
+    show : bool, optional
+        Boolean indicating if the calculations should be shown in Jupyter output
 
-       return_latex : bool, optional
-           Boolean indicating if the latex string should be returned
+    return_latex : bool, optional
+        Boolean indicating if the latex string should be returned
 
-       decimal_points : int, optional
-           How many decimal places to use when displaying calculations in
-           Jupyter output. Defaults to 3"""
+    decimal_points : int, optional
+        How many decimal places to use when displaying calculations in
+        Jupyter output. Defaults to 3"""
     c_c_side = c_c_side.to("inch")
     s = s.to("inch")
     dec = kwargs.get("decimal_points", 3)
