@@ -22,6 +22,15 @@ def test_linterp():
     y_3 = utils.linterp(1, 1, 3, 3, 2)
     assert y_3 == 2
 
+def test_linterp_dicts():
+    dict_3 = utils.linterp_dicts(
+        x_1=1,
+        dict_1={11: {21: 1, 22: 1, "text": "text"}, 12: {21: 1, 22: 1}},
+        x_2=3,
+        dict_2={11: {21: 3, 22: 3, "text": "text"}, 12: {21: 3, 22: 3}},
+        x_3=2)
+    assert dict_3 == {11: {21: 2, 22: 2, "text": "text"}, 12: {21: 2, 22: 2}}
+
 def test_convert_to_unit_1():
     result = utils.convert_to_unit("1 ft")
     assert result == 1*unit.ft
@@ -45,7 +54,7 @@ def test_convert_to_unit_5():
     assert record[0].message.args[0] == "1 xyz was not evaluated as a unit"
 
 def test_get_table_entry():
-    filepath = resources.joinpath("steel_materials.csv")
+    filepath = resources.joinpath("AISC_steel_materials.csv")
     data = utils.get_table_entry(filepath, "A36")
     expected_data = {
         "name": "A36",

@@ -18,6 +18,58 @@ from math import isclose
 from structuraltools import asce, unit
 
 
+def test_calc_K_z_low():
+    K_z = asce.wind_loading.calc_K_z(10*unit.ft, 2460*unit.ft, 9.8)
+    assert isclose(K_z, 0.8511539011, abs_tol=1e-10)
+
+def test_calc_K_z_mid():
+    K_z = asce.wind_loading.calc_K_z(100*unit.ft, 2460*unit.ft, 9.8)
+    assert isclose(K_z, 1.253581964, abs_tol=1e-9)
+
+def test_calc_K_z_high():
+    K_z = asce.wind_loading.calc_K_z(3000*unit.ft, 2460*unit.ft, 9.8)
+    assert K_z == 2.41
+
+def test_calc_q_z():
+    q_z = asce.wind_loading.calc_q_z(1.21, 1, 0.96, 110*unit.mph)
+    assert isclose(q_z.to("psf").magnitude, 35.9817216, abs_tol=1e-7)
+
+def test_calc_wind_server_inputs():
+    inputs = asce.wind_loading.calc_wind_server_inputs(
+        V=110*unit.mph,
+        exposure="B",
+        building_type="low-rise",
+        roof_type="flat",
+        roof_angle=0,
+        ridge_axis="x",
+        L_x=211.5*unit.ft,
+        L_y=78.5*unit.ft,
+        h=51.25*unit.ft,
+        z_e=520*unit.ft,
+        h_p=53.25*unit.ft)
+    assert isclose(inputs["K_e"], 0.981352065, abs_tol=1e-9)
+    assert isclose(inputs["q_h"].to("psf").magnitude, 24.16680433, abs_tol=1e-8)
+    assert isclose(inputs["q_p"].to("psf").magnitude, 24.41477673, abs_tol=1e-8)
+    assert isclose(inputs["G_x"], 0.840652037, abs_tol=1e-9)
+    assert isclose(inputs["G_y"], 0.8068246373, abs_tol=1e-10)
+
+def test_MainWindServer_init_flat():
+    MWFRS = asce.wind_loading.MainWindServer(
+        building_type="low-rise",
+        roof_type="gable",
+        roof_angle=15,
+        ridge_axis="x",
+        L_x=211.5*unit.ft,
+        L_y=78.5*unit.ft,
+        h=51.25*unit.ft,
+        GC_pi=0.18)
+    assert MWFRS.coefficients["x"]["parapet"]["windward"]["c1"] == 1.5
+    assert isclose(MWFRS.coefficients["x"]["wall"]["leeward"]["c1"], -0.2652866242, abs_tol=1e-10)
+    assert MWFRS.coefficients["x"]["roof"]["d<=h"]["c1"] == -0.9
+    assert MWFRS.coefficients["y"]["parapet"]["leeward"]["c1"] == -1
+    assert MWFRS.coefficients["y"]["wall"]["side"]["c1"] == -0.7
+    assert isclose(MWFRS.coefficients["y"]["roof"]["windward"]["c1"], -0.7917197452, abs_tol=1e-10)
+
 def test_CandCServer_init_gable():
     CandC = asce.wind_loading.CandCServer(
         building_type="low-rise",
@@ -26,9 +78,9 @@ def test_CandCServer_init_gable():
         GC_pi=0.18,
         h_c = 10*unit.ft,
         h_e = 20*unit.ft)
-    keys = ("1+", "1-", "2+", "2-", "3+", "3-", "4+", "4-", "4P+",
-            "4P-", "5+", "5-", "5P+", "5P-", "C+", "C-")
-    assert tuple(CandC.coefficients.keys()) == keys
+    keys = {"1+", "1-", "2+", "2-", "3+", "3-", "4+", "4-", "4P+",
+            "4P-", "5+", "5-", "5P+", "5P-", "C+", "C-"}
+    assert set(CandC.coefficients.keys()) == keys
     assert CandC.coefficients["1-"]["c1"] == -3.0155
     assert CandC.coefficients["4-"]["c1"] == -1.2766
     assert CandC.coefficients["C-"]["c1"] == -0.7

@@ -145,7 +145,7 @@ class Steel:
         name : str
             Name of the steel. Must match a name in the structuraltools steel
             database."""
-        steel_database = resources.joinpath("steel_materials.csv")
+        steel_database = resources.joinpath("AISC_steel_materials.csv")
         self.name = name
         properties = utils.get_table_entry(steel_database, self.name)
         for attribute, value in properties.items():
