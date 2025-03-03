@@ -19,20 +19,36 @@ from structuraltools import asce, unit
 
 
 def test_calc_K_z_low():
-    K_z = asce.wind_loading.calc_K_z(10*unit.ft, 2460*unit.ft, 9.8)
+    latex, K_z = asce.wind_loading._calc_K_z(10*unit.ft, 2460*unit.ft, 9.8, return_latex=True)
     assert isclose(K_z, 0.8511539011, abs_tol=1e-10)
+    assert latex == r"""
+    $$ \begin{aligned}
+        K_z &= 2.41 \cdot \frac{\operatorname{max}\left(z, 15 \mathrm{ft}\right)}{z_g}^{\frac{2}{\alpha}} = 2.41 \cdot \frac{\operatorname{max}\left(10\ \mathrm{ft} , 15 \mathrm{ft}\right)}{2460\ \mathrm{ft}}^{\frac{2}{9.8}} &= 0.851
+    \end{aligned} $$
+"""
 
 def test_calc_K_z_mid():
-    K_z = asce.wind_loading.calc_K_z(100*unit.ft, 2460*unit.ft, 9.8)
+    latex, K_z = asce.wind_loading._calc_K_z(100*unit.ft, 2460*unit.ft, 9.8, return_latex=True)
     assert isclose(K_z, 1.253581964, abs_tol=1e-9)
+    assert latex == r"""
+    $$ \begin{aligned}
+        K_z &= 2.41 \cdot \frac{\operatorname{max}\left(z, 15 \mathrm{ft}\right)}{z_g}^{\frac{2}{\alpha}} = 2.41 \cdot \frac{\operatorname{max}\left(100\ \mathrm{ft} , 15 \mathrm{ft}\right)}{2460\ \mathrm{ft}}^{\frac{2}{9.8}} &= 1.254
+    \end{aligned} $$
+"""
 
 def test_calc_K_z_high():
-    K_z = asce.wind_loading.calc_K_z(3000*unit.ft, 2460*unit.ft, 9.8)
+    latex, K_z = asce.wind_loading._calc_K_z(3000*unit.ft, 2460*unit.ft, 9.8, return_latex=True)
     assert K_z == 2.41
+    assert latex == r"""
+    $$ \begin{aligned}
+        & \text{Since, } \left(z > z_g \Leftarrow 3000\ \mathrm{ft} > 2460\ \mathrm{ft}\right): & K_z &= 2.41
+    \end{aligned} $$
+"""
 
 def test_calc_q_z():
-    q_z = asce.wind_loading.calc_q_z(1.21, 1, 0.96, 110*unit.mph)
+    latex, q_z = asce.wind_loading._calc_q_z(1.21, 1, 0.96, 110*unit.mph, return_latex=True)
     assert isclose(q_z.to("psf").magnitude, 35.9817216, abs_tol=1e-7)
+    assert latex == r"q_z &= 0.00256 \cdot K_z \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot 110\ \mathrm{mph}^2 &= 35.982\ \mathrm{psf}"
 
 def test_calc_wind_server_inputs():
     inputs = asce.wind_loading.calc_wind_server_inputs(
@@ -53,7 +69,7 @@ def test_calc_wind_server_inputs():
     assert isclose(inputs["G_x"], 0.840652037, abs_tol=1e-9)
     assert isclose(inputs["G_y"], 0.8068246373, abs_tol=1e-10)
 
-def test_MainWindServer_init_flat():
+def test_MainWindServer_init_gable():
     MWFRS = asce.wind_loading.MainWindServer(
         building_type="low-rise",
         roof_type="gable",
@@ -69,6 +85,70 @@ def test_MainWindServer_init_flat():
     assert MWFRS.coefficients["y"]["parapet"]["leeward"]["c1"] == -1
     assert MWFRS.coefficients["y"]["wall"]["side"]["c1"] == -0.7
     assert isclose(MWFRS.coefficients["y"]["roof"]["windward"]["c1"], -0.7917197452, abs_tol=1e-10)
+
+def test_MainWindServer_minimum_pressure():
+    MWFRS = asce.wind_loading.MainWindServer(
+        V=110*unit.mph,
+        building_type="low-rise",
+        roof_angle=15,
+        ridge_axis="x",
+        L_x=30*unit.ft,
+        L_y=30*unit.ft,
+        h=30*unit.ft,
+        K_d=0.85,
+        GC_pi=0.18,
+        q_h=21.34887631*unit.psf,
+        G_x=0.85,
+        G_y=0.85)
+    pressure = MWFRS.get_load("x", "wall", "side")
+    assert pressure[0] == -16*unit.psf
+    assert pressure[1] == -16*unit.psf
+
+class TestMainWindServer:
+    def setup_method(self, method):
+        self.MWFRS = asce.wind_loading.MainWindServer(
+            V=150*unit.mph,
+            building_type="low-rise",
+            roof_angle=15,
+            ridge_axis="x",
+            L_x=30*unit.ft,
+            L_y=30*unit.ft,
+            h=30*unit.ft,
+            K_d=0.85,
+            K_zt=1,
+            GC_pi=0.18,
+            z_g=3280*unit.ft,
+            alpha=7.5,
+            K_e=1,
+            q_h=39.69832372*unit.psf,
+            q_p=40.72022963*unit.psf,
+            G_x=0.85,
+            G_y=0.85)
+
+    def test_get_load_windward_wall(self):
+        pressure = self.MWFRS.get_load("x", "wall", 25*unit.ft)
+        assert isclose(pressure[0].to("psf").magnitude, 27.93056453, abs_tol=1e-8)
+        assert isclose(pressure[1].to("psf").magnitude, 27.93056453, abs_tol=1e-8)
+
+    def test_get_load_leeward_wall(self):
+        pressure = self.MWFRS.get_load("y", "wall", "leeward")
+        assert isclose(pressure[0].to("psf").magnitude, -20.41486297, abs_tol=1e-8)
+        assert isclose(pressure[1].to("psf").magnitude, -20.41486297, abs_tol=1e-8)
+
+    def test_get_load_windward_parapet(self):
+        pressure = self.MWFRS.get_load("x", "parapet", "windward")
+        assert isclose(pressure[0].to("psf").magnitude, 51.91829278, abs_tol=1e-8)
+        assert isclose(pressure[1].to("psf").magnitude, 51.91829278, abs_tol=1e-8)
+
+    def test_get_load_flat_roof(self):
+        pressure = self.MWFRS.get_load("x", "roof", 25*unit.ft)
+        assert isclose(pressure[0].to("psf").magnitude, -26.15127075, abs_tol=1e-8)
+        assert isclose(pressure[1].to("psf").magnitude, -11.23661053, abs_tol=1e-8)
+
+    def test_get_load_gable_roof(self):
+        pressure = self.MWFRS.get_load("y", "roof", "windward")
+        assert isclose(pressure[0].to("psf").magnitude, -34.75588242, abs_tol=1e-8)
+        assert isclose(pressure[1].to("psf").magnitude, -11.23661053, abs_tol=1e-8)
 
 def test_CandCServer_init_gable():
     CandC = asce.wind_loading.CandCServer(
@@ -106,7 +186,8 @@ class TestCandCServerLowRise:
             roof_type="gable",
             roof_angle=0,
             a=10*unit.ft,
-            G={"x": 0.85, "y": 0.85},
+            G_x=0.85,
+            G_y=0.85,
             GC_pi=0.18,
             h_c = 10*unit.ft,
             h_e = 20*unit.ft,
@@ -174,7 +255,8 @@ class TestCandCServerOpen:
             roof_type="monoslope_clear",
             roof_angle=0,
             a=10*unit.ft,
-            G={"x": 0.85, "y": 0.85},
+            G_x=0.85,
+            G_y=0.85,
             GC_pi=0.18,
             K_d=0.85,
             q_h=27.8*unit.psf,

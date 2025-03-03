@@ -49,7 +49,7 @@ def straight_bar_factors(rebar, concrete, c_c, s, **kwargs):
         unconservative.
 
     show : bool, optional
-        Boolean indicating if the calculations shold be shown in
+        Boolean indicating if the calculations should be shown in
         Jupyter output
 
     return_latex : bool, optional
@@ -197,9 +197,9 @@ def straight_bar(rebar, concrete, c_c, s, **kwargs):
     dec = kwargs.get("decimal_points", 3)
     latex = {
         "c_c": round(c_c, dec),
-        "d_b": rebar.d_b,
-        "f_prime_c": concrete.f_prime_c,
-        "f_y": rebar.f_y,
+        "d_b": round(rebar.d_b, dec),
+        "f_prime_c": round(concrete.f_prime_c, dec),
+        "f_y": round(rebar.f_y, dec),
         "s": round(s, dec)
     }
 
@@ -235,7 +235,7 @@ def straight_bar(rebar, concrete, c_c, s, **kwargs):
     latex.update({
         "c_b": round(c_b, dec),
         "l_prime_d": round(l_prime_d, dec),
-        "l_d_limit": l_d_limit,
+        "l_d_limit": round(l_d_limit, dec),
         "l_d": round(l_d, dec)
     })
 
@@ -411,9 +411,9 @@ def standard_hook(rebar, concrete, c_c_side, s, **kwargs):
     dec = kwargs.get("decimal_points", 3)
     latex = {
         "c_c_side": round(c_c_side, dec),
-        "d_b": rebar.d_b,
-        "f_prime_c": concrete.f_prime_c,
-        "f_y": rebar.f_y,
+        "d_b": round(rebar.d_b, dec),
+        "f_prime_c": round(concrete.f_prime_c, dec),
+        "f_y": round(rebar.f_y, dec),
         "s": round(s, dec)
     }
 
@@ -435,7 +435,7 @@ def standard_hook(rebar, concrete, c_c_side, s, **kwargs):
     latex.update({
         "l_prime_dh": round(l_prime_dh, dec),
         "d_b8": round(8*rebar.d_b, dec),
-        "l_dh_limit": l_dh_limit,
+        "l_dh_limit": round(l_dh_limit, dec),
         "l_dh": round(l_dh, dec)
     })
 
