@@ -43,6 +43,45 @@ def linterp(x_1, y_1, x_2, y_2, x_3):
     y_3 = y_1+(y_2-y_1)/(x_2-x_1)*(x_3-x_1)
     return y_3
 
+def linterp_dicts(x_1, dict_1: dict, x_2, dict_2: dict, x_3) -> dict:
+    """Returns a dictionary that is a linear interpolation between two provided
+    dictionaries of dictionaries with the same keys. Integer and float values
+    are interpolated all other values are taken from dict_1.
+
+    Parameters
+    ==========
+
+    x_1 : float
+        Value to associate with dict_1 for interpolation
+
+    dict_1 : dict
+        First dictionary of values to interpolate
+
+    x_2 : float
+        Value to associate with dict_2 for interpolation
+
+    dict_2 : dict
+        Second dictionary of values to interpolate
+
+    x_3 : float
+        Interpolation value to associate with the new dictionary"""
+    dict_3 = {}
+    for key_1 in dict_1.keys():
+        dict_3.update({key_1: {}})
+        for key_2 in dict_1[key_1].keys():
+            if isinstance(dict_1[key_1][key_2], int | float):
+                dict_3[key_1].update({
+                    key_2: linterp(
+                        x_1,
+                        dict_1[key_1][key_2],
+                        x_2,
+                        dict_2[key_1][key_2],
+                        x_3)
+                    })
+            else:
+                dict_3[key_1].update({key_2: dict_1[key_1][key_2]})
+    return dict_3
+
 def convert_to_unit(value):
     """Checks if the given value is likely to be a string of a pint
     quantity and attempts to read with the set unit registry. This

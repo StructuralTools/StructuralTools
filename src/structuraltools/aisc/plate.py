@@ -81,8 +81,8 @@ class Plate:
         latex = {
             "C_b": round(C_b, dec),
             "d" : round(self.d, dec),
-            "E": self.material.E,
-            "F_y": self.material.F_y,
+            "E": round(self.material.E, dec),
+            "F_y": round(self.material.F_y, dec),
             "L_b": round(L_b, dec),
             "S_x": round(self.Sx, dec),
             "t": round(self.t, dec),
@@ -150,8 +150,8 @@ class Plate:
         latex = {
             "C_b": round(C_b, dec),
             "d" : round(self.d, dec),
-            "E": self.material.E,
-            "F_y": self.material.F_y,
+            "E": round(self.material.E, dec),
+            "F_y": round(self.material.F_y, dec),
             "L_b": round(L_b, dec),
             "S_y": round(self.Sy, dec),
             "t": round(self.t, dec),
