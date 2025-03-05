@@ -18,6 +18,16 @@ from math import isclose
 from structuraltools import asce, unit
 
 
+def test_calc_K_zt():
+    K_zt = asce.wind_loading.calc_K_zt(
+        feature="escarpment",
+        H=500*unit.ft,
+        L_h=1500*unit.ft,
+        x=300*unit.ft,
+        z=50*unit.ft,
+        exposure="B")
+    assert isclose(K_zt, 1.484767957, abs_tol=1e-9)
+
 def test_calc_K_z_low():
     latex, K_z = asce.wind_loading._calc_K_z(10*unit.ft, 2460*unit.ft, 9.8, return_latex=True)
     assert isclose(K_z, 0.8511539011, abs_tol=1e-10)
@@ -79,12 +89,12 @@ def test_MainWindServer_init_gable():
         L_y=78.5*unit.ft,
         h=51.25*unit.ft,
         GC_pi=0.18)
-    assert MWFRS.coefficients["x"]["parapet"]["windward"]["c1"] == 1.5
-    assert isclose(MWFRS.coefficients["x"]["wall"]["leeward"]["c1"], -0.2652866242, abs_tol=1e-10)
-    assert MWFRS.coefficients["x"]["roof"]["d<=h"]["c1"] == -0.9
-    assert MWFRS.coefficients["y"]["parapet"]["leeward"]["c1"] == -1
-    assert MWFRS.coefficients["y"]["wall"]["side"]["c1"] == -0.7
-    assert isclose(MWFRS.coefficients["y"]["roof"]["windward"]["c1"], -0.7917197452, abs_tol=1e-10)
+    assert MWFRS.coefs["x"]["parapet"]["windward"]["c1"] == 1.5
+    assert isclose(MWFRS.coefs["x"]["wall"]["leeward"]["c1"], -0.2652866242, abs_tol=1e-10)
+    assert MWFRS.coefs["x"]["roof"]["d<=h"]["c1"] == -0.9
+    assert MWFRS.coefs["y"]["parapet"]["leeward"]["c1"] == -1
+    assert MWFRS.coefs["y"]["wall"]["side"]["c1"] == -0.7
+    assert isclose(MWFRS.coefs["y"]["roof"]["windward"]["c1"], -0.7917197452, abs_tol=1e-10)
 
 def test_MainWindServer_minimum_pressure():
     MWFRS = asce.wind_loading.MainWindServer(
@@ -160,10 +170,10 @@ def test_CandCServer_init_gable():
         h_e = 20*unit.ft)
     keys = {"1+", "1-", "2+", "2-", "3+", "3-", "4+", "4-", "4P+",
             "4P-", "5+", "5-", "5P+", "5P-", "C+", "C-"}
-    assert set(CandC.coefficients.keys()) == keys
-    assert CandC.coefficients["1-"]["c1"] == -3.0155
-    assert CandC.coefficients["4-"]["c1"] == -1.2766
-    assert CandC.coefficients["C-"]["c1"] == -0.7
+    assert set(CandC.coefs.keys()) == keys
+    assert CandC.coefs["1-"]["c1"] == -3.0155
+    assert CandC.coefs["4-"]["c1"] == -1.2766
+    assert CandC.coefs["C-"]["c1"] == -0.7
 
 def test_CandCServer_init_open_monoslope():
     CandC = asce.wind_loading.CandCServer(
@@ -171,13 +181,13 @@ def test_CandCServer_init_open_monoslope():
         roof_type="monoslope_clear",
         roof_angle=22.5,
         GC_pi=0.18)
-    assert CandC.coefficients["1+"]["kind"] == "constants"
-    assert isclose(CandC.coefficients["1+"]["c3"], 2.2)
-    assert isclose(CandC.coefficients["1-"]["c3"], -2.2)
-    assert isclose(CandC.coefficients["2+"]["c2"], 3.3)
-    assert isclose(CandC.coefficients["2-"]["c2"], -3.35)
-    assert isclose(CandC.coefficients["3+"]["c1"], 4.4)
-    assert isclose(CandC.coefficients["3-"]["c1"], -4.4)
+    assert CandC.coefs["1+"]["kind"] == "constants"
+    assert isclose(CandC.coefs["1+"]["c3"], 2.2)
+    assert isclose(CandC.coefs["1-"]["c3"], -2.2)
+    assert isclose(CandC.coefs["2+"]["c2"], 3.3)
+    assert isclose(CandC.coefs["2-"]["c2"], -3.35)
+    assert isclose(CandC.coefs["3+"]["c1"], 4.4)
+    assert isclose(CandC.coefs["3-"]["c1"], -4.4)
 
 class TestCandCServerLowRise:
     def setup_method(self, method):

@@ -22,6 +22,58 @@ from structuraltools import resources, unit, utils
 from structuraltools.asce import _wind_loading_latex as templates
 
 
+def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
+    """Calculate the topographic factor (K_zt) per ASCE 7-22 Figure 26.8-1.
+
+    Parameters
+    ==========
+
+    feature : str
+        Topographic feature causing wind speed-up.
+        One of: "ridge", "escarpment", or "hill"
+
+    H : pint length quantity
+        Height of feature relative to the upwind terrain
+
+    L_h : pint length quantity
+        Distance upwind of crest to where the difference in ground elevation is
+        half of the height of the feature
+
+    x : pint length quantity
+        Distance (upwind or downwind) from the crest to the site of
+        the structure
+
+    z : pint length quantity
+        Height of the structure above the ground surface at the site
+
+    exposure : str, optional
+        Exposure catagory. One of: "B", "C", or "D".
+        Conservatively defaults to "D"
+
+    location : str, optional
+        On of: "upwind" or "downwind", indicating the location of the structure
+        relative to the feature. Conservatively defaults to "downwind".
+
+    show : bool, optional
+        Boolean indicating if the calculations should be shown in
+        Jupyter output
+
+    return_latex : bool, optional
+        Boolean indicating if the latex string should be returned
+
+    decimal_points : int, optional
+        How many decimal points to use when displaying the calculations in
+        Jupyter output. Defaults to 3"""
+    dec = kwargs.get("decimal_points", 3)
+    with open(resources.joinpath("ASCE_TopoCoefficients.json"), "r") as file:
+        topo_coefs = json.load(file)[feature]
+
+    K_1 = topo_coefs["K_1/(H/L_h)"][kwargs.get("exposure", "D")]*min(H/L_h, 0.5)
+    K_2 = 1-abs(x)/(topo_coefs["mu"][kwargs.get("location", "downwind")]*L_h)
+    K_3 = e**(-topo_coefs["gamma"]*z/L_h)
+    K_zt = (1+K_1*K_2*K_3)**2
+    return K_zt
+
 def _calc_K_z(z, z_g, alpha: float, **kwargs) -> float:
     """Calculate the velocity pressure exposure coefficient (K_z) per
     ASCE 7-22 Table 26.10-1 footnote 1
@@ -43,7 +95,7 @@ def _calc_K_z(z, z_g, alpha: float, **kwargs) -> float:
         Jupyter output
 
     return_latex : bool, optional
-        Boolean indicating if the latex string string should be returned
+        Boolean indicating if the latex string should be returned
 
     decimal_points : int, optional
         How many decimal places to use when displaying calculations in
@@ -93,7 +145,7 @@ def _calc_q_z(K_z: float, K_zt: float, K_e: float, V, **kwargs):
         Jupyter output
 
     return_latex : bool, optional
-        Boolean indicating if the latex string string should be returned
+        Boolean indicating if the latex string should be returned
 
     decimal_points : int, optional
         How many decimal places to use when displaying calculations in
@@ -326,8 +378,8 @@ class MainWindServer:
         q_p : pint pressure quantity, optional
             Velocity pressure factor at parapet height"""
         if filepath:
-            with open(filepath, "r") as json_file:
-                raw = json.load(json_file)
+            with open(filepath, "r") as file:
+                raw = json.load(file)
             file_vals = {key: utils.convert_to_unit(value) for key, value in raw.items()}
         else:
             file_vals = {}
@@ -353,12 +405,12 @@ class MainWindServer:
         self.q_h = kwargs.get("q_h", file_vals.get("q_h"))
         self.q_p = kwargs.get("q_p", file_vals.get("q_p"))
 
-        with open(resources.joinpath("ASCE_MainWindCoefficients.json")) as coefficients_file:
-            type_coefs = json.load(coefficients_file)[self.building_type]
+        with open(resources.joinpath("ASCE_MainWindCoefficients.json")) as file:
+            type_coefs = json.load(file)[self.building_type]
 
         if self.building_type in ("low-rise", "mid-rise"):
             # Get parapet coefficients
-            self.coefficients = {
+            self.coefs = {
                 "x": {"parapet": type_coefs["parapet"]},
                 "y": {"parapet": type_coefs["parapet"]}
             }
@@ -366,34 +418,34 @@ class MainWindServer:
             for axis, L, B in (("x", self.L_x, self.L_y), ("y", self.L_y, self.L_x)):
                 x_3 = (L/B).to("dimensionless").magnitude
                 if x_3 <= 1:
-                    self.coefficients[axis].update({"wall": type_coefs["wall"]["L/B=1"]})
+                    self.coefs[axis].update({"wall": type_coefs["wall"]["L/B=1"]})
                 elif x_3 <= 2:
-                    self.coefficients[axis].update({"wall": utils.linterp_dicts(
+                    self.coefs[axis].update({"wall": utils.linterp_dicts(
                         1, type_coefs["wall"]["L/B=1"],
                         2, type_coefs["wall"]["L/B=2"],
                         x_3)})
                 elif x_3 <= 4:
-                    self.coefficients[axis].update({"wall": utils.linterp_dicts(
+                    self.coefs[axis].update({"wall": utils.linterp_dicts(
                         2, type_coefs["wall"]["L/B=2"],
                         4, type_coefs["wall"]["L/B=4"],
                         x_3)})
                 else:
-                    self.coefficients[axis].update({"wall": type_coefs["wall"]["L/B=4"]})
+                    self.coefs[axis].update({"wall": type_coefs["wall"]["L/B=4"]})
             # Get roof coefficients
             for axis, L in (("x", self.L_x), ("y", self.L_y)):
                 x_3 = (self.h/L).to("dimensionless").magnitude
                 if self.ridge_axis == axis or self.roof_angle < 10:
                     # Use table for flat roof or wind parallel to ridge
                     if x_3 <= 0.5:
-                        self.coefficients[axis].update({
+                        self.coefs[axis].update({
                             "roof": type_coefs["roof_parallel"]["h/L=0.5"]})
                     elif x_3 <= 1:
-                        self.coefficients[axis].update({"roof": utils.linterp_dicts(
+                        self.coefs[axis].update({"roof": utils.linterp_dicts(
                             0.5, type_coefs["roof_parallel"]["h/L=0.5"],
                             1, type_coefs["roof_parallel"]["h/L=1"],
                             x_3)})
                     else:
-                        self.coefficients[axis].update({
+                        self.coefs[axis].update({
                             "roof": type_coefs["roof_parallel"]["h/L=1"]})
                 else:
                     # Use table for wind normal to ridge
@@ -408,15 +460,15 @@ class MainWindServer:
                             self.roof_angle)})
                     # Get final roof dictionary
                     if x_3 <= 0.25:
-                        self.coefficients[axis].update({"roof": dicts["h/L=0.25"]})
+                        self.coefs[axis].update({"roof": dicts["h/L=0.25"]})
                     elif x_3 <= 0.5:
-                        self.coefficients[axis].update({"roof": utils.linterp_dicts(
+                        self.coefs[axis].update({"roof": utils.linterp_dicts(
                             0.25, dicts["h/L=0.25"], 0.5, dicts["h/L=0.5"], x_3)})
                     elif x_3 <= 1:
-                        self.coefficients[axis].update({"roof": utils.linterp_dicts(
+                        self.coefs[axis].update({"roof": utils.linterp_dicts(
                             0.5, dicts["h/L=0.5"], 1, dicts["h/L=1"], x_3)})
                     else:
-                        self.coefficients[axis].update({"roof": dicts["h/L=1"]})
+                        self.coefs[axis].update({"roof": dicts["h/L=1"]})
         elif self.building_type == "open":
             raise NotImplementedError("open buildings have not yet been implemented")
         else:
@@ -460,7 +512,7 @@ class MainWindServer:
             elif element == "wall":
                 location = "windward"
 
-        coefs = self.coefficients[axis][element][location]
+        coefs = self.coefs[axis][element][location]
         p_min = unit(coefs["p_min"])
         match coefs.get("q_z", "q_h"):
             case "q_h":
@@ -533,8 +585,8 @@ class CandCServer:
         q_p : pint pressure quantity, optional
             Velocity pressure factor at parapet height"""
         if filepath:
-            with open(filepath, "r") as json_file:
-                raw = json.load(json_file)
+            with open(filepath, "r") as file:
+                raw = json.load(file)
             file_vals = {key: utils.convert_to_unit(value) for key, value in raw.items()}
         else:
             file_vals = {}
@@ -560,26 +612,26 @@ class CandCServer:
         match self.building_type:
             case "low-rise":
                 # Get wall coefficients
-                self.coefficients = type_coefs["walls"]
+                self.coefs = type_coefs["walls"]
                 # Get roof coefficients
                 if self.roof_angle <= 7:
-                    self.coefficients.update(type_coefs["flat"])
+                    self.coefs.update(type_coefs["flat"])
                 elif self.roof_angle <= 20:
-                    self.coefficients.update(type_coefs["low_"+self.roof_type])
+                    self.coefs.update(type_coefs["low_"+self.roof_type])
                 elif self.roof_angle <= 27:
-                    self.coefficients.update(type_coefs["mid_"+self.roof_type])
+                    self.coefs.update(type_coefs["mid_"+self.roof_type])
                 elif self.roof_angle <= 45:
-                    self.coefficients.update(type_coefs["high_"+self.roof_type])
+                    self.coefs.update(type_coefs["high_"+self.roof_type])
                 else:
                     raise ValueError("Roof slope greater than 45 degrees")
                 # Get canopy coefficients
                 if self.h_c and self.h_e:
                     if self.h_c/self.h_e <= 0.5:
-                        self.coefficients.update(type_coefs["low_canopy"])
+                        self.coefs.update(type_coefs["low_canopy"])
                     elif self.h_c/self.h_e < 0.9:
-                        self.coefficients.update(type_coefs["mid_canopy"])
+                        self.coefs.update(type_coefs["mid_canopy"])
                     elif self.h_c/self.h_e <= 1:
-                        self.coefficients.update(type_coefs["high_canopy"])
+                        self.coefs.update(type_coefs["high_canopy"])
                     else:
                         raise ValueError("Canopy is higher than mean eave height")
             case "mid-rise":
@@ -596,7 +648,7 @@ class CandCServer:
                     slopes = (30, 45)
                 else:
                     raise ValueError("Roof slope is greater than 45 degrees")
-                self.coefficients = utils.linterp_dicts(
+                self.coefs = utils.linterp_dicts(
                     slopes[0],
                     type_coefs[self.roof_type+"_"+str(slopes[0])],
                     slopes[1],
@@ -632,7 +684,7 @@ class CandCServer:
         G_method : str, optional
             String indicating which G value to use for the calculation.
             Should be one of "x", "y", or "max"."""
-        coefs = self.coefficients[zone]
+        coefs = self.coefs[zone]
         GC_pi = kwargs.get("GC_pi", coefs.get("GC_pi", self.GC_pi))
         p_min = kwargs.get("p_min", unit(coefs.get("p_min", "16 psf")))
         G_method = kwargs.get("G_method", "max")
