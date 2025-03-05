@@ -13,8 +13,9 @@
 # limitations under the License.
 
 
-from . import development_length
+from . import development_length, sectional_strength
 
 __all__ = (
-    development_length
+    development_length,
+    sectional_strength
 )
