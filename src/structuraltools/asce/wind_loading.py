@@ -68,7 +68,9 @@ def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
     with open(resources.joinpath("ASCE_TopoCoefficients.json"), "r") as file:
         topo_coefs = json.load(file)[feature]
 
-    K_1 = topo_coefs["K_1/(H/L_h)"][kwargs.get("exposure", "D")]*min(H/L_h, 0.5)
+    if H/L_h > 0.5:
+        L_h = 2*H
+    K_1 = topo_coefs["K_1/(H/L_h)"][kwargs.get("exposure", "D")]*H/L_h
     K_2 = 1-abs(x)/(topo_coefs["mu"][kwargs.get("location", "downwind")]*L_h)
     K_3 = e**(-topo_coefs["gamma"]*z/L_h)
     K_zt = (1+K_1*K_2*K_3)**2
