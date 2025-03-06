@@ -14,8 +14,10 @@
 
 
 import csv
+from string import Template
 import warnings
 
+from IPython import display, Latex
 from pint.errors import UndefinedUnitError
 
 from structuraltools import unit
@@ -117,3 +119,50 @@ def get_table_entry(filepath, index: str) -> dict:
                 break
     data = {key: convert_to_unit(value) for key, value in raw_data.items()}
     return data
+
+def fill_templates(return_vals: tuple, main_template: Template, variables: dict):
+    """Add docstring
+
+    Parameters
+    ==========
+
+    returns : tuple
+        Tuple of values to return
+
+    main_template : Template
+        Main template string to fill out and return if requested
+
+    variables : dict
+        Dictionary of additional arguments and values to use to fill out the
+        template strings"""
+    if not (variables.get("show") or variables.get("return_latex")):
+        return return_vals
+
+    sorted_vars = {}
+    subtemplates = {}
+    for key, value in variables.items():
+        if isinstance(value, Template):
+            subtemplates.update({key: value})
+        elif getattr(value, "unpack_for_templates", False):
+            sorted_vars.update(vars(value))
+        else:
+            sorted_vars.update({key: value})
+
+    rounded_vars = {}
+    dec = sorted_vars.get("decimal_points", 3)
+    for key, value in sorted_vars.items():
+        try:
+            rounded_vars.update({key: round(value, dec)})
+        except TypeError:
+            rounded_vars.update({key: value})
+
+    filled_subtemplates = {}
+    for name, subtemplate in subtemplates.items():
+        filled_subtemplates.update({name: subtemplate.substitute(**rounded_vars)})
+
+    latex = main_template.substitute(**filled_subtemplates, **rounded_vars)
+    if rounded_vars.get("show"):
+        display(Latex(latex))
+    if rounded_vars.get("return_latex"):
+        return (latex, *return_vals)
+    return return_vals

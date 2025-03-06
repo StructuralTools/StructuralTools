@@ -53,6 +53,7 @@ class Concrete:
         self.v = kwargs.get("v", 0.2)
         dec = kwargs.get("decimal_points", 3)
         latex = {"w_c": self.w_c, "f_prime_c": self.f_prime_c}
+        self.unpack_for_templates = True
 
         low = 100*unit.pcf
         high = 135*unit.pcf
@@ -128,6 +129,7 @@ class Rebar:
         self.f_y = round(kwargs.get("f_y", 60000*unit.psi).to("psi").magnitude)*unit.psi
         self.coated = kwargs.get("coated", False)
         self.E_s = round(kwargs.get("E_s", 29e6*unit.psi).to("psi").magnitude)*unit.psi
+        self.unpack_for_templates = True
         dimensions = utils.get_table_entry(rebar_database, str(self.size))
         for attribute, value in dimensions.items():
             setattr(self, attribute, value)
