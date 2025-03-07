@@ -16,10 +16,11 @@
 from IPython.display import display, Latex
 from numpy import sqrt
 
-from structuraltools import unit
+from structuraltools import unit, utils
 from structuraltools.aci import _development_length_latex as templates
 
-def straight_bar_factors(rebar, concrete, c_c, s, **kwargs):
+def straight_bar_factors(rebar, concrete, c_c, s, concrete_below: bool = False,
+                         use_psi_s: bool = False, **latex_options):
     """Returns the modification factors for straight bar development
     length from ACI 318-19 Table 25.4.2.5
 
@@ -60,89 +61,71 @@ def straight_bar_factors(rebar, concrete, c_c, s, **kwargs):
         Jupyter output. Defaults to 3"""
     c_c = c_c.to("inch")
     s = s.to("inch")
-    dec = kwargs.get("decimal_points", 3)
-    factors = {}
-    latex = {}
 
     # Set lamb
     normal = 135*unit.pcf
     if concrete.w_c < normal:
-        factors.update({"lamb": 0.75})
-        latex.update({"lamb_str": templates.straight_lamb_low.substitute(
-            lamb=factors["lamb"], w_c=concrete.w_c, normal=normal)})
+        lamb = 0.75
+        lamb_template = templates.straight_lamb_low
     else:
-        factors.update({"lamb": 1})
-        latex.update({"lamb_str": templates.straight_lamb_high.substitute(
-            lamb=factors["lamb"], w_c=concrete.w_c, normal=normal)})
+        lamb = 1
+        lamb_template = templates.straight_lamb_high
 
     # Set psi_g
     low = 60*unit.ksi
     high = 80*unit.ksi
     f_y = round(rebar.f_y.to("ksi").magnitude)*unit.ksi
     if f_y <= low:
-        factors.update({"psi_g": 1})
-        latex.update({"psi_g_str": templates.straight_psi_g_low.substitute(
-            psi_g=factors["psi_g"], f_y=f_y, low=low)})
+        psi_g = 1
+        psi_g_template = templates.straight_psi_g_low
     elif f_y <= high:
-        factors.update({"psi_g": 1.15})
-        latex.update({"psi_g_str": templates.straight_psi_g_mid.substitute(
-            psi_g=factors["psi_g"], f_y=f_y, low=low, high=high)})
+        psi_g = 1.15
+        psi_g_template = templates.straight_psi_g_mid
     else:
-        factors.update({"psi_g": 1.3})
-        latex.update({"psi_g_str": templates.straight_psi_g_high.substitute(
-            psi_g=factors["psi_g"], f_y=f_y, high=high)})
+        psi_g = 1.3
+        psi_g_template = templates.straight_psi_g_high
 
     # Set psi_e
     if rebar.coated:
-        if c_c < 3*rebar.d_b:
-            factors.update({"psi_e": 1.5})
-            latex.update({"psi_e_str": templates.straight_psi_e_c_c.substitute(
-                psi_e=factors["psi_e"], c_c=round(c_c, dec), d_b3=round(3*rebar.d_b, dec))})
-        elif s < 7*rebar.d_b:
-            factors.update({"psi_e": 1.5})
-            latex.update({"psi_e_str": templates.straight_psi_e_s.substitute(
-                psi_e=factors["psi_e"], s=round(s, dec), d_b7=round(7*rebar.d_b, dec))})
+        d_b3 = 3*rebar.d_b
+        d_b7 = 7*rebar.d_b
+        if c_c < d_b3:
+            psi_e = 1.5
+            psi_e_template = templates.straight_psi_e_c_c
+        elif s < d_b7:
+            psi_e = 1.5
+            psi_e_template = templates.straight_psi_e_s
         else:
-            factors.update({"psi_e": 1.2})
-            latex.update({"psi_e_str": templates.straight_psi_e_true.substitute(
-                psi_e=factors["psi_e"])})
+            psi_e = 1.2
+            psi_e_template = templates.straight_psi_e_true
     else:
-        factors.update({"psi_e": 1})
-        latex.update({"psi_e_str": templates.straight_psi_e_false.substitute(
-            psi_e=factors["psi_e"])})
+        psi_e = 1
+        psi_e_template = templates.straight_psi_e_false
 
     # Set psi_s
     if rebar.size >= 7:
-        factors.update({"psi_s": 1})
-        latex.update({"psi_s_str": templates.straight_psi_s_big.substitute(
-            psi_s=factors["psi_s"])})
-    elif kwargs.get("use_psi_s"):
-        factors.update({"psi_s": 0.8})
-        latex.update({"psi_s_str": templates.straight_psi_s_used.substitute(
-            psi_s=factors["psi_s"])})
+        psi_s = 1
+        psi_s_template = templates.straight_psi_s_big
+    elif use_psi_s:
+        psi_s = 0.8
+        psi_s_template = templates.straight_psi_s_used
     else:
-        factors.update({"psi_s": 1})
-        latex.update({"psi_s_str": templates.straight_psi_s_small.substitute(
-            psi_s=factors["psi_s"])})
+        psi_s = 1
+        psi_s_template = templates.straight_psi_s_small
 
     # Set psi_t
     limit = 12*unit.inch
-    if kwargs.get("concrete_below"):
-        factors.update({"psi_t": 1.3})
-        latex.update({"psi_t_str": templates.straight_psi_t_true.substitute(
-            psi_t=factors["psi_t"], limit=limit)})
+    if concrete_below:
+        psi_t = 1.3
+        psi_t_template = templates.straight_psi_t_true
     else:
-        factors.update({"psi_t": 1})
-        latex.update({"psi_t_str": templates.straight_psi_t_false.substitute(
-            psi_t=factors["psi_t"], limit=limit)})
+        psi_t = 1
+        psi_t_template = templates.straight_psi_t_false
 
-    if kwargs.get("show") or kwargs.get("return_latex"):
-        latex = templates.straight_bar_factors.substitute(**latex)
-        if kwargs.get("show"):
-            display(Latex(latex))
-        if kwargs.get("return_latex"):
-            return latex, factors
-    return factors
+    return utils.fill_templates(
+        (lamb, psi_g, psi_e, psi_s, psi_t),
+        templates.straight_bar_factors,
+        locals())
 
 def straight_bar(rebar, concrete, c_c, s, **kwargs):
     """Calculate the development length of deformed bars in tension according
@@ -203,15 +186,20 @@ def straight_bar(rebar, concrete, c_c, s, **kwargs):
         "s": round(s, dec)
     }
 
-    factors_latex, factors = straight_bar_factors(
+    factors_latex, lamb, psi_g, psi_e, psi_s, psi_t = straight_bar_factors(
         rebar, concrete, c_c, s,
         concrete_below=kwargs.get("concrete_below", False),
         use_psi_s=kwargs.get("use_psi_s", False),
         return_latex=True,
         decimal_points=dec)
-    lamb, psi_g, psi_e, psi_s, psi_t = factors.values()
-    latex.update({"factors_latex": factors_latex})
-    latex.update(factors)
+    latex.update({
+        "factors_latex": factors_latex,
+        "lamb": lamb,
+        "psi_g": psi_g,
+        "psi_e": psi_e,
+        "psi_s": psi_s,
+        "psi_t": psi_t
+    })
 
     if kwargs.get("A_tr"):
         K_tr = ((40*kwargs["A_tr"])/(s*kwargs.get("n", 1))).to("inch")

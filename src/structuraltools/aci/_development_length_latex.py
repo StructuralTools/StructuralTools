@@ -45,15 +45,15 @@ straight_psi_t_false = Template(r"& \text{Since, } \left(\text{Concrete below} \
 
 straight_bar_factors = Template(r"""
     $$$$ \begin{aligned}
-        $lamb_str
+        $lamb_template
         \\[10pt]
-        $psi_g_str
+        $psi_g_template
         \\[10pt]
-        $psi_e_str
+        $psi_e_template
         \\[10pt]
-        $psi_s_str
+        $psi_s_template
         \\[10pt]
-        $psi_t_str
+        $psi_t_template
         \\[10pt]
     \end{aligned} $$$$
 """)
