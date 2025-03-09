@@ -197,6 +197,7 @@ def straight_bar(
         decimal_points=latex_options.get("dec", decimal_points))
 
     if A_tr:
+        A_tr = A_tr.to("inch**2")
         K_tr = ((40*A_tr)/(s*n)).to("inch")
         K_tr_template = templates.straight_K_tr
     else:
