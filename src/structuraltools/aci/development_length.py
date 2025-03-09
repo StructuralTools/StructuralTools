@@ -13,7 +13,6 @@
 # limitations under the License.
 
 
-from IPython.display import display, Latex
 from numpy import sqrt
 
 from structuraltools import decimal_points, materials, quantities, unit, utils
