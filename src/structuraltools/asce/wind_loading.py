@@ -16,7 +16,7 @@
 import json
 
 from IPython.display import display, Latex
-from numpy import ceil, e, log10, sign, sqrt
+from numpy import e, log10, sign, sqrt
 
 from structuraltools import resources, unit, utils
 from structuraltools.asce import _wind_loading_latex as templates
@@ -64,7 +64,6 @@ def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
     decimal_points : int, optional
         How many decimal points to use when displaying the calculations in
         Jupyter output. Defaults to 3"""
-    dec = kwargs.get("decimal_points", 3)
     with open(resources.joinpath("ASCE_TopoCoefficients.json"), "r") as file:
         topo_coefs = json.load(file)[feature]
 

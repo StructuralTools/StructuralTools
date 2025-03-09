@@ -16,21 +16,28 @@
 from IPython.display import display, Latex
 from numpy import sqrt
 
-from structuraltools import unit, utils
+from structuraltools import decimal_points, materials, quantities, unit, utils
 from structuraltools.aci import _development_length_latex as templates
 
-def straight_bar_factors(rebar, concrete, c_c, s, concrete_below: bool = False,
-                         use_psi_s: bool = False, **latex_options):
+
+def straight_bar_factors(
+        rebar: materials.Rebar,
+        concrete: materials.Concrete,
+        c_c: quantities.Length,
+        s: quantities.Length,
+        concrete_below: bool = False,
+        use_psi_s: bool = False,
+        **latex_options) -> tuple:
     """Returns the modification factors for straight bar development
     length from ACI 318-19 Table 25.4.2.5
 
     Parameters
     ==========
 
-    rebar : structuraltools.materials.Rebar instance
+    rebar : materials.Rebar instance
         Rebar to return the modification factors for
 
-    concrete : structuraltools.materials.Concrete instance
+    concrete : materials.Concrete instance
         Concrete to return the modification factors for
 
     c_c : pint length quantity
@@ -43,7 +50,7 @@ def straight_bar_factors(rebar, concrete, c_c, s, concrete_below: bool = False,
         Boolean indicating if there is 12 inches or more of fresh
         concrete placed below horizontal reinforcement
 
-    use_psi_s : Bool, optional
+    use_psi_s : bool, optional
         Boolean indicating if the rebar size factor from
         ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
         default because research indicates that using this factor is
@@ -63,8 +70,8 @@ def straight_bar_factors(rebar, concrete, c_c, s, concrete_below: bool = False,
     s = s.to("inch")
 
     # Set lamb
-    normal = 135*unit.pcf
-    if concrete.w_c < normal:
+    normal_weight = 135*unit.pcf
+    if concrete.w_c < normal_weight:
         lamb = 0.75
         lamb_template = templates.straight_lamb_low
     else:
@@ -72,13 +79,13 @@ def straight_bar_factors(rebar, concrete, c_c, s, concrete_below: bool = False,
         lamb_template = templates.straight_lamb_high
 
     # Set psi_g
-    low = 60*unit.ksi
-    high = 80*unit.ksi
+    psi_g_low_limit = 60*unit.ksi
+    psi_g_high_limit = 80*unit.ksi
     f_y = round(rebar.f_y.to("ksi").magnitude)*unit.ksi
-    if f_y <= low:
+    if f_y <= psi_g_low_limit:
         psi_g = 1
         psi_g_template = templates.straight_psi_g_low
-    elif f_y <= high:
+    elif f_y <= psi_g_high_limit:
         psi_g = 1.15
         psi_g_template = templates.straight_psi_g_mid
     else:
@@ -122,12 +129,19 @@ def straight_bar_factors(rebar, concrete, c_c, s, concrete_below: bool = False,
         psi_t = 1
         psi_t_template = templates.straight_psi_t_false
 
-    return utils.fill_templates(
-        (lamb, psi_g, psi_e, psi_s, psi_t),
-        templates.straight_bar_factors,
-        locals())
+    return utils.fill_templates(templates.straight_bar_factors, locals(),
+                                lamb, psi_g, psi_e, psi_s, psi_t)
 
-def straight_bar(rebar, concrete, c_c, s, **kwargs):
+def straight_bar(
+        rebar: materials.Rebar,
+        concrete: materials.Concrete,
+        c_c: quantities.Length,
+        s: quantities.Length,
+        n: int = 1,
+        A_tr: quantities.Area | None = None,
+        concrete_below: bool = False,
+        use_psi_s: bool = False,
+        **latex_options) -> quantities.Length | tuple[str, quantities.Length]:
     """Calculate the development length of deformed bars in tension according
     to ACI 318-19 Section 25.4.2
 
@@ -177,63 +191,25 @@ def straight_bar(rebar, concrete, c_c, s, **kwargs):
         Jupyter output. Defaults to 3"""
     c_c = c_c.to("inch")
     s = s.to("inch")
-    dec = kwargs.get("decimal_points", 3)
-    latex = {
-        "c_c": round(c_c, dec),
-        "d_b": round(rebar.d_b, dec),
-        "f_prime_c": round(concrete.f_prime_c, dec),
-        "f_y": round(rebar.f_y, dec),
-        "s": round(s, dec)
-    }
 
     factors_latex, lamb, psi_g, psi_e, psi_s, psi_t = straight_bar_factors(
-        rebar, concrete, c_c, s,
-        concrete_below=kwargs.get("concrete_below", False),
-        use_psi_s=kwargs.get("use_psi_s", False),
-        return_latex=True,
-        decimal_points=dec)
-    latex.update({
-        "factors_latex": factors_latex,
-        "lamb": lamb,
-        "psi_g": psi_g,
-        "psi_e": psi_e,
-        "psi_s": psi_s,
-        "psi_t": psi_t
-    })
+        rebar, concrete, c_c, s, concrete_below, use_psi_s, return_latex=True,
+        decimal_points=latex_options.get("dec", decimal_points))
 
-    if kwargs.get("A_tr"):
-        K_tr = ((40*kwargs["A_tr"])/(s*kwargs.get("n", 1))).to("inch")
-        latex.update({
-            "K_tr": round(K_tr, dec),
-            "K_tr_str": templates.straight_K_tr.substitute(
-                A_tr=round(kwargs["A_tr"], dec),
-                K_tr=round(K_tr, dec),
-                n=kwargs.get("n", 1),
-                s=latex["s"])
-        })
+    if A_tr:
+        K_tr = ((40*A_tr)/(s*n)).to("inch")
+        K_tr_template = templates.straight_K_tr
     else:
         K_tr = 0*unit.inch
-        latex.update({"K_tr": K_tr, "K_tr_str": ""})
+        K_tr_template = ""
 
     c_b = min(c_c+rebar.d_b/2, s/2)
     l_prime_d = ((3*rebar.f_y*min(psi_t*psi_e, 1.7)*psi_s*psi_g*rebar.d_b**2)/ \
                  (40*lamb*sqrt(concrete.f_prime_c*unit.psi)*(c_b+K_tr))).to("inch")
     l_d_limit = 12*unit.inch
     l_d = max(l_prime_d, l_d_limit)
-    latex.update({
-        "c_b": round(c_b, dec),
-        "l_prime_d": round(l_prime_d, dec),
-        "l_d_limit": round(l_d_limit, dec),
-        "l_d": round(l_d, dec)
-    })
 
-    if kwargs.get("show") or kwargs.get("return_latex"):
-        latex = templates.straight_bar.substitute(**latex)
-        if kwargs.get("show"):
-            display(Latex(latex))
-        if kwargs.get("return_latex"):
-            return latex, l_d
-    return l_d
+    return utils.fill_templates(templates.straight_bar, locals(), l_d)
 
 def standard_hook_factors(rebar, concrete, c_c_side, s, **kwargs):
     """Returns the modification factors for standard hook development length

@@ -13,17 +13,11 @@
 # limitations under the License.
 
 
-import importlib.resources
-import json
+from typing import Annotated
 
-import pint
+from pint import Quantity
 
-resources = importlib.resources.files("structuraltools.resources")
 
-unit = pint.UnitRegistry(resources.joinpath("units"))
-unit.formatter.default_format = "~L"
+type Area = Annotated[Quantity, float, "[length]**2]"]
 
-with open(resources.joinpath("ASCE_combinations.json")) as file:
-    load_combinations = json.load(file)
-
-decimal_points = 3
+type Length = Annotated[Quantity, float, "[length]"]

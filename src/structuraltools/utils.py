@@ -20,7 +20,7 @@ import warnings
 from IPython.display import display, Latex
 from pint.errors import UndefinedUnitError
 
-from structuraltools import unit
+from structuraltools import decimal_points, unit
 
 def linterp(x_1, y_1, x_2, y_2, x_3):
     """Linear interpolation between two points
@@ -120,7 +120,7 @@ def get_table_entry(filepath, index: str) -> dict:
     data = {key: convert_to_unit(value) for key, value in raw_data.items()}
     return data
 
-def fill_templates(return_vals: tuple, main_template: Template, variables: dict):
+def fill_templates(main_template: Template, variables: dict, *return_vals):
     """Function to fill out latex templates used for displaying calculations.
     This is designed to be used in the return statement of another function to
     fill out the primary latex template associated with that function.
@@ -128,11 +128,6 @@ def fill_templates(return_vals: tuple, main_template: Template, variables: dict)
     Parameters
     ==========
 
-    returns : tuple
-        Tuple of values to return. If return_latex is specified in a
-        latex_options sub-dictionary contained in the variables dictionary
-        a new tuple consisting of the latex prepended to returns will be
-        returned
 
     main_template : Template
         Main template string to fill out and return if requested
@@ -145,11 +140,16 @@ def fill_templates(return_vals: tuple, main_template: Template, variables: dict)
         Values contained in the latex_options sub-dictionary will be used to
         determine the number of decimal points used when filling out the
         templates, if the main template should be shown with display(Latex()),
-        and if the filled out main template should be returned"""
+        and if the filled out main template should be returned
+
+    return_vals : Any
+        Values to return. If return_latex is specified in a latex_options
+        sub-dictionary contained in the variables dictionary a new tuple
+        consisting of the latex prepended to returns will be returned"""
     latex_options = {
         "show": False,
         "return_latex": False,
-        "decimal_points": 3
+        "decimal_points": decimal_points
     }
     latex_options.update(variables.get("latex_options", {}))
     if not (latex_options["show"] or latex_options["return_latex"]):
@@ -158,7 +158,7 @@ def fill_templates(return_vals: tuple, main_template: Template, variables: dict)
     sorted_vars = {}
     subtemplates = {}
     for key, value in variables.items():
-        if isinstance(value, Template):
+        if isinstance(value, Template) and value != main_template:
             subtemplates.update({key: value})
         elif getattr(value, "unpack_for_templates", False):
             sorted_vars.update(vars(value))

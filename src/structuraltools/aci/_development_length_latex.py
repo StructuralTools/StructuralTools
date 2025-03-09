@@ -15,15 +15,15 @@
 
 from string import Template
 
-straight_lamb_low = Template(r"& \text{Since, } \left(w_c < $normal \Leftarrow $w_c < $normal\right): & \lambda &= $lamb")
+straight_lamb_low = Template(r"& \text{Since, } \left(w_c < $normal_weight \Leftarrow $w_c < $normal_weight\right): & \lambda &= $lamb")
 
-straight_lamb_high = Template(r"& \text{Since, } \left(w_c \geq $normal \Leftarrow $w_c \geq $normal\right): & \lambda &= $lamb")
+straight_lamb_high = Template(r"& \text{Since, } \left(w_c \geq $normal_weight \Leftarrow $w_c \geq $normal_weight\right): & \lambda &= $lamb")
 
-straight_psi_g_low = Template(r"& \text{Since, } \left(f_y \leq $low \Leftarrow $f_y \leq $low\right): & \psi_g &= $psi_g")
+straight_psi_g_low = Template(r"& \text{Since, } \left(f_y \leq $psi_g_low_limit \Leftarrow $f_y \leq $psi_g_low_limit\right): & \psi_g &= $psi_g")
 
-straight_psi_g_mid = Template(r"& \text{Since, } \left($low < f_y \leq $high \Leftarrow $low < $f_y \leq $high\right): & \psi_g &= $psi_g")
+straight_psi_g_mid = Template(r"& \text{Since, } \left($psi_g_low_limit < f_y \leq $psi_g_high_limit \Leftarrow $psi_g_low_limit < $f_y \leq $psi_g_high_limit\right): & \psi_g &= $psi_g")
 
-straight_psi_g_high = Template(r"& \text{Since, } \left(f_y > $high \Leftarrow $f_y > $high\right): & \psi_g &= $psi_g")
+straight_psi_g_high = Template(r"& \text{Since, } \left(f_y > $psi_g_high_limit \Leftarrow $f_y > $psi_g_high_limit\right): & \psi_g &= $psi_g")
 
 straight_psi_e_c_c = Template(r"& \text{Since, } \left(\mathrm{coated} = \mathrm{True}\right) \text{ and } \left(c_c < 3 \cdot d_b \Leftarrow $c_c < $d_b3\right): & \psi_e &= $psi_e")
 
@@ -62,7 +62,7 @@ straight_K_tr = Template(r"K_{tr} &= \frac{40 \cdot A_{tr}}{s \cdot n} = \frac{4
 
 straight_bar = Template(r"""$factors_latex
     $$$$ \begin{aligned}
-        $K_tr_str
+        $K_tr_template
         c_b &= \operatorname{min}\left(c_c + \frac{d_b}{2} ,\ \frac{s}{2}\right) = \operatorname{min}\left($c_c + \frac{$d_b}{2} ,\ \frac{$s}{2}\right) &= $c_b
         \\[10pt]
         l'_d &= \left(\frac{3 \cdot f_y \cdot \operatorname{min}\left(\psi_t \cdot \psi_e ,\ 1.7\right) \cdot \psi_s \cdot \psi_g}{40 \cdot \lambda \cdot \sqrt{f'_c \cdot \mathrm{psi}} \cdot \left(\frac{c_b + K_{tr}}{d_b}\right)}\right) \cdot d_b
