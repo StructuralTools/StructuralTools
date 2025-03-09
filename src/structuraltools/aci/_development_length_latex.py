@@ -76,9 +76,9 @@ straight_bar = Template(r"""$factors_latex
     \end{aligned} $$$$
 """)
 
-hook_lamb_low = Template(r"& \text{Since, } \left(w_c < $normal \Leftarrow $w_c < $normal\right): & \lambda &= $lamb")
+hook_lamb_low = Template(r"& \text{Since, } \left(w_c < $normal_weight \Leftarrow $w_c < $normal_weight\right): & \lambda &= $lamb")
 
-hook_lamb_high = Template(r"& \text{Since, } \left(w_c \geq $normal \Leftarrow $w_c \geq $normal\right): & \lambda &= $lamb")
+hook_lamb_high = Template(r"& \text{Since, } \left(w_c \geq $normal_weight \Leftarrow $w_c \geq $normal_weight\right): & \lambda &= $lamb")
 
 hook_psi_e = Template(r"& \text{Since, } \left(\mathrm{coated} = \mathrm{$coated}\right): & \psi_e &= $psi_e")
 
@@ -94,9 +94,9 @@ hook_psi_o_large = Template(r"& \text{Since, } \left(\text{Rebar size} > 11 \Lef
 
 hook_psi_o_d_b = Template(r"& \text{Since, } \left(c_{c_{side}} \geq 6 \cdot d_b \Leftarrow $c_c_side \geq $d_b6\right): & \psi_o &= $psi_o")
 
-hook_psi_o_column = Template(r"& \text{Since, } \left(\text{In column} = \mathrm{True}\right) \text{ and } \left(c_{c_{side}} \geq $min_c \Leftarrow $c_c_side \geq $min_c\right): & \psi_o &= $psi_o")
+hook_psi_o_column = Template(r"& \text{Since, } \left(\text{In column} = \mathrm{True}\right) \text{ and } \left(c_{c_{side}} \geq $min_c_c_side \Leftarrow $c_c_side \geq $min_c_c_side\right): & \psi_o &= $psi_o")
 
-hook_psi_o_column_small = Template(r"& \text{Since, } \left(c_{c_{side}} < $min_c \Leftarrow $c_c_side < $min_c\right): & \psi_o &= $psi_o")
+hook_psi_o_column_small = Template(r"& \text{Since, } \left(c_{c_{side}} < $min_c_c_side \Leftarrow $c_c_side < $min_c_c_side\right): & \psi_o &= $psi_o")
 
 hook_psi_o_small = Template(r"& \text{Since, } \left(c_{c_{side}} < 6 \cdot d_b \Leftarrow $c_c_side < $d_b6\right): & \psi_o &= $psi_o")
 
@@ -104,17 +104,17 @@ hook_psi_c = Template(r"\psi_c &= \operatorname{min}\left(\frac{f'_c}{15000\ \ma
 
 standard_hook_factors = Template(r"""
     $$$$ \begin{aligned}
-        $lamb_str
+        $lamb_template
         \\[10pt]
-        $psi_e_str
+        $psi_e_template
         \\[10pt]
-        $psi_r_str
+        $psi_r_template
         \\[10pt]
-        $psi_o_str
+        $psi_o_template
         \\[10pt]
     \end{aligned} $$$$
     $$$$ \begin{aligned}
-        $psi_c_str
+        $psi_c_template
         \\[10pt]
     \end{aligned} $$$$
 """)

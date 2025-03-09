@@ -247,7 +247,7 @@ def test_straight_bar():
 def test_standard_hook_factors_1():
     concrete = materials.Concrete(4000*unit.psi, w_c=110*unit.pcf)
     rebar = materials.Rebar(8, coated=True)
-    latex, factors = aci.development_length.standard_hook_factors(
+    results = aci.development_length.standard_hook_factors(
         rebar=rebar,
         concrete=concrete,
         c_c_side=3*unit.inch,
@@ -255,9 +255,9 @@ def test_standard_hook_factors_1():
         A_th=1*unit.inch**2,
         in_column=True,
         return_latex=True)
-    assert isclose(factors.pop("psi_c"), 0.8666666667, abs_tol=1e-10)
-    assert factors == {"lamb": 0.75, "psi_e": 1.2, "psi_r": 1, "psi_o": 1}
-    assert latex == r"""
+    assert isclose(results[-1], 0.8666666667, abs_tol=1e-10)
+    assert results[1:-1] == (0.75, 1.2, 1, 1)
+    assert results[0] == r"""
     $$ \begin{aligned}
         & \text{Since, } \left(w_c < 135\ \mathrm{pcf} \Leftarrow 110\ \mathrm{pcf} < 135\ \mathrm{pcf}\right): & \lambda &= 0.75
         \\[10pt]
@@ -277,16 +277,16 @@ def test_standard_hook_factors_1():
 def test_standard_hook_factors_2():
     concrete = materials.Concrete(6000*unit.psi)
     rebar = materials.Rebar(8)
-    latex, factors = aci.development_length.standard_hook_factors(
+    results = aci.development_length.standard_hook_factors(
         rebar=rebar,
         concrete=concrete,
         c_c_side=6*unit.inch,
         s=6*unit.inch,
         in_column=True,
         return_latex=True)
-    assert isclose(factors.pop("psi_c"), 1)
-    assert factors == {"lamb": 1, "psi_e": 1, "psi_r": 1, "psi_o": 1}
-    assert latex == r"""
+    assert isclose(results[-1], 1)
+    assert results[1:-1] == (1, 1, 1, 1)
+    assert results[0] == r"""
     $$ \begin{aligned}
         & \text{Since, } \left(w_c \geq 135\ \mathrm{pcf} \Leftarrow 150\ \mathrm{pcf} \geq 135\ \mathrm{pcf}\right): & \lambda &= 1
         \\[10pt]
@@ -306,16 +306,16 @@ def test_standard_hook_factors_2():
 def test_standard_hook_factors_3():
     concrete = materials.Concrete(6000*unit.psi)
     rebar = materials.Rebar(8)
-    latex, factors = aci.development_length.standard_hook_factors(
+    results = aci.development_length.standard_hook_factors(
         rebar=rebar,
         concrete=concrete,
         c_c_side=2*unit.inch,
         s=4*unit.inch,
         in_column=True,
         return_latex=True)
-    assert isclose(factors.pop("psi_c"), 1)
-    assert factors == {"lamb": 1, "psi_e": 1, "psi_r": 1.6, "psi_o": 1.25}
-    assert latex == r"""
+    assert isclose(results[-1], 1)
+    assert results[1:-1] == (1, 1, 1.6, 1.25)
+    assert results[0] == r"""
     $$ \begin{aligned}
         & \text{Since, } \left(w_c \geq 135\ \mathrm{pcf} \Leftarrow 150\ \mathrm{pcf} \geq 135\ \mathrm{pcf}\right): & \lambda &= 1
         \\[10pt]
@@ -335,15 +335,15 @@ def test_standard_hook_factors_3():
 def test_standard_hook_factors_4():
     concrete = materials.Concrete(6000*unit.psi)
     rebar = materials.Rebar(8)
-    latex, factors = aci.development_length.standard_hook_factors(
+    results = aci.development_length.standard_hook_factors(
         rebar=rebar,
         concrete=concrete,
         c_c_side=3*unit.inch,
         s=4*unit.inch,
         return_latex=True)
-    assert isclose(factors.pop("psi_c"), 1)
-    assert factors == {"lamb": 1, "psi_e": 1, "psi_r": 1.6, "psi_o": 1.25}
-    assert latex == r"""
+    assert isclose(results[-1], 1)
+    assert results[1:-1] == (1, 1, 1.6, 1.25)
+    assert results[0] == r"""
     $$ \begin{aligned}
         & \text{Since, } \left(w_c \geq 135\ \mathrm{pcf} \Leftarrow 150\ \mathrm{pcf} \geq 135\ \mathrm{pcf}\right): & \lambda &= 1
         \\[10pt]
@@ -363,15 +363,15 @@ def test_standard_hook_factors_4():
 def test_standard_hook_factors_5():
     concrete = materials.Concrete(6000*unit.psi)
     rebar = materials.Rebar(14)
-    latex, factors = aci.development_length.standard_hook_factors(
+    results = aci.development_length.standard_hook_factors(
         rebar=rebar,
         concrete=concrete,
         c_c_side=12*unit.inch,
         s=12*unit.inch,
         return_latex=True)
-    assert isclose(factors.pop("psi_c"), 1)
-    assert factors == {"lamb": 1, "psi_e": 1, "psi_r": 1.6, "psi_o": 1.25}
-    assert latex == r"""
+    assert isclose(results[-1], 1)
+    assert results[1:-1] == (1, 1, 1.6, 1.25)
+    assert results[0] == r"""
     $$ \begin{aligned}
         & \text{Since, } \left(w_c \geq 135\ \mathrm{pcf} \Leftarrow 150\ \mathrm{pcf} \geq 135\ \mathrm{pcf}\right): & \lambda &= 1
         \\[10pt]

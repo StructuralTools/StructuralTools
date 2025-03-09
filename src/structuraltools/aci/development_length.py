@@ -54,18 +54,7 @@ def straight_bar_factors(
         Boolean indicating if the rebar size factor from
         ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
         default because research indicates that using this factor is
-        unconservative.
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
+        unconservative."""
     c_c = c_c.to("inch")
     s = s.to("inch")
 
@@ -177,18 +166,7 @@ def straight_bar(
         Boolean indicating if the rebar size factor from
         ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
         default because reseach indicates that using this factor is
-        unconservative.
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
+        unconservative."""
     c_c = c_c.to("inch")
     s = s.to("inch")
 
@@ -209,10 +187,17 @@ def straight_bar(
                  (40*lamb*sqrt(concrete.f_prime_c*unit.psi)*(c_b+K_tr))).to("inch")
     l_d_limit = 12*unit.inch
     l_d = max(l_prime_d, l_d_limit)
-
     return utils.fill_templates(templates.straight_bar, locals(), l_d)
 
-def standard_hook_factors(rebar, concrete, c_c_side, s, **kwargs):
+def standard_hook_factors(
+    rebar: materials.Rebar,
+    concrete: materials.Concrete,
+    c_c_side: quantities.Length,
+    s: quantities.Length,
+    n: int = 1,
+    A_th: quantities.Area = 0*unit.inch**2,
+    in_column: bool = False,
+    **latex_options) -> tuple:
     """Returns the modification factors for standard hook development length
     from ACI 318-19 Table 25.4.3.2
 
@@ -239,101 +224,77 @@ def standard_hook_factors(rebar, concrete, c_c_side, s, **kwargs):
         bars. Defaults to 0
 
     in_column : bool, optional
-        Boolean indicating if the hooked bar terminates inside a column core
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
+        Boolean indicating if the hooked bar terminates inside a column core"""
     c_c_side = c_c_side.to("inch")
     s = s.to("inch")
-    A_th = kwargs.get("A_th", 0*unit.inch**2).to("inch**2")
-    dec = kwargs.get("decimal_points", 3)
-    factors = {}
-    latex = {}
+    A_th = A_th.to("inch**2")
 
     # Set lamb
-    normal = 135*unit.pcf
-    if concrete.w_c < normal:
-        factors.update({"lamb": 0.75})
-        latex.update({"lamb_str": templates.hook_lamb_low.substitute(
-            lamb=factors["lamb"], w_c=concrete.w_c, normal=normal)})
+    normal_weight = 135*unit.pcf
+    if concrete.w_c < normal_weight:
+        lamb = 0.75
+        lamb_template = templates.hook_lamb_low
     else:
-        factors.update({"lamb": 1})
-        latex.update({"lamb_str": templates.hook_lamb_high.substitute(
-            lamb=factors["lamb"], w_c=concrete.w_c, normal=normal)})
+        lamb = 1
+        lamb_template = templates.hook_lamb_high
 
     # Set psi_e
     if rebar.coated:
-        factors.update({"psi_e": 1.2})
+        psi_e = 1.2
     else:
-        factors.update({"psi_e": 1})
-    latex.update({"psi_e_str": templates.hook_psi_e.substitute(
-        psi_e=factors["psi_e"], coated=rebar.coated)})
+        psi_e = 1
+    psi_e_template = templates.hook_psi_e
 
     # Set psi_r
+    d_b6 = 6*rebar.d_b
+    A_hs04 = 0.4*rebar.A_b*n
     if rebar.size > 11:
-        factors.update({"psi_r": 1.6})
-        latex.update({"psi_r_str": templates.hook_psi_r_large.substitute(
-            psi_r=factors["psi_r"], size=rebar.size)})
-    elif s >= 6*rebar.d_b:
-        factors.update({"psi_r": 1})
-        latex.update({"psi_r_str": templates.hook_psi_r_s.substitute(
-            psi_r=factors["psi_r"], s=round(s, dec), d_b6=round(6*rebar.d_b, dec))})
-    elif A_th >= 0.4*rebar.A_b*kwargs.get("n", 1):
-        factors.update({"psi_r": 1})
-        latex.update({"psi_r_str": templates.hook_psi_r_A_th.substitute(
-            psi_r=factors["psi_r"], A_th=round(A_th, dec),
-            A_hs04=round(0.4*rebar.A_b*kwargs.get("n", 1), dec))})
+        psi_r = 1.6
+        psi_r_template = templates.hook_psi_r_large
+    elif s >= d_b6:
+        psi_r = 1
+        psi_r_template = templates.hook_psi_r_s
+    elif A_th >= A_hs04:
+        psi_r = 1
+        psi_r_template = templates.hook_psi_r_A_th
     else:
-        factors.update({"psi_r": 1.6})
-        latex.update({"psi_r_str": templates.hook_psi_r_small.substitute(
-            psi_r=factors["psi_r"], s=round(s, dec),  d_b6=round(6*rebar.d_b, dec),
-            A_th=round(A_th, dec), A_hs04=round(0.4*rebar.A_b*kwargs.get("n", 1), dec))})
+        psi_r = 1.6
+        psi_r_template = templates.hook_psi_r_small
 
     # Set psi_o
-    min_c = 2.5*unit.inch
+    min_c_c_side = 2.5*unit.inch
     if rebar.size > 11:
-        factors.update({"psi_o": 1.25})
-        latex.update({"psi_o_str": templates.hook_psi_o_large.substitute(
-            psi_o=factors["psi_o"], size=rebar.size)})
-    elif c_c_side >= 6*rebar.d_b:
-        factors.update({"psi_o": 1})
-        latex.update({"psi_o_str": templates.hook_psi_o_d_b.substitute(
-            psi_o=factors["psi_o"], c_c_side=round(c_c_side, dec), d_b6=round(6*rebar.d_b, dec))})
-    elif c_c_side >= min_c and kwargs.get("in_column", False):
-        factors.update({"psi_o": 1})
-        latex.update({"psi_o_str": templates.hook_psi_o_column.substitute(
-            psi_o=factors["psi_o"], c_c_side=round(c_c_side, dec), min_c=min_c)})
-    elif kwargs.get("in_column", False):
-        factors.update({"psi_o": 1.25})
-        latex.update({"psi_o_str": templates.hook_psi_o_column_small.substitute(
-            psi_o=factors["psi_o"], c_c_side=round(c_c_side, dec), min_c=min_c)})
+        psi_o = 1.25
+        psi_o_template = templates.hook_psi_o_large
+    elif c_c_side >= d_b6:
+        psi_o = 1
+        psi_o_template = templates.hook_psi_o_d_b
+    elif c_c_side >= min_c_c_side and in_column:
+        psi_o = 1
+        psi_o_template = templates.hook_psi_o_column
+    elif in_column:
+        psi_o = 1.25
+        psi_o_template = templates.hook_psi_o_column_small
     else:
-        factors.update({"psi_o": 1.25})
-        latex.update({"psi_o_str": templates.hook_psi_o_small.substitute(
-            psi_o=factors["psi_o"], c_c_side=round(c_c_side, dec), d_b6=round(6*rebar.d_b, dec))})
+        psi_o = 1.25
+        psi_o_template = templates.hook_psi_o_small
 
     # Set psi_c
-    factors.update({"psi_c": min(concrete.f_prime_c.magnitude/15000+0.6, 1)})
-    latex.update({"psi_c_str": templates.hook_psi_c.substitute(
-        psi_c=round(factors["psi_c"], dec), f_prime_c=concrete.f_prime_c)})
+    psi_c = min(concrete.f_prime_c.magnitude/15000+0.6, 1)
+    psi_c_template = templates.hook_psi_c
 
-    if kwargs.get("show") or kwargs.get("return_latex"):
-        latex = templates.standard_hook_factors.substitute(**latex)
-        if kwargs.get("show"):
-            display(Latex(latex))
-        if kwargs.get("return_latex"):
-            return latex, factors
-    return factors
+    return utils.fill_templates(templates.standard_hook_factors, locals(),
+                                lamb, psi_e, psi_r, psi_o, psi_c)
 
-def standard_hook(rebar, concrete, c_c_side, s, **kwargs):
+def standard_hook(
+    rebar: materials.Rebar,
+    concrete: materials.Concrete,
+    c_c_side: quantities.Length,
+    s: quantities.Length,
+    n: int = 1,
+    A_th: quantities.Area = 0*unit.inch**2,
+    in_column: bool = False,
+    **latex_options) -> quantities.Length | tuple[str, quantities.Length]:
     """Calculate the development length ($l_{dh}$) for a deformed bar in tension
     terminating in a standard hook according to ACI 318-19 Section 25.4.3
 
@@ -360,54 +321,18 @@ def standard_hook(rebar, concrete, c_c_side, s, **kwargs):
         Defaults to 0.
 
     in_column : bool
-        Boolean indicating if the hooked bar terminates inside a column core
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
+        Boolean indicating if the hooked bar terminates inside a column core"""
     c_c_side = c_c_side.to("inch")
     s = s.to("inch")
-    dec = kwargs.get("decimal_points", 3)
-    latex = {
-        "c_c_side": round(c_c_side, dec),
-        "d_b": round(rebar.d_b, dec),
-        "f_prime_c": round(concrete.f_prime_c, dec),
-        "f_y": round(rebar.f_y, dec),
-        "s": round(s, dec)
-    }
+    A_th = A_th.to("inch**2")
 
-    factors_latex, factors = standard_hook_factors(
-        rebar, concrete, c_c_side, s,
-        n=kwargs.get("n", 1),
-        A_th=kwargs.get("A_th", 0*unit.inch**2).to("inch**2"),
-        in_column=kwargs.get("in_column", False),
-        return_latex=True,
-        decimal_points=dec)
-    lamb, psi_e, psi_r, psi_o, psi_c = factors.values()
-    latex.update(factors)
-    latex.update({"factors_latex": factors_latex, "psi_c": round(latex["psi_c"], dec)})
+    factors_latex, lamb, psi_e, psi_r, psi_o, psi_c = standard_hook_factors(
+        rebar, concrete, c_c_side, s, n, A_th, in_column, return_latex=True,
+        decimal_points=latex_options.get("decimal_points", decimal_points))
 
     l_prime_dh = (((rebar.f_y*psi_e*psi_r*psi_o*psi_c)/ \
         (55*lamb*sqrt(concrete.f_prime_c*unit.pli)))*rebar.d_b**1.5).to("inch")
+    d_b8 = 8*rebar.d_b
     l_dh_limit = 6*unit.inch
-    l_dh = max(l_prime_dh, 8*rebar.d_b, l_dh_limit)
-    latex.update({
-        "l_prime_dh": round(l_prime_dh, dec),
-        "d_b8": round(8*rebar.d_b, dec),
-        "l_dh_limit": round(l_dh_limit, dec),
-        "l_dh": round(l_dh, dec)
-    })
-
-    if kwargs.get("show") or kwargs.get("return_latex"):
-        latex = templates.standard_hook.substitute(**latex)
-        if kwargs.get("show"):
-            display(Latex(latex))
-        if kwargs.get("return_latex"):
-            return latex, l_dh
-    return l_dh
+    l_dh = max(l_prime_dh, d_b8, l_dh_limit)
+    return utils.fill_templates(templates.standard_hook, locals(), l_dh)

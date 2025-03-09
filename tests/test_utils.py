@@ -88,3 +88,5 @@ def test_fill_templates():
         Test class attribute: 60000\ \mathrm{psi}
         Test quantity: 3.67\ \mathrm{ft}"""
 
+def test_fill_templates_single_return():
+    assert utils.fill_templates("", {}, "test") == "test"

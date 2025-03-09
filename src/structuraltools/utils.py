@@ -18,6 +18,7 @@ from string import Template
 import warnings
 
 from IPython.display import display, Latex
+from pint import Quantity
 from pint.errors import UndefinedUnitError
 
 from structuraltools import decimal_points, unit
@@ -128,7 +129,6 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
     Parameters
     ==========
 
-
     main_template : Template
         Main template string to fill out and return if requested
 
@@ -137,10 +137,21 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
         template strings. Any template strings in the variables dictionary will
         be filled out and used to fill out the main template.
 
-        Values contained in the latex_options sub-dictionary will be used to
-        determine the number of decimal points used when filling out the
-        templates, if the main template should be shown with display(Latex()),
-        and if the filled out main template should be returned
+        The variables dictionary may contain a latex_options sub-dictionary to
+        specify addition arguments for the latex output.
+
+        show : bool, optional
+            Boolean indicating if the calculations should be displayed with
+            IPython's display(Latex()). Defaults to False.
+
+        return_latex : bool, optional
+            Boolean indicating if the latex string should be returned.
+            Defaults to False.
+
+        decimal_points : int, optional
+            How many decimal places to use when writing variables into the
+            latex template. defaults to the value in
+            structuraltools.decimal_points.
 
     return_vals : Any
         Values to return. If return_latex is specified in a latex_options
@@ -153,7 +164,10 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
     }
     latex_options.update(variables.get("latex_options", {}))
     if not (latex_options["show"] or latex_options["return_latex"]):
-        return return_vals
+        if len(return_vals) == 1:
+            return return_vals[0]
+        else:
+            return return_vals
 
     sorted_vars = {}
     subtemplates = {}
@@ -167,9 +181,9 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
 
     rounded_vars = {}
     for key, value in sorted_vars.items():
-        try:
+        if isinstance(value, Quantity | float):
             rounded_vars.update({key: round(value, latex_options["decimal_points"])})
-        except TypeError:
+        else:
             rounded_vars.update({key: value})
 
     filled_subtemplates = {}
@@ -181,4 +195,7 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
         display(Latex(latex))
     if latex_options["return_latex"]:
         return (latex, *return_vals)
-    return return_vals
+    elif len(return_vals) == 1:
+        return return_vals[0]
+    else:
+        return return_vals
