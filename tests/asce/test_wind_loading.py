@@ -71,7 +71,7 @@ def test_calc_wind_server_inputs():
         L_x=211.5*unit.ft,
         L_y=78.5*unit.ft,
         h=51.25*unit.ft,
-        z_e=520*unit.ft,
+        Z_e=520*unit.ft,
         h_p=53.25*unit.ft)
     assert isclose(inputs["K_e"], 0.981352065, abs_tol=1e-9)
     assert isclose(inputs["q_h"].to("psf").magnitude, 24.16680433, abs_tol=1e-8)
