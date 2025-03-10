@@ -66,7 +66,7 @@ def calc_K_zt(
         L_h = 2*H
     K_1 = (topo_coefs["K_1/(H/L_h)"][exposure]*H/L_h).to("dimensionless").magnitude
     K_2 = (1-abs(x)/(topo_coefs["mu"][location]*L_h)).to("dimensionless").magnitude
-    K_3 = (e**(-topo_coefs["gamma"]*z/L_h)).to("dimensionless").magnitude
+    K_3 = e**(-topo_coefs["gamma"]*z/L_h)
     K_zt = (1+K_1*K_2*K_3)**2
     return K_zt
 
