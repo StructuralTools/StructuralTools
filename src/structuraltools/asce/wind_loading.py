@@ -18,11 +18,18 @@ import json
 from IPython.display import display, Latex
 from numpy import e, log10, sign, sqrt
 
-from structuraltools import resources, unit, utils
+from structuraltools import quantities, resources, unit, utils
 from structuraltools.asce import _wind_loading_latex as templates
 
 
-def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
+def calc_K_zt(
+    feature: str,
+    H: quantities.Length,
+    L_h: quantities.Length,
+    x: quantities.Length,
+    z: quantities.Length,
+    exposure: str = "D",
+    location: str = "downwind") -> float:
     """Calculate the topographic factor (K_zt) per ASCE 7-22 Figure 26.8-1.
 
     Parameters
@@ -32,18 +39,18 @@ def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
         Topographic feature causing wind speed-up.
         One of: "ridge", "escarpment", or "hill"
 
-    H : pint length quantity
+    H : quantities.Length
         Height of feature relative to the upwind terrain
 
-    L_h : pint length quantity
+    L_h : quantities.Length
         Distance upwind of crest to where the difference in ground elevation is
         half of the height of the feature
 
-    x : pint length quantity
+    x : quantities.Length
         Distance (upwind or downwind) from the crest to the site of
         the structure
 
-    z : pint length quantity
+    z : quantities.Length
         Height of the structure above the ground surface at the site
 
     exposure : str, optional
@@ -52,78 +59,53 @@ def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
 
     location : str, optional
         On of: "upwind" or "downwind", indicating the location of the structure
-        relative to the feature. Conservatively defaults to "downwind".
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal points to use when displaying the calculations in
-        Jupyter output. Defaults to 3"""
+        relative to the feature. Conservatively defaults to "downwind"."""
     with open(resources.joinpath("ASCE_TopoCoefficients.json"), "r") as file:
         topo_coefs = json.load(file)[feature]
 
     if H/L_h > 0.5:
         L_h = 2*H
-    K_1 = topo_coefs["K_1/(H/L_h)"][kwargs.get("exposure", "D")]*H/L_h
-    K_2 = 1-abs(x)/(topo_coefs["mu"][kwargs.get("location", "downwind")]*L_h)
+    K_1 = topo_coefs["K_1/(H/L_h)"][exposure]*H/L_h
+    K_2 = 1-abs(x)/(topo_coefs["mu"][location]*L_h)
     K_3 = e**(-topo_coefs["gamma"]*z/L_h)
     K_zt = (1+K_1*K_2*K_3)**2
     return K_zt
 
-def _calc_K_z(z, z_g, alpha: float, **kwargs) -> float:
+def _calc_K_z(
+    z: quantities.Length,
+    z_g: quantities.Length,
+    alpha: float,
+    **latex_options) -> float:
     """Calculate the velocity pressure exposure coefficient (K_z) per
     ASCE 7-22 Table 26.10-1 footnote 1
 
     Parameters
     ==========
 
-    z : pint length quantity
+    z : quantities.Length
         Elevation to calculate the K_z at
 
-    z_g : pint length quantity
+    z_g : quantities.Length
         Elevation of maximum K_z
 
     alpha : float
-        Terrain exposure constant alpha from ASCE 7-22 Table 26.11-1
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
-    dec = kwargs.get("decimal_points", 3)
-    latex = {
-        "z": round(z.to("ft"), dec),
-        "z_g": round(z_g, dec),
-        "alpha": round(alpha, dec)
-    }
-
+        Terrain exposure constant alpha from ASCE 7-22 Table 26.11-1"""
     if 0 <= z and z <= z_g:
         K_z = 2.41*(max(z.to("ft"), 15*unit.ft)/z_g.to("ft")).magnitude**(2/alpha)
-        latex = templates.calc_K_z.substitute(K_z=round(K_z, dec), **latex)
+        main_template = templates.calc_K_z
     elif z <= 3280*unit.ft:
         K_z = 2.41
-        latex = templates.calc_K_z_high.substitute(K_z=K_z, **latex)
+        main_template = templates.calc_K_z_high
     else:
         raise ValueError("z is outside of the bounds supported by ASCE 7-22")
+    return utils.fill_templates(main_template, locals(), K_z)
 
-    if kwargs.get("show"):
-        display(Latex(latex))
-    if kwargs.get("return_latex"):
-        return latex, K_z
-    return K_z
-
-def _calc_q_z(K_z: float, K_zt: float, K_e: float, V, **kwargs):
+def _calc_q_z(
+    K_z: float,
+    K_zt: float,
+    K_e: float,
+    V: quantities.Velocity,
+    **latex_options) -> quantities.Pressure:
     """Calculate the velocity pressure (q_z) per ASCE 7-22 Equation 26.10-1
 
     Parameters
@@ -138,46 +120,22 @@ def _calc_q_z(K_z: float, K_zt: float, K_e: float, V, **kwargs):
     K_e : float
         Ground elevation factor from ASCE 7-22 Table 26.9-1
 
-    V : pint velocity quantity
-        Basic wind speed from the ASCE 7 Hazard tool
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
+    V : quantities.Velocity
+        Basic wind speed from the ASCE 7 Hazard tool"""
     q_z = 0.00256*K_z*K_zt*K_e*((V.to("mph").magnitude)**2)*unit.psf
-
-    if kwargs.get("show") or kwargs.get("return_latex"):
-        dec = kwargs.get("decimal_points", 3)
-        latex = templates.calc_q_z.substitute(
-            K_z=round(K_z, dec),
-            K_zt=round(K_zt, dec),
-            K_e=round(K_e, dec),
-            V=round(V.to("mph"), dec),
-            q_z=round(q_z, dec))
-        if kwargs.get("show"):
-            display(Latex(latex))
-        if kwargs.get("return_latex"):
-            return latex, q_z
-    return q_z
+    return utils.fill_templates(templates.calc_q_z, locals(), q_z)
 
 def calc_wind_server_inputs(
-    V,
+    V: quantities.Velocity,
     exposure: str,
     building_type: str,
     roof_type: str,
     roof_angle: float,
     ridge_axis: str,
-    L_x,
-    L_y,
-    h,
-    **kwargs):
+    L_x: quantities.Length,
+    L_y: quantities.Length,
+    h: quantities.Length,
+    **kwargs) -> dict:
     """Performs calculations from ASCE 7-22 Chapter 26 and returns a dictionary
     of results that can be used as input for a MainWindServer or a CandCServer.
 
