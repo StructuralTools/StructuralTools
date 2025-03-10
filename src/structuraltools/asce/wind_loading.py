@@ -129,15 +129,15 @@ def calc_wind_server_inputs(
     V: quantities.Velocity,
     exposure: str,
     building_type: str,
-    roof_type: str,
-    roof_angle: float,
-    ridge_axis: str,
     L_x: quantities.Length,
     L_y: quantities.Length,
     h: quantities.Length,
+    roof_type: str = "flat",
+    roof_angle: float = 0,
+    ridge_axis: str | None = None,
     K_d: float = 0.85,
     K_zt: float = 1,
-    z_e: quantities.Length = 0*unit.ft,
+    Z_e: quantities.Length = 0*unit.ft,
     GC_pi: float = 0.18,
     h_p: quantities.Length | None = None,
     h_e: quantities.Length | None = None,
@@ -171,12 +171,6 @@ def calc_wind_server_inputs(
         are supported for low-rise buildings and "monoslope_clear" and
         "monoslope_obstructed" are supported for open buildings.
 
-    roof_angle : float
-        Roof angle theta. Use 0 for flat roofs.
-
-    ridge_axis : str
-        String indicating the roof ridge direction. One of "x" or "y".
-
     L_x : quantities.Length
         Maximum length of the building along the x-axis.
 
@@ -185,6 +179,12 @@ def calc_wind_server_inputs(
 
     h : quantities.Length
         Mean roof height
+
+    roof_angle : float, optional
+        Roof angle theta. Use 0 for flat roofs.
+
+    ridge_axis : str, optional
+        String indicating the roof ridge direction. One of "x" or "y".
 
     K_d : float, optional
         Wind directionality factor from ASCE 7-22 Table 26.6-1. Defaults to
@@ -197,7 +197,7 @@ def calc_wind_server_inputs(
         in the upper one-half of a hill or ridge or near the crest of an
         escarpment.
 
-    z_e : quantities.Length, optional
+    Z_e : quantities.Length, optional
         Ground elevation above sea level. Defaults to 0, which can
         conservatively be used in all cases.
 
@@ -223,7 +223,7 @@ def calc_wind_server_inputs(
         exposure)
 
     # Calculate K_e according to ASCE 7-22 Table 26.9-1 footnotes 1 and 2
-    K_e = e**(-0.0000362*z_e.to("ft").magnitude)
+    K_e = e**(-0.0000362*Z_e.to("ft").magnitude)
 
     # Calculate velocity pressure at the roof height and the parapet height,
     # if applicable, according to ASCE 7-22 Table 26.10-1 footnote 1 and
@@ -298,7 +298,7 @@ class MainWindServer:
         roof_angle : float
             Roof angle ($\\theta$) in degrees. Use 0 for flat roofs.
 
-        ridge_axis : str
+        ridge_axis : str or None
             String indicating the roof ridge direction. One of: "x" or "y".
 
         L_x : quantities.Length
@@ -401,7 +401,7 @@ class MainWindServer:
                     else:
                         self.coefs[axis].update({
                             "roof": type_coefs["roof_parallel"]["h/L=1"]})
-                else:
+                elif self.ridge_axis is not None:
                     # Use table for wind normal to ridge
                     roof_angles = (10, 15, 20, 25, 30, 35, 45, 60, 80)
                     angle_index = sum(self.roof_angle > x for x in roof_angles)
@@ -423,6 +423,8 @@ class MainWindServer:
                             0.5, dicts["h/L=0.5"], 1, dicts["h/L=1"], x_3)})
                     else:
                         self.coefs[axis].update({"roof": dicts["h/L=1"]})
+                else:
+                    raise ValueError("ridge_axis not set")
         elif self.building_type == "open":
             raise NotImplementedError("open buildings have not yet been implemented")
         else:
