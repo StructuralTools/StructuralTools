@@ -288,7 +288,7 @@ class MainWindServer:
         ==========
 
         file : str, optional
-            Path to file to load variable from
+            Path to json file to load variables from
 
         building_type : str
             Type of building for MWFRS calculations.
@@ -503,7 +503,7 @@ class CandCServer:
         ==========
 
         file : str, optional
-            Path to file to load variables from
+            Path to json file to load variables from
 
         building_type : str
             Type of building for CandC calculations.
