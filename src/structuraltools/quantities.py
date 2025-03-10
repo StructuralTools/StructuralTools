@@ -21,3 +21,7 @@ from pint import Quantity
 type Area = Annotated[Quantity, float, "[length]**2]"]
 
 type Length = Annotated[Quantity, float, "[length]"]
+
+type Pressure = Annotated[Quantity, float, "[pressure]"]
+
+type Velocity = Annotated[Quantity, float, "[velocity]"]

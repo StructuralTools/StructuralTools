@@ -15,14 +15,20 @@
 
 import json
 
-from IPython.display import display, Latex
 from numpy import e, log10, sign, sqrt
 
-from structuraltools import resources, unit, utils
+from structuraltools import quantities, resources, unit, utils
 from structuraltools.asce import _wind_loading_latex as templates
 
 
-def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
+def calc_K_zt(
+    feature: str,
+    H: quantities.Length,
+    L_h: quantities.Length,
+    x: quantities.Length,
+    z: quantities.Length,
+    exposure: str = "D",
+    location: str = "downwind") -> float:
     """Calculate the topographic factor (K_zt) per ASCE 7-22 Figure 26.8-1.
 
     Parameters
@@ -32,18 +38,18 @@ def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
         Topographic feature causing wind speed-up.
         One of: "ridge", "escarpment", or "hill"
 
-    H : pint length quantity
+    H : quantities.Length
         Height of feature relative to the upwind terrain
 
-    L_h : pint length quantity
+    L_h : quantities.Length
         Distance upwind of crest to where the difference in ground elevation is
         half of the height of the feature
 
-    x : pint length quantity
+    x : quantities.Length
         Distance (upwind or downwind) from the crest to the site of
         the structure
 
-    z : pint length quantity
+    z : quantities.Length
         Height of the structure above the ground surface at the site
 
     exposure : str, optional
@@ -52,78 +58,53 @@ def calc_K_zt(feature: str, H, L_h, x, z, **kwargs) -> float:
 
     location : str, optional
         On of: "upwind" or "downwind", indicating the location of the structure
-        relative to the feature. Conservatively defaults to "downwind".
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal points to use when displaying the calculations in
-        Jupyter output. Defaults to 3"""
+        relative to the feature. Conservatively defaults to "downwind"."""
     with open(resources.joinpath("ASCE_TopoCoefficients.json"), "r") as file:
         topo_coefs = json.load(file)[feature]
 
     if H/L_h > 0.5:
         L_h = 2*H
-    K_1 = topo_coefs["K_1/(H/L_h)"][kwargs.get("exposure", "D")]*H/L_h
-    K_2 = 1-abs(x)/(topo_coefs["mu"][kwargs.get("location", "downwind")]*L_h)
+    K_1 = topo_coefs["K_1/(H/L_h)"][exposure]*H/L_h
+    K_2 = 1-abs(x)/(topo_coefs["mu"][location]*L_h)
     K_3 = e**(-topo_coefs["gamma"]*z/L_h)
     K_zt = (1+K_1*K_2*K_3)**2
     return K_zt
 
-def _calc_K_z(z, z_g, alpha: float, **kwargs) -> float:
+def _calc_K_z(
+    z: quantities.Length,
+    z_g: quantities.Length,
+    alpha: float,
+    **latex_options) -> float:
     """Calculate the velocity pressure exposure coefficient (K_z) per
     ASCE 7-22 Table 26.10-1 footnote 1
 
     Parameters
     ==========
 
-    z : pint length quantity
+    z : quantities.Length
         Elevation to calculate the K_z at
 
-    z_g : pint length quantity
+    z_g : quantities.Length
         Elevation of maximum K_z
 
     alpha : float
-        Terrain exposure constant alpha from ASCE 7-22 Table 26.11-1
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
-    dec = kwargs.get("decimal_points", 3)
-    latex = {
-        "z": round(z.to("ft"), dec),
-        "z_g": round(z_g, dec),
-        "alpha": round(alpha, dec)
-    }
-
+        Terrain exposure constant alpha from ASCE 7-22 Table 26.11-1"""
     if 0 <= z and z <= z_g:
         K_z = 2.41*(max(z.to("ft"), 15*unit.ft)/z_g.to("ft")).magnitude**(2/alpha)
-        latex = templates.calc_K_z.substitute(K_z=round(K_z, dec), **latex)
+        main_template = templates.calc_K_z
     elif z <= 3280*unit.ft:
         K_z = 2.41
-        latex = templates.calc_K_z_high.substitute(K_z=K_z, **latex)
+        main_template = templates.calc_K_z_high
     else:
         raise ValueError("z is outside of the bounds supported by ASCE 7-22")
+    return utils.fill_templates(main_template, locals(), K_z)
 
-    if kwargs.get("show"):
-        display(Latex(latex))
-    if kwargs.get("return_latex"):
-        return latex, K_z
-    return K_z
-
-def _calc_q_z(K_z: float, K_zt: float, K_e: float, V, **kwargs):
+def _calc_q_z(
+    K_z: float,
+    K_zt: float,
+    K_e: float,
+    V: quantities.Velocity,
+    **latex_options) -> quantities.Pressure:
     """Calculate the velocity pressure (q_z) per ASCE 7-22 Equation 26.10-1
 
     Parameters
@@ -138,46 +119,28 @@ def _calc_q_z(K_z: float, K_zt: float, K_e: float, V, **kwargs):
     K_e : float
         Ground elevation factor from ASCE 7-22 Table 26.9-1
 
-    V : pint velocity quantity
-        Basic wind speed from the ASCE 7 Hazard tool
-
-    show : bool, optional
-        Boolean indicating if the calculations should be shown in
-        Jupyter output
-
-    return_latex : bool, optional
-        Boolean indicating if the latex string should be returned
-
-    decimal_points : int, optional
-        How many decimal places to use when displaying calculations in
-        Jupyter output. Defaults to 3"""
+    V : quantities.Velocity
+        Basic wind speed from the ASCE 7 Hazard tool"""
     q_z = 0.00256*K_z*K_zt*K_e*((V.to("mph").magnitude)**2)*unit.psf
-
-    if kwargs.get("show") or kwargs.get("return_latex"):
-        dec = kwargs.get("decimal_points", 3)
-        latex = templates.calc_q_z.substitute(
-            K_z=round(K_z, dec),
-            K_zt=round(K_zt, dec),
-            K_e=round(K_e, dec),
-            V=round(V.to("mph"), dec),
-            q_z=round(q_z, dec))
-        if kwargs.get("show"):
-            display(Latex(latex))
-        if kwargs.get("return_latex"):
-            return latex, q_z
-    return q_z
+    return utils.fill_templates(templates.calc_q_z, locals(), q_z)
 
 def calc_wind_server_inputs(
-    V,
+    V: quantities.Velocity,
     exposure: str,
     building_type: str,
-    roof_type: str,
-    roof_angle: float,
-    ridge_axis: str,
-    L_x,
-    L_y,
-    h,
-    **kwargs):
+    L_x: quantities.Length,
+    L_y: quantities.Length,
+    h: quantities.Length,
+    roof_type: str = "flat",
+    roof_angle: float = 0,
+    ridge_axis: str | None = None,
+    K_d: float = 0.85,
+    K_zt: float = 1,
+    Z_e: quantities.Length = 0*unit.ft,
+    GC_pi: float = 0.18,
+    h_p: quantities.Length | None = None,
+    h_e: quantities.Length | None = None,
+    h_c: quantities.Length | None = None) -> dict:
     """Performs calculations from ASCE 7-22 Chapter 26 and returns a dictionary
     of results that can be used as input for a MainWindServer or a CandCServer.
 
@@ -191,7 +154,7 @@ def calc_wind_server_inputs(
     Parameters
     ==========
 
-    V : pint velocity quantity
+    V : quantities.Velocity
         Basic wind speed from the ASCE 7 Hazard tool
 
     exposure : str
@@ -207,20 +170,20 @@ def calc_wind_server_inputs(
         are supported for low-rise buildings and "monoslope_clear" and
         "monoslope_obstructed" are supported for open buildings.
 
-    roof_angle : float
-        Roof angle theta. Use 0 for flat roofs.
-
-    ridge_axis : str
-        String indicating the roof ridge direction. One of "x" or "y".
-
-    L_x : pint length quantity
+    L_x : quantities.Length
         Maximum length of the building along the x-axis.
 
-    L_y : pint length quantity
+    L_y : quantities.Length
         Maximum length of the building along the y-axis
 
-    h : pint length quantity
+    h : quantities.Length
         Mean roof height
+
+    roof_angle : float, optional
+        Roof angle theta. Use 0 for flat roofs.
+
+    ridge_axis : str, optional
+        String indicating the roof ridge direction. One of "x" or "y".
 
     K_d : float, optional
         Wind directionality factor from ASCE 7-22 Table 26.6-1. Defaults to
@@ -233,7 +196,7 @@ def calc_wind_server_inputs(
         in the upper one-half of a hill or ridge or near the crest of an
         escarpment.
 
-    z_e : pint length quantity, optional
+    Z_e : quantities.Length, optional
         Ground elevation above sea level. Defaults to 0, which can
         conservatively be used in all cases.
 
@@ -242,15 +205,15 @@ def calc_wind_server_inputs(
         this is set to 0.18 for an enclosed building, and it should be set
         explicity for other building types
 
-    h_p : pint length quantity, optional
+    h_p : quantities.Length, optional
         Parapet height. Should be set if wind loads on parapets are needed.
 
-    h_e : pint length quantity, optional
+    h_e : quantities.Length, optional
         Eave height. Should be set if wind loads on canopies are needed.
         Note: This can also be set when initializing a CandCServer if multiple
         eave heights are needed.
 
-    h_c : pint length quantity, optional
+    h_c : quantities.Length, optional
         Canopy height. Should be set if wind loads on canopies are needed.
         Note: This can also be set when initializing a CandCServer if multiple
         canopy heights are needed."""
@@ -259,16 +222,16 @@ def calc_wind_server_inputs(
         exposure)
 
     # Calculate K_e according to ASCE 7-22 Table 26.9-1 footnotes 1 and 2
-    K_e = e**(-0.0000362*(kwargs.pop("z_e", 0*unit.ft).to("ft").magnitude))
+    K_e = e**(-0.0000362*Z_e.to("ft").magnitude)
 
     # Calculate velocity pressure at the roof height and the parapet height,
     # if applicable, according to ASCE 7-22 Table 26.10-1 footnote 1 and
     # ASCE 7-22 Equation 26.10-1
     K_h = _calc_K_z(h, exposure_constants["z_g"], exposure_constants["alpha"])
-    q_h = _calc_q_z(K_h, kwargs.get("K_zt", 1), K_e, V)
-    if (h_p := kwargs.pop("h_p", None)):
+    q_h = _calc_q_z(K_h, K_zt, K_e, V)
+    if h_p:
         K_p = _calc_K_z(h_p, exposure_constants["z_g"], exposure_constants["alpha"])
-        q_p = _calc_q_z(K_p, kwargs.get("K_zt", 1), K_e, V)
+        q_p = _calc_q_z(K_p, K_zt, K_e, V)
     else:
         q_p = None
 
@@ -297,11 +260,11 @@ def calc_wind_server_inputs(
         "L_x": L_x.to("ft"),
         "L_y": L_y.to("ft"),
         "h": h.to("ft"),
-        "K_d": kwargs.get("K_d", 0.85),
-        "K_zt": kwargs.get("K_zt", 1),
-        "GC_pi": kwargs.get("GC_pi", 0.18),
-        "h_e": kwargs.get("h_e"),
-        "h_c": kwargs.get("h_c"),
+        "K_d": K_d,
+        "K_zt": K_zt,
+        "GC_pi": GC_pi,
+        "h_e": h_e,
+        "h_c": h_c,
         "z_g": exposure_constants["z_g"],
         "alpha": exposure_constants["alpha"],
         "K_e": K_e,
@@ -327,57 +290,58 @@ class MainWindServer:
         file : str, optional
             Path to file to load variable from
 
-        building_type : str, optional
+        building_type : str
             Type of building for MWFRS calculations.
             One of: "low-rise" or "mid-rise"
 
-        roof_angle : float, optional
+        roof_angle : float
             Roof angle ($\\theta$) in degrees. Use 0 for flat roofs.
 
-        ridge_axis : str, optional
+        ridge_axis : str or None
             String indicating the roof ridge direction. One of: "x" or "y".
 
-        L_x : pint length quantity
+        L_x : quantities.Length
             Maximum length of the building along the x-axis.
 
-        L_y : pint length quantity
+        L_y : quantities.Length
             Maximum length of the building along the y-axis
 
-        h : pint length quantity
+        h : quantities.Length
             Mean roof height
 
-        G_x : float, optional
+        G_x : float
             Gust effect factor for wind along the x-axis
 
-        G_y : float, optional
+        G_y : float
             Gust effect factor for wind along the y-axis
 
-        GC_pi : float, optional
+        GC_pi : float
             Internal pressure coefficient
 
-        K_d : float, optional
+        K_d : float
             Wind directionality factor
 
-        K_zt : float, optional
+        K_zt : float
             Topographic factor from ASCE 7-22 Figure 26.8-1
 
-        K_e : float, optional
+        K_e : float
             Ground elevation factor from ASCE 7-22 Table 26.9-1
 
-        V : pint velocity quantity, optional
+        V : quantities.Velocity
             Basic wind speed from the ASCE 7 Hazard tool
 
-        z_g : pint length quantity, optional
+        z_g : quantities.Length
             z_g from ASCE 7-22 Table 26.11-1
 
-        alpha : float, optional
+        alpha : float
             alpha from ASCE 7-22 Table 26.11-1
 
-        q_h : pint pressure quantity, optional
+        q_h : quantities.Pressure
             Velocity pressure factor at roof height
 
-        q_p : pint pressure quantity, optional
+        q_p : quantities.Pressure, optional
             Velocity pressure factor at parapet height"""
+        # Merge file arguments and keyword arguments to set attributes
         if filepath:
             with open(filepath, "r") as file:
                 raw = json.load(file)
@@ -385,27 +349,15 @@ class MainWindServer:
         else:
             file_vals = {}
 
-        self.building_type = kwargs.get("building_type", file_vals.get("building_type"))
-        self.roof_type = kwargs.get("roof_type", file_vals.get("roof_type"))
-        self.roof_angle = kwargs.get("roof_angle", file_vals.get("roof_angle"))
-        self.ridge_axis = kwargs.get("ridge_axis", file_vals.get("ridge_axis"))
-        self.L_x = kwargs.get("L_x", file_vals.get("L_x"))
-        self.L_y = kwargs.get("L_y", file_vals.get("L_y"))
-        self.h = kwargs.get("h", file_vals.get("h"))
-        self.G = {
-            "x": kwargs.get("G_x", file_vals.get("G_x")),
-            "y": kwargs.get("G_y", file_vals.get("G_y"))
-        }
-        self.GC_pi = abs(kwargs.get("GC_pi", file_vals.get("GC_pi")))
-        self.K_d = kwargs.get("K_d", file_vals.get("K_d"))
-        self.K_zt = kwargs.get("K_zt", file_vals.get("K_zt"))
-        self.K_e = kwargs.get("K_e", file_vals.get("K_e"))
-        self.V = kwargs.get("V", file_vals.get("V"))
-        self.z_g = kwargs.get("z_g", file_vals.get("z_g"))
-        self.alpha = kwargs.get("alpha", file_vals.get("alpha"))
-        self.q_h = kwargs.get("q_h", file_vals.get("q_h"))
-        self.q_p = kwargs.get("q_p", file_vals.get("q_p"))
+        attributes = ("building_type", "roof_type", "roof_angle", "ridge_axis",
+                     "L_x", "L_y", "h", "G_x", "G_y", "GC_pi", "K_d", "K_zt",
+                     "K_e", "V", "z_g", "alpha", "q_h", "q_p")
+        for attribute in attributes:
+            setattr(self, attribute, kwargs.get(attribute, file_vals.get(attribute)))
+        self.G = {"x": self.G_x, "y": self.G_y}
+        self.GC_pi = abs(self.GC_pi)
 
+        # Generate C_p lookup dictionary
         with open(resources.joinpath("ASCE_MainWindCoefficients.json")) as file:
             type_coefs = json.load(file)[self.building_type]
 
@@ -448,7 +400,7 @@ class MainWindServer:
                     else:
                         self.coefs[axis].update({
                             "roof": type_coefs["roof_parallel"]["h/L=1"]})
-                else:
+                elif self.ridge_axis is not None:
                     # Use table for wind normal to ridge
                     roof_angles = (10, 15, 20, 25, 30, 35, 45, 60, 80)
                     angle_index = sum(self.roof_angle > x for x in roof_angles)
@@ -470,12 +422,18 @@ class MainWindServer:
                             0.5, dicts["h/L=0.5"], 1, dicts["h/L=1"], x_3)})
                     else:
                         self.coefs[axis].update({"roof": dicts["h/L=1"]})
+                else:
+                    raise ValueError("ridge_axis not set")
         elif self.building_type == "open":
             raise NotImplementedError("open buildings have not yet been implemented")
         else:
             raise ValueError(f"Unsupported building type: {self.building_type}")
 
-    def get_load(self, axis: str, element: str, location):
+    def get_load(
+        self,
+        axis: str,
+        element: str,
+        location: str | quantities.Length) -> quantities.Pressure:
         """Get the wind pressures for the specified axis, element, and location.
         Note: q_i is always taken as q_h so calculations for partially enclosed
         buildings may be conservative.
@@ -490,7 +448,7 @@ class MainWindServer:
             Element to get the wind pressure on.
             One of: "wall", "parapet", or "roof"
 
-        location : str or pint length quantity
+        location : str or quantities.Length
             Location of the element to get the wind pressure on.
                 - "leeward" or "side" for leeward or side walls respectively
                 - Height above ground level for windward walls
@@ -547,44 +505,45 @@ class CandCServer:
         file : str, optional
             Path to file to load variables from
 
-        building_type : str, optional
+        building_type : str
             Type of building for CandC calculations.
             One of: "low-rise" or "open"
 
-        roof_type : str, optional
+        roof_type : str
             Type of roof for CandC calculations. Should be one of "gable",
             "hip", or "canopy" for low-rise buildings and one of
             "monoslope_clear" or "monoslope_obstructed" for open buildings.
 
-        roof_angle : float, optional
+        roof_angle : float
             Roof angle ($\\theta$) in degrees
 
-        a : pint length quantity, optional
+        a : quantities.Length
             Length of wind zone dimension a
 
-        G_x : float, optional
+        G_x : float
             Gust effect factor for wind along the x-axis
 
-        G_y : float, optional
+        G_y : float
             Gust effect factor for wind along the y-axis
 
-        GC_pi : float, optional
+        GC_pi : float
             Internal pressure coefficient
 
-        h_c : pint length quantity, optional
-            Canopy height
-
-        h_e : pint length quantity, optional
-            Eve height for canopy calculations
-
-        K_d : float, optional
+        K_d : float
             Wind directionality factor
 
-        q_h : pint pressure quantity, optional
+        q_h : quantities.Pressure
             Velocity pressure factor at roof height
 
-        q_p : pint pressure quantity, optional
+        h_c : quantities.Length, optional
+            Canopy height
+
+        h_e : quantities.Length, optional
+            Eve height for canopy calculations
+
+        q_p : quantities.Pressure, optional
             Velocity pressure factor at parapet height"""
+        # Merge file arguments and keyword arguments to set attributes
         if filepath:
             with open(filepath, "r") as file:
                 raw = json.load(file)
@@ -592,21 +551,14 @@ class CandCServer:
         else:
             file_vals = {}
 
-        self.building_type = kwargs.get("building_type", file_vals.get("building_type"))
-        self.roof_type = kwargs.get("roof_type", file_vals.get("roof_type"))
-        self.roof_angle = kwargs.get("roof_angle", file_vals.get("roof_angle"))
-        self.a = kwargs.get("a", file_vals.get("a"))
-        self.G = {
-            "x": kwargs.get("G_x", file_vals.get("G_x")),
-            "y": kwargs.get("G_y", file_vals.get("G_y"))
-        }
-        self.GC_pi = abs(kwargs.get("GC_pi", file_vals.get("GC_pi")))
-        self.h_c = kwargs.get("h_c", file_vals.get("h_c"))
-        self.h_e = kwargs.get("h_e", file_vals.get("h_e"))
-        self.K_d = kwargs.get("K_d", file_vals.get("K_d"))
-        self.q_h = kwargs.get("q_h", file_vals.get("q_h"))
-        self.q_p = kwargs.get("q_p", file_vals.get("q_p"))
+        attributes = ("building_type", "roof_type", "roof_angle", "a", "G_x",
+                     "G_y", "GC_pi", "h_c", "h_e", "K_d", "q_h", "q_p")
+        for attribute in attributes:
+            setattr(self, attribute, kwargs.get(attribute, file_vals.get(attribute)))
+        self.G = {"x": self.G_x, "y": self.G_y}
+        self.GC_pi = abs(self.GC_pi)
 
+        # Generate C_p lookup dictionary
         with open(resources.joinpath("ASCE_CandCCoefficients.json")) as coefficients_file:
             type_coefs = json.load(coefficients_file)[self.building_type]
 
@@ -658,7 +610,14 @@ class CandCServer:
             case _:
                 raise ValueError(f"Unsupported building type: {self.building_type}")
 
-    def get_load(self, zone: str, area, **kwargs):
+    def get_load(
+        self,
+        zone: str,
+        area: quantities.Area,
+        G_method: str = "max",
+        q_z: quantities.Pressure | None = None,
+        GC_pi: float | None = None,
+        p_min: quantities.Pressure | None = None) -> quantities.Pressure:
         """Get the wind pressure for the specified zone and area
 
         Parameters
@@ -668,32 +627,38 @@ class CandCServer:
             C&C wind zone to calculate wind pressure for. Allowable options
             depend on the building and roof type.
 
-        area : pint area quantity
+        area : quantities.Area
             Tributary area to calculate wind pressure for
 
-        q_z : pint pressure quantity
+        G_method : str, optional
+            String indicating which G value to use for the calculation.
+            Should be one of "x", "y", or "max".
+
+        q_z : quantities.Pressure
             Velocity pressure factor at height z
 
         GC_pi : float
             Internal pressure coefficient
 
-        p_min : pint pressure quantity, optional
+        p_min : quantities.Pressure, optional
             Minimum magnitude for CandC wind pressure. Default value is
             16 psf unless the zone requests a different value. Manually
-            setting this value overrides the zone requesting a value.
-
-        G_method : str, optional
-            String indicating which G value to use for the calculation.
-            Should be one of "x", "y", or "max"."""
+            setting this value overrides the zone requesting a value."""
         coefs = self.coefs[zone]
-        GC_pi = kwargs.get("GC_pi", coefs.get("GC_pi", self.GC_pi))
-        p_min = kwargs.get("p_min", unit(coefs.get("p_min", "16 psf")))
-        G_method = kwargs.get("G_method", "max")
-        if kwargs.get("q_z"):
-            q_z = kwargs["q_z"]
-        elif coefs.get("use_q_p", False):
-            q_z = self.q_p
+
+        if GC_pi is not None:
+            GC_pi = abs(GC_pi)
         else:
+            GC_pi = coefs.get("GC_pi", self.GC_pi)
+
+        if p_min is not None:
+            p_min = abs(p_min)
+        else:
+            p_min = unit(coefs.get("p_min", "16 psf"))
+
+        if not q_z and coefs.get("use_q_p"):
+            q_z = self.q_p
+        elif not q_z:
             q_z = self.q_h
 
         match coefs.get("kind"):
