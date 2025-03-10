@@ -64,9 +64,9 @@ def calc_K_zt(
 
     if H/L_h > 0.5:
         L_h = 2*H
-    K_1 = topo_coefs["K_1/(H/L_h)"][exposure]*H/L_h
-    K_2 = 1-abs(x)/(topo_coefs["mu"][location]*L_h)
-    K_3 = e**(-topo_coefs["gamma"]*z/L_h)
+    K_1 = (topo_coefs["K_1/(H/L_h)"][exposure]*H/L_h).to("dimensionless").magnitude
+    K_2 = (1-abs(x)/(topo_coefs["mu"][location]*L_h)).to("dimensionless").magnitude
+    K_3 = (e**(-topo_coefs["gamma"]*z/L_h)).to("dimensionless").magnitude
     K_zt = (1+K_1*K_2*K_3)**2
     return K_zt
 
@@ -339,7 +339,7 @@ class MainWindServer:
         q_h : quantities.Pressure
             Velocity pressure factor at roof height
 
-        q_p : quantities.Pressure, optional
+        q_p : quantities.Pressure or None, optional
             Velocity pressure factor at parapet height"""
         # Merge file arguments and keyword arguments to set attributes
         if filepath:
@@ -535,13 +535,13 @@ class CandCServer:
         q_h : quantities.Pressure
             Velocity pressure factor at roof height
 
-        h_c : quantities.Length, optional
+        h_c : quantities.Length or None, optional
             Canopy height
 
-        h_e : quantities.Length, optional
+        h_e : quantities.Length or None, optional
             Eve height for canopy calculations
 
-        q_p : quantities.Pressure, optional
+        q_p : quantities.Pressure or None, optional
             Velocity pressure factor at parapet height"""
         # Merge file arguments and keyword arguments to set attributes
         if filepath:
