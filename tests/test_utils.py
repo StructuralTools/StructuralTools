@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+from string import Template
+
 import pytest
 
-from structuraltools import resources, unit, utils
+from structuraltools import materials, resources, unit, utils
 
 
 def test_linterp():
@@ -66,3 +68,25 @@ def test_get_table_entry():
         "w_s": 490*unit.pcf
     }
     assert data == expected_data
+
+def test_fill_templates():
+    main_template = Template("""
+        Sub-template: $sub_template
+        Test string: $test_string
+        Test class attribute: $f_y
+        Test quantity: $length""")
+    sub_template = Template("Sub-template value: $length")
+    rebar = materials.Rebar(4)
+    test_string = "Test string"
+    length = 3.66667*unit.ft
+    latex_options = {"return_latex": True, "decimal_points": 2}
+    latex, returned = utils.fill_templates(main_template, locals(), length)
+    assert returned == length
+    assert latex == r"""
+        Sub-template: Sub-template value: 3.67\ \mathrm{ft}
+        Test string: Test string
+        Test class attribute: 60000\ \mathrm{psi}
+        Test quantity: 3.67\ \mathrm{ft}"""
+
+def test_fill_templates_single_return():
+    assert utils.fill_templates("", {}, "test") == "test"

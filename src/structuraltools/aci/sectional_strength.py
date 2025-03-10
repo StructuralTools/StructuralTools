@@ -15,7 +15,6 @@
 
 from IPython.display import display, Latex
 
-from structuraltools import unit
 from structuraltools.aci import _sectional_strength_latex as templates
 
 
