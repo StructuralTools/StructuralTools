@@ -15,7 +15,6 @@
 
 import json
 
-from IPython.display import display, Latex
 from numpy import e, log10, sign, sqrt
 
 from structuraltools import quantities, resources, unit, utils
