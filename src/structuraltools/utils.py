@@ -22,6 +22,8 @@ from pint import Quantity
 from pint.errors import UndefinedUnitError
 
 from structuraltools import decimal_points, unit
+from structuraltools import Numeric
+
 
 def linterp(x_1, y_1, x_2, y_2, x_3):
     """Linear interpolation between two points
@@ -85,7 +87,7 @@ def linterp_dicts(x_1, dict_1: dict, x_2, dict_2: dict, x_3) -> dict:
                 dict_3[key_1].update({key_2: dict_1[key_1][key_2]})
     return dict_3
 
-def convert_to_unit(value):
+def convert_to_unit(value: any) -> any:
     """Checks if the given value is likely to be a string of a pint
     quantity and attempts to read with the set unit registry. This
     is designed to help with reading .csv data tables."""
@@ -98,7 +100,7 @@ def convert_to_unit(value):
                 warnings.warn(f"{value} was not evaluated as a unit")
     return value
 
-def get_table_entry(filepath, index: str) -> dict:
+def get_table_entry(filepath: str, index: str) -> dict:
     """Returns the specified row from a csv file as a dict. String values that
     are likely to be numeric or contain Pint quantities are evaluated with
     convert_to_unit. A "with" context handler does not need to be used when

@@ -14,19 +14,21 @@
 
 
 import json
+from typing import Optional
 
 from numpy import e, log10, sign, sqrt
 
-from structuraltools import quantities, resources, unit, utils
+from structuraltools import resources, unit, utils
+from structuraltools import Area, Length, Pressure, Velocity
 from structuraltools.asce import _wind_loading_latex as templates
 
 
 def calc_K_zt(
     feature: str,
-    H: quantities.Length,
-    L_h: quantities.Length,
-    x: quantities.Length,
-    z: quantities.Length,
+    H: Length,
+    L_h: Length,
+    x: Length,
+    z: Length,
     exposure: str = "D",
     location: str = "downwind") -> float:
     """Calculate the topographic factor (K_zt) per ASCE 7-22 Figure 26.8-1.
@@ -38,18 +40,18 @@ def calc_K_zt(
         Topographic feature causing wind speed-up.
         One of: "ridge", "escarpment", or "hill"
 
-    H : quantities.Length
+    H : Length
         Height of feature relative to the upwind terrain
 
-    L_h : quantities.Length
+    L_h : Length
         Distance upwind of crest to where the difference in ground elevation is
         half of the height of the feature
 
-    x : quantities.Length
+    x : Length
         Distance (upwind or downwind) from the crest to the site of
         the structure
 
-    z : quantities.Length
+    z : Length
         Height of the structure above the ground surface at the site
 
     exposure : str, optional
@@ -71,8 +73,8 @@ def calc_K_zt(
     return K_zt
 
 def _calc_K_z(
-    z: quantities.Length,
-    z_g: quantities.Length,
+    z: Length,
+    z_g: Length,
     alpha: float,
     **latex_options) -> float:
     """Calculate the velocity pressure exposure coefficient (K_z) per
@@ -81,10 +83,10 @@ def _calc_K_z(
     Parameters
     ==========
 
-    z : quantities.Length
+    z : Length
         Elevation to calculate the K_z at
 
-    z_g : quantities.Length
+    z_g : Length
         Elevation of maximum K_z
 
     alpha : float
@@ -103,8 +105,8 @@ def _calc_q_z(
     K_z: float,
     K_zt: float,
     K_e: float,
-    V: quantities.Velocity,
-    **latex_options) -> quantities.Pressure:
+    V: Velocity,
+    **latex_options) -> Pressure:
     """Calculate the velocity pressure (q_z) per ASCE 7-22 Equation 26.10-1
 
     Parameters
@@ -119,28 +121,28 @@ def _calc_q_z(
     K_e : float
         Ground elevation factor from ASCE 7-22 Table 26.9-1
 
-    V : quantities.Velocity
+    V : Velocity
         Basic wind speed from the ASCE 7 Hazard tool"""
     q_z = 0.00256*K_z*K_zt*K_e*((V.to("mph").magnitude)**2)*unit.psf
     return utils.fill_templates(templates.calc_q_z, locals(), q_z)
 
 def calc_wind_server_inputs(
-    V: quantities.Velocity,
+    V: Velocity,
     exposure: str,
     building_type: str,
-    L_x: quantities.Length,
-    L_y: quantities.Length,
-    h: quantities.Length,
+    L_x: Length,
+    L_y: Length,
+    h: Length,
     roof_type: str = "flat",
     roof_angle: float = 0,
-    ridge_axis: str | None = None,
+    ridge_axis: Optional[str] = None,
     K_d: float = 0.85,
     K_zt: float = 1,
-    Z_e: quantities.Length = 0*unit.ft,
+    Z_e: Length = 0*unit.ft,
     GC_pi: float = 0.18,
-    h_p: quantities.Length | None = None,
-    h_e: quantities.Length | None = None,
-    h_c: quantities.Length | None = None) -> dict:
+    h_p: Optional[Length] = None,
+    h_e: Optional[Length] = None,
+    h_c: Optional[Length] = None) -> dict[str, any]:
     """Performs calculations from ASCE 7-22 Chapter 26 and returns a dictionary
     of results that can be used as input for a MainWindServer or a CandCServer.
 
@@ -154,7 +156,7 @@ def calc_wind_server_inputs(
     Parameters
     ==========
 
-    V : quantities.Velocity
+    V : Velocity
         Basic wind speed from the ASCE 7 Hazard tool
 
     exposure : str
@@ -170,13 +172,13 @@ def calc_wind_server_inputs(
         are supported for low-rise buildings and "monoslope_clear" and
         "monoslope_obstructed" are supported for open buildings.
 
-    L_x : quantities.Length
+    L_x : Length
         Maximum length of the building along the x-axis.
 
-    L_y : quantities.Length
+    L_y : Length
         Maximum length of the building along the y-axis
 
-    h : quantities.Length
+    h : Length
         Mean roof height
 
     roof_angle : float, optional
@@ -196,7 +198,7 @@ def calc_wind_server_inputs(
         in the upper one-half of a hill or ridge or near the crest of an
         escarpment.
 
-    Z_e : quantities.Length, optional
+    Z_e : Length, optional
         Ground elevation above sea level. Defaults to 0, which can
         conservatively be used in all cases.
 
@@ -205,15 +207,15 @@ def calc_wind_server_inputs(
         this is set to 0.18 for an enclosed building, and it should be set
         explicity for other building types
 
-    h_p : quantities.Length, optional
+    h_p : Length, optional
         Parapet height. Should be set if wind loads on parapets are needed.
 
-    h_e : quantities.Length, optional
+    h_e : Length, optional
         Eave height. Should be set if wind loads on canopies are needed.
         Note: This can also be set when initializing a CandCServer if multiple
         eave heights are needed.
 
-    h_c : quantities.Length, optional
+    h_c : Length, optional
         Canopy height. Should be set if wind loads on canopies are needed.
         Note: This can also be set when initializing a CandCServer if multiple
         canopy heights are needed."""
@@ -300,13 +302,13 @@ class MainWindServer:
         ridge_axis : str or None
             String indicating the roof ridge direction. One of: "x" or "y".
 
-        L_x : quantities.Length
+        L_x : Length
             Maximum length of the building along the x-axis.
 
-        L_y : quantities.Length
+        L_y : Length
             Maximum length of the building along the y-axis
 
-        h : quantities.Length
+        h : Length
             Mean roof height
 
         G_x : float
@@ -327,19 +329,19 @@ class MainWindServer:
         K_e : float
             Ground elevation factor from ASCE 7-22 Table 26.9-1
 
-        V : quantities.Velocity
+        V : Velocity
             Basic wind speed from the ASCE 7 Hazard tool
 
-        z_g : quantities.Length
+        z_g : Length
             z_g from ASCE 7-22 Table 26.11-1
 
         alpha : float
             alpha from ASCE 7-22 Table 26.11-1
 
-        q_h : quantities.Pressure
+        q_h : Pressure
             Velocity pressure factor at roof height
 
-        q_p : quantities.Pressure or None, optional
+        q_p : Pressure or None, optional
             Velocity pressure factor at parapet height"""
         # Merge file arguments and keyword arguments to set attributes
         if filepath:
@@ -433,7 +435,7 @@ class MainWindServer:
         self,
         axis: str,
         element: str,
-        location: str | quantities.Length) -> quantities.Pressure:
+        location: str | Length) -> Pressure:
         """Get the wind pressures for the specified axis, element, and location.
         Note: q_i is always taken as q_h so calculations for partially enclosed
         buildings may be conservative.
@@ -448,7 +450,7 @@ class MainWindServer:
             Element to get the wind pressure on.
             One of: "wall", "parapet", or "roof"
 
-        location : str or quantities.Length
+        location : str or Length
             Location of the element to get the wind pressure on.
                 - "leeward" or "side" for leeward or side walls respectively
                 - Height above ground level for windward walls
@@ -517,7 +519,7 @@ class CandCServer:
         roof_angle : float
             Roof angle ($\\theta$) in degrees
 
-        a : quantities.Length
+        a : Length
             Length of wind zone dimension a
 
         G_x : float
@@ -532,16 +534,16 @@ class CandCServer:
         K_d : float
             Wind directionality factor
 
-        q_h : quantities.Pressure
+        q_h : Pressure
             Velocity pressure factor at roof height
 
-        h_c : quantities.Length or None, optional
+        h_c : Length or None, optional
             Canopy height
 
-        h_e : quantities.Length or None, optional
+        h_e : Length or None, optional
             Eve height for canopy calculations
 
-        q_p : quantities.Pressure or None, optional
+        q_p : Pressure or None, optional
             Velocity pressure factor at parapet height"""
         # Merge file arguments and keyword arguments to set attributes
         if filepath:
@@ -613,11 +615,11 @@ class CandCServer:
     def get_load(
         self,
         zone: str,
-        area: quantities.Area,
+        area: Area,
         G_method: str = "max",
-        q_z: quantities.Pressure | None = None,
-        GC_pi: float | None = None,
-        p_min: quantities.Pressure | None = None) -> quantities.Pressure:
+        q_z: Optional[Pressure] = None,
+        GC_pi: Optional[float] = None,
+        p_min: Optional[Pressure] = None) -> Pressure:
         """Get the wind pressure for the specified zone and area
 
         Parameters
@@ -627,20 +629,20 @@ class CandCServer:
             C&C wind zone to calculate wind pressure for. Allowable options
             depend on the building and roof type.
 
-        area : quantities.Area
+        area : Area
             Tributary area to calculate wind pressure for
 
         G_method : str, optional
             String indicating which G value to use for the calculation.
             Should be one of "x", "y", or "max".
 
-        q_z : quantities.Pressure
+        q_z : Pressure
             Velocity pressure factor at height z
 
         GC_pi : float
             Internal pressure coefficient
 
-        p_min : quantities.Pressure, optional
+        p_min : Pressure, optional
             Minimum magnitude for CandC wind pressure. Default value is
             16 psf unless the zone requests a different value. Manually
             setting this value overrides the zone requesting a value."""

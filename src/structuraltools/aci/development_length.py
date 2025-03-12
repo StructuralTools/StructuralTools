@@ -13,20 +13,23 @@
 # limitations under the License.
 
 
+from typing import Optional
+
 from numpy import sqrt
 
-from structuraltools import decimal_points, materials, quantities, unit, utils
+from structuraltools import decimal_points, materials, unit, utils
+from structuraltools import Area, Length
 from structuraltools.aci import _development_length_latex as templates
 
 
 def straight_bar_factors(
         rebar: materials.Rebar,
         concrete: materials.Concrete,
-        c_c: quantities.Length,
-        s: quantities.Length,
+        c_c: Length,
+        s: Length,
         concrete_below: bool = False,
         use_psi_s: bool = False,
-        **latex_options) -> tuple:
+        **latex_options) -> tuple[float] | tuple[str, float, ...]:
     """Returns the modification factors for straight bar development
     length from ACI 318-19 Table 25.4.2.5
 
@@ -123,13 +126,13 @@ def straight_bar_factors(
 def straight_bar(
         rebar: materials.Rebar,
         concrete: materials.Concrete,
-        c_c: quantities.Length,
-        s: quantities.Length,
+        c_c: Length,
+        s: Length,
         n: int = 1,
-        A_tr: quantities.Area | None = None,
+        A_tr: Optional[Area] = None,
         concrete_below: bool = False,
         use_psi_s: bool = False,
-        **latex_options) -> quantities.Length | tuple[str, quantities.Length]:
+        **latex_options) -> Length | tuple[str, Length]:
     """Calculate the development length of deformed bars in tension according
     to ACI 318-19 Section 25.4.2
 
@@ -191,12 +194,12 @@ def straight_bar(
 def standard_hook_factors(
     rebar: materials.Rebar,
     concrete: materials.Concrete,
-    c_c_side: quantities.Length,
-    s: quantities.Length,
+    c_c_side: Length,
+    s: Length,
     n: int = 1,
-    A_th: quantities.Area = 0*unit.inch**2,
+    A_th: Area = 0*unit.inch**2,
     in_column: bool = False,
-    **latex_options) -> tuple:
+    **latex_options) -> tuple[float] | tuple[str, float, ...]:
     """Returns the modification factors for standard hook development length
     from ACI 318-19 Table 25.4.3.2
 
@@ -288,12 +291,12 @@ def standard_hook_factors(
 def standard_hook(
     rebar: materials.Rebar,
     concrete: materials.Concrete,
-    c_c_side: quantities.Length,
-    s: quantities.Length,
+    c_c_side: Length,
+    s: Length,
     n: int = 1,
-    A_th: quantities.Area = 0*unit.inch**2,
+    A_th: Area = 0*unit.inch**2,
     in_column: bool = False,
-    **latex_options) -> quantities.Length | tuple[str, quantities.Length]:
+    **latex_options) -> Length | tuple[str, Length]:
     """Calculate the development length ($l_{dh}$) for a deformed bar in tension
     terminating in a standard hook according to ACI 318-19 Section 25.4.3
 
