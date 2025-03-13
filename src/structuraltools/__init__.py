@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
+from typing import Annotated, Union
+
 import importlib.resources
 import json
 
 import pint
+
 
 resources = importlib.resources.files("structuraltools.resources")
 
@@ -27,3 +30,13 @@ with open(resources.joinpath("ASCE_combinations.json")) as file:
     load_combinations = json.load(file)
 
 decimal_points = 3
+
+type Numeric = Union[int, float, pint.Quantity]
+
+type Area = Annotated[pint.Quantity, float, "[length]**2]"]
+
+type Length = Annotated[pint.Quantity, float, "[length]"]
+
+type Pressure = Annotated[pint.Quantity, float, "[pressure]"]
+
+type Velocity = Annotated[pint.Quantity, float, "[velocity]"]
