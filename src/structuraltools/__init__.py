@@ -31,7 +31,7 @@ with open(resources.joinpath("ASCE_combinations.json")) as file:
 
 decimal_points = 3
 
-type Numeric = Union[int, float, Quantity]
+type Numeric = Union[int, float, pint.Quantity]
 
 type Area = Annotated[pint.Quantity, float, "[length]**2]"]
 
