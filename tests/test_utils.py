@@ -55,6 +55,11 @@ def test_convert_to_unit_5():
     assert result == "1 xyz"
     assert record[0].message.args[0] == "1 xyz was not evaluated as a unit"
 
+def test_read_data_table():
+    filepath = resources.joinpath("AISC_steel_materials.csv")
+    steel_table = utils.read_data_table(filepath)
+    assert steel_table.at["A36", "F_y"] == 36*unit.ksi
+
 def test_get_table_entry():
     filepath = resources.joinpath("AISC_steel_materials.csv")
     data = utils.get_table_entry(filepath, "A36")
