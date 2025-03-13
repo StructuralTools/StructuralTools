@@ -13,15 +13,20 @@
 # limitations under the License.
 
 
-from typing import Annotated
-
-from pint import Quantity
+from structuraltools import io, unit
 
 
-type Area = Annotated[Quantity, float, "[length]**2]"]
+def test_model_init():
+    model = io.openre.Model("./tests/io/test.oex.xml")
+    assert model.force_unit == unit.kip
+    assert model.length_unit == unit.ft
 
-type Length = Annotated[Quantity, float, "[length]"]
 
-type Pressure = Annotated[Quantity, float, "[pressure]"]
+class TestModel:
+    def setup_method(self):
+        self.model = io.openre.Model("./tests/io/test.oex.xml")
 
-type Velocity = Annotated[Quantity, float, "[velocity]"]
+    def test_get_node_reactions(self):
+        reactions = self.model.get_node_reactions("1")
+        assert reactions.at["DL", "FY"] == 0.025*unit.kip
+        assert reactions.at["D2", "MZ"] == 0.212597234696009*unit.kipft

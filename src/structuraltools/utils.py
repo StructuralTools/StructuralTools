@@ -18,61 +18,74 @@ from string import Template
 import warnings
 
 from IPython.display import display, Latex
+import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
 
 from structuraltools import decimal_points, unit
+from structuraltools import Numeric
 
-def linterp(x_1, y_1, x_2, y_2, x_3):
+
+def linterp(
+    x_1: Numeric,
+    y_1: Numeric,
+    x_2: Numeric,
+    y_2: Numeric,
+    x_3: Numeric) -> Numeric:
     """Linear interpolation between two points
 
     Parameters
     ==========
 
-    x1 : int, float, or pint quantity
+    x1 : Numeric
         x value of first point for interpolation
 
-    y1 : int, float, or pint quantity
+    y1 : Numeric
         y value of first point for interpolation
 
-    x2 : int, float, or pint quantity
+    x2 : Numeric
         x value of second point for interpolation
 
-    y2 : int, float, or pint quantity
+    y2 : Numeric
         y value of second point for interpolation
 
-    x3 : int, float, or pint quantity
+    x3 : Numeric
         x value of point to interpolate y value for."""
     y_3 = y_1+(y_2-y_1)/(x_2-x_1)*(x_3-x_1)
     return y_3
 
-def linterp_dicts(x_1, dict_1: dict, x_2, dict_2: dict, x_3) -> dict:
+def linterp_dicts(
+    x_1: Numeric,
+    dict_1: dict[any, dict],
+    x_2: Numeric,
+    dict_2: dict[any, dict],
+    x_3: Numeric) -> dict[any, dict]:
     """Returns a dictionary that is a linear interpolation between two provided
-    dictionaries of dictionaries with the same keys. Integer and float values
-    are interpolated all other values are taken from dict_1.
+    dictionaries of dictionaries with the same keys. Numeric value are
+    interpolated all other values are taken from dict_1.
 
     Parameters
     ==========
 
-    x_1 : float
+    x_1 : Numeric
         Value to associate with dict_1 for interpolation
 
-    dict_1 : dict
+    dict_1 : dict[any, dict]
         First dictionary of values to interpolate
 
-    x_2 : float
+    x_2 : Numeric
         Value to associate with dict_2 for interpolation
 
-    dict_2 : dict
+    dict_2 : dict[any, dict]
         Second dictionary of values to interpolate
 
-    x_3 : float
+    x_3 : Numeric
         Interpolation value to associate with the new dictionary"""
     dict_3 = {}
     for key_1 in dict_1.keys():
         dict_3.update({key_1: {}})
         for key_2 in dict_1[key_1].keys():
-            if isinstance(dict_1[key_1][key_2], int | float):
+            if isinstance(dict_1[key_1][key_2], int | float | Quantity):
                 dict_3[key_1].update({
                     key_2: linterp(
                         x_1,
@@ -85,10 +98,18 @@ def linterp_dicts(x_1, dict_1: dict, x_2, dict_2: dict, x_3) -> dict:
                 dict_3[key_1].update({key_2: dict_1[key_1][key_2]})
     return dict_3
 
-def convert_to_unit(value):
+def convert_to_unit(value: any) -> any:
     """Checks if the given value is likely to be a string of a pint
-    quantity and attempts to read with the set unit registry. This
-    is designed to help with reading .csv data tables."""
+    Quantity and attempts to read with the set unit registry. This
+    is designed to help with reading serialized data.
+
+    Parameters
+    ==========
+
+    value : any
+        Value to convert. If this is a string that starts with a number it will
+        attempt to convert it to a Quantity. Any non-string or string that can't
+        be converted will be returned unmodified."""
 
     if isinstance(value, str):
         if value.split(" ")[0].replace(".", "").replace("-", "").isdigit():
@@ -98,7 +119,21 @@ def convert_to_unit(value):
                 warnings.warn(f"{value} was not evaluated as a unit")
     return value
 
-def get_table_entry(filepath, index: str) -> dict:
+def read_data_table(filepath: str) -> pd.DataFrame:
+    """Reads a .csv file and returns a pandas DataFrame with the first column
+    set as the index and convert_to_unit run on all values
+
+    Parameters
+    ==========
+
+    filepath : str
+        Path to the file"""
+    data_table = pd.read_csv(filepath)
+    data_table = data_table.map(convert_to_unit)
+    data_table = data_table.set_index(data_table.columns[0], drop=True)
+    return data_table
+
+def get_table_entry(filepath: str, index: str) -> dict:
     """Returns the specified row from a csv file as a dict. String values that
     are likely to be numeric or contain Pint quantities are evaluated with
     convert_to_unit. A "with" context handler does not need to be used when
@@ -107,7 +142,7 @@ def get_table_entry(filepath, index: str) -> dict:
     Parameters
     ==========
 
-    filepath
+    filepath : str
         Path to the csv file
 
     index : str
