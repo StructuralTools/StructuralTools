@@ -20,13 +20,26 @@ def test_model_init():
     model = io.openre.Model("./tests/io/test.oex.xml")
     assert model.force_unit == unit.kip
     assert model.length_unit == unit.ft
+    assert model.load_cases == {"DL": "DL", "LL": "LL"}
+    assert model.design_combinations == {"D1", "D2"}
+    assert model.service_combinations == {"S2"}
 
 
 class TestModel:
     def setup_method(self):
         self.model = io.openre.Model("./tests/io/test.oex.xml")
 
-    def test_get_node_reactions(self):
-        reactions = self.model.get_node_reactions("1")
+    def test_get_node_reactions_load_cases(self):
+        reactions = self.model.get_node_reactions("1", "load_cases")
         assert reactions.at["DL", "FY"] == 0.025*unit.kip
-        assert reactions.at["D2", "MZ"] == 0.212597234696009*unit.kipft
+        assert reactions.at["LL", "MZ"] == 0.132969434963536*unit.kipft
+
+    def test_get_node_reactions_design_combinations(self):
+        reactions = self.model.get_node_reactions("2", "design_combinations")
+        assert reactions.at["D1", "FY"] == 0.035*unit.kip
+        assert reactions.at["D2", "MZ"] == 0.235493482898162*unit.kipft
+
+    def test_get_node_reactions_service_combinations(self):
+        reactions = self.model.get_node_reactions("1", "service_combinations")
+        assert reactions.at["S2", "FX"] == -0.234979829085838*unit.kip
+        assert reactions.at["S2", "MX"] == 0*unit.kipft
