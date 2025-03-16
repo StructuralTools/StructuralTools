@@ -71,7 +71,7 @@ class Model:
         Parameters
         ==========
 
-        node : str
+        node : int
             ID number of the node
 
         cases : str
