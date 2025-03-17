@@ -20,6 +20,15 @@ import pytest
 from structuraltools import materials, resources, unit, utils
 
 
+def test_bound_low():
+    assert utils.bound(5, 1, 10) == 5
+
+def test_bound_calculated():
+    assert utils.bound(5, 7, 10) == 7
+
+def test_bound_high():
+    assert utils.bound(5, 12, 10) == 10
+
 def test_linterp():
     y_3 = utils.linterp(1, 1, 3, 3, 2)
     assert y_3 == 2
@@ -74,6 +83,16 @@ def test_get_table_entry():
     }
     assert data == expected_data
 
+def test_remove_alignment():
+    string = utils.remove_alignment(r"""$$ \begin{aligned}
+    q_z &= 0.00256 \cdot K_z \cdot K_{zt} \cdot K_e \cdot V^2
+        = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot 110\ \mathrm{mph}^2
+        &= 35.982\ \mathrm{psf}
+\end{aligned} $$""")
+    assert string == r"""    q_z &= 0.00256 \cdot K_z \cdot K_{zt} \cdot K_e \cdot V^2
+        = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot 110\ \mathrm{mph}^2
+        &= 35.982\ \mathrm{psf}"""
+
 def test_fill_templates():
     main_template = Template("""
         Sub-template: $sub_template
@@ -84,10 +103,10 @@ def test_fill_templates():
     rebar = materials.Rebar(4)
     test_string = "Test string"
     length = 3.66667*unit.ft
-    latex_options = {"return_latex": True, "decimal_points": 2}
-    latex, returned = utils.fill_templates(main_template, locals(), length)
+    markdown_options = {"return_markdown": True, "decimal_points": 2}
+    markdown, returned = utils.fill_templates(main_template, locals(), length)
     assert returned == length
-    assert latex == r"""
+    assert markdown == r"""
         Sub-template: Sub-template value: 3.67\ \mathrm{ft}
         Test string: Test string
         Test class attribute: 60000\ \mathrm{psi}
@@ -95,3 +114,7 @@ def test_fill_templates():
 
 def test_fill_templates_single_return():
     assert utils.fill_templates("", {}, "test") == "test"
+
+def test_fill_templates_return_markdown_only():
+    values = {"markdown_options": {"return_markdown": True}}
+    assert utils.fill_templates(Template("test"), values) == "test"

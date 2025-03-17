@@ -17,7 +17,7 @@ import csv
 from string import Template
 import warnings
 
-from IPython.display import display, Latex
+from IPython.display import display_markdown
 import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
@@ -25,6 +25,22 @@ from pint.errors import UndefinedUnitError
 from structuraltools import decimal_points, unit
 from structuraltools import Numeric
 
+
+def bound(low: Numeric, calculated: Numeric, high: Numeric) -> Numeric:
+    """Return the calculated value bounded by the values of high and low
+
+    Parameters
+    ==========
+
+    low : Numeric
+        Lower bound to return if the calculated value is below the range
+
+    calculated : Numeric
+        Value to return if the calculated value is in range
+
+    high : Numeric
+        Upper bound to return if the calculated value is below the range"""
+    return min(max(low, calculated), high)
 
 def linterp(
     x_1: Numeric,
@@ -156,7 +172,10 @@ def get_table_entry(filepath: str, index: str) -> dict:
     data = {key: convert_to_unit(value) for key, value in raw_data.items()}
     return data
 
-def fill_templates(main_template: Template, variables: dict, *return_vals):
+def remove_alignment(latex: str) -> str:
+    return latex.replace("$$ \\begin{aligned}\n", "").replace("\n\\end{aligned} $$", "")
+
+def fill_templates(main_template: Template, variables: dict, *return_vals) -> any:
     """Function to fill out latex templates used for displaying calculations.
     This is designed to be used in the return statement of another function to
     fill out the primary latex template associated with that function.
@@ -172,33 +191,33 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
         template strings. Any template strings in the variables dictionary will
         be filled out and used to fill out the main template.
 
-        The variables dictionary may contain a latex_options sub-dictionary to
-        specify addition arguments for the latex output.
+        The variables dictionary may contain a markdown_options sub-dictionary
+        to specify addition arguments for the markdown output.
 
         show : bool, optional
             Boolean indicating if the calculations should be displayed with
-            IPython's display(Latex()). Defaults to False.
+            IPython's display_markdown(). Defaults to False.
 
-        return_latex : bool, optional
-            Boolean indicating if the latex string should be returned.
+        return_markdown : bool, optional
+            Boolean indicating if the markdown string should be returned.
             Defaults to False.
 
         decimal_points : int, optional
             How many decimal places to use when writing variables into the
-            latex template. defaults to the value in
+            markdown template. defaults to the value in
             structuraltools.decimal_points.
 
     return_vals : Any
-        Values to return. If return_latex is specified in a latex_options
+        Values to return. If return_markdown is specified in a markdown_options
         sub-dictionary contained in the variables dictionary a new tuple
-        consisting of the latex prepended to returns will be returned"""
-    latex_options = {
+        consisting of the markdown prepended to returns will be returned"""
+    markdown_options = {
         "show": False,
-        "return_latex": False,
+        "return_markdown": False,
         "decimal_points": decimal_points
     }
-    latex_options.update(variables.get("latex_options", {}))
-    if not (latex_options["show"] or latex_options["return_latex"]):
+    markdown_options.update(variables.get("markdown_options", {}))
+    if not (markdown_options["show"] or markdown_options["return_markdown"]):
         if len(return_vals) == 1:
             return return_vals[0]
         else:
@@ -217,7 +236,7 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
     rounded_vars = {}
     for key, value in sorted_vars.items():
         if isinstance(value, Quantity | float):
-            rounded_vars.update({key: round(value, latex_options["decimal_points"])})
+            rounded_vars.update({key: round(value, markdown_options["decimal_points"])})
         else:
             rounded_vars.update({key: value})
 
@@ -225,12 +244,12 @@ def fill_templates(main_template: Template, variables: dict, *return_vals):
     for name, subtemplate in subtemplates.items():
         filled_subtemplates.update({name: subtemplate.substitute(**rounded_vars)})
 
-    latex = main_template.substitute(**filled_subtemplates, **rounded_vars)
-    if latex_options["show"]:
-        display(Latex(latex))
-    if latex_options["return_latex"]:
-        return (latex, *return_vals)
-    elif len(return_vals) == 1:
+    markdown = main_template.substitute(**filled_subtemplates, **rounded_vars)
+    if markdown_options["show"]:
+        display_markdown(markdown, raw=True)
+    if markdown_options["return_markdown"]:
+        return_vals = (markdown, *return_vals)
+    if len(return_vals) == 1:
         return return_vals[0]
     else:
         return return_vals

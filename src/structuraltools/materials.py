@@ -13,16 +13,27 @@
 # limitations under the License.
 
 
-from IPython.display import display, Latex
-from numpy import sqrt
+from numpy import isclose, sqrt
 
 from structuraltools import resources, unit, utils
-from structuraltools import _materials_latex as templates
+from structuraltools import Length, Stress, UnitWeight
+from structuraltools import _materials_markdown as templates
+
+
+rebar_database = utils.read_data_table(resources.joinpath("ACI_rebar_sizes.csv"))
+steel_database = utils.read_data_table(resources.joinpath("AISC_steel_materials.csv"))
+
 
 class Concrete:
     """Class to store data for concrete materials and calculate basic material
     properties."""
-    def __init__(self, f_prime_c, **kwargs):
+    def __init__(
+        self,
+        f_prime_c: Stress,
+        w_c: UnitWeight = 150*unit.pcf,
+        max_agg: Length = 1*unit.inch,
+        v: float = 0.2,
+        **markdown_options):
         """Create a new concrete material instance, calculate the modulus of
         elasticity, and optionally show the any calculations made.
 
@@ -39,74 +50,37 @@ class Concrete:
             Nominal maximum aggregate size
 
         v : float, optional
-            Poisson's ration of the concrete
-
-        show : bool, optional
-            Whether to display all calculations made
-
-        dec : int, optional
-            Number of decimal places to use in LaTeX representation
-            of calculations"""
-        self.f_prime_c = min(round(f_prime_c.to("psi").magnitude), 10000)*unit.psi
-        self.w_c = round(kwargs.get("w_c", 150*unit.pcf).to("pcf").magnitude)*unit.pcf
-        self.max_agg = kwargs.get("max_agg", 1*unit.inch).to("inch")
-        self.v = kwargs.get("v", 0.2)
-        dec = kwargs.get("decimal_points", 3)
-        latex = {"w_c": self.w_c, "f_prime_c": self.f_prime_c}
+            Poisson's ration of the concrete"""
+        self.max_agg = max_agg.to("inch")
+        self.v = v
         self.unpack_for_templates = True
 
-        low = 100*unit.pcf
-        high = 135*unit.pcf
-        if self.w_c <= low:
-            self.lamb = 0.75
-            latex.update({
-                "lamb": self.lamb,
-                "lamb_str": templates.Concrete_lamb_low.substitute(
-                    lamb=self.lamb, w_c=self.w_c, low=low)
-            })
-        elif self.w_c <= high:
-            self.lamb = min(0.0075*(self.w_c/unit.pcf).to("dimensionless").magnitude, 1)
-            latex.update({
-                "lamb": round(self.lamb, dec),
-                "lamb_str": templates.Concrete_lamb_mid.substitute(
-                    lamb=round(self.lamb, dec), w_c=self.w_c, low=low, high=high)
-            })
-        else:
-            self.lamb = 1
-            latex.update({
-                "lamb": self.lamb,
-                "lamb_str": templates.Concrete_lamb_high.substitute(
-                    lamb=self.lamb, w_c=self.w_c, high=high)
-            })
+        if isclose(f_prime_c.to("psi"), round(f_prime_c.to("psi"))):
+            f_prime_c = round(f_prime_c.to("psi").magnitude)*unit.psi
+        self.f_prime_c = min(f_prime_c.to("psi"), 10000*unit.psi)
 
-        low = 4000*unit.psi
-        high = 8000*unit.psi
-        if self.f_prime_c <= low:
-            self.beta_1 = 0.85
-            latex.update({"beta_1_str": templates.Concrete_beta_1_low.substitute(
-                beta_1=self.beta_1, f_prime_c=self.f_prime_c, low=low)})
-        elif self.f_prime_c < high:
-            beta_1 = 0.85-0.05*(self.f_prime_c-4000*unit.psi)/(1000*unit.psi)
-            self.beta_1 = beta_1.to("dimensionless").magnitude
-            latex.update({"beta_1_str": templates.Concrete_beta_1_mid.substitute(
-                beta_1=round(self.beta_1, dec), f_prime_c=self.f_prime_c, low=low, high=high)})
+        if isclose(w_c.to("pcf"), round(w_c.to("pcf"))):
+            self.w_c = round(w_c.to("pcf").magnitude)*unit.pcf
         else:
-            self.beta_1 = 0.65
-            latex.update({"beta_1_str": templates.Concrete_beta_1_high.substitute(
-                beta_1=self.beta_1, f_prime_c=self.f_prime_c, high=high)})
+            self.w_c = w_c.to("pcf")
 
-        self.E_c = (self.w_c/unit.pcf)**1.5*33*sqrt(self.f_prime_c*unit.psi)
+        self.E_c = (self.w_c.magnitude)**1.5*33*sqrt(self.f_prime_c*unit.psi)
+        self.lamb = utils.bound(0.75, 0.0075*w_c.magnitude, 1)
         self.f_r = 7.5*self.lamb*sqrt(self.f_prime_c*unit.psi)
-        latex.update({"E_c": round(self.E_c, dec), "f_r": round(self.f_r, dec)})
+        self.beta_1 = utils.bound(0.65, 0.85-0.05*(self.f_prime_c.magnitude-4000)/1000, 0.85)
 
-        self.latex = templates.Concrete.substitute(**latex)
-        if kwargs.get("show"):
-            display(Latex(self.latex))
+        markdown_options.update({"return_markdown": True})
+        self.markdown = utils.fill_templates(templates.Concrete, locals())
 
 
 class Rebar:
     """Class to store data for rebar"""
-    def __init__(self, size: int, **kwargs):
+    def __init__(
+        self,
+        size: int,
+        f_y: Stress = 60000*unit.psi,
+        coated: bool = False,
+        E_s: Stress = 29e6*unit.psi):
         """Create a new rebar class instance
 
         Parameters
@@ -124,13 +98,21 @@ class Rebar:
 
         E_s : pint pressure quantity optional
             Modulus of elasticity to use for the rebar. Defaults to 29000 ksi"""
-        rebar_database = resources.joinpath("ACI_rebar_sizes.csv")
         self.size = size
-        self.f_y = round(kwargs.get("f_y", 60000*unit.psi).to("psi").magnitude)*unit.psi
-        self.coated = kwargs.get("coated", False)
-        self.E_s = round(kwargs.get("E_s", 29e6*unit.psi).to("psi").magnitude)*unit.psi
+        self.coated = coated
         self.unpack_for_templates = True
-        dimensions = utils.get_table_entry(rebar_database, str(self.size))
+
+        if isclose(f_y.to("psi"), round(f_y.to("psi"))):
+            self.f_y = round(f_y.to("psi").magnitude)*unit.psi
+        else:
+            self.f_y = f_y.to("psi")
+
+        if isclose(E_s.to("psi"), round(E_s.to("psi"))):
+            self.E_s = round(E_s.to("psi").magnitude)*unit.psi
+        else:
+            self.E_s = E_s.to("psi")
+
+        dimensions = rebar_database.loc[size, :].to_dict()
         for attribute, value in dimensions.items():
             setattr(self, attribute, value)
 
@@ -147,8 +129,8 @@ class Steel:
         name : str
             Name of the steel. Must match a name in the structuraltools steel
             database."""
-        steel_database = resources.joinpath("AISC_steel_materials.csv")
         self.name = name
-        properties = utils.get_table_entry(steel_database, self.name)
+        self.unpack_for_templates = True
+        properties = steel_database.loc[name, :].to_dict()
         for attribute, value in properties.items():
             setattr(self, attribute, value)

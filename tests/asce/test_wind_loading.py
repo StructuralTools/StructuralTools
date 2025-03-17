@@ -19,46 +19,89 @@ from structuraltools import asce, unit
 
 
 def test_calc_K_zt():
-    K_zt = asce.wind_loading.calc_K_zt(
+    markdown, K_zt = asce.wind_loading.calc_K_zt(
         feature="escarpment",
         H=500*unit.ft,
         L_h=1500*unit.ft,
         x=300*unit.ft,
         z=50*unit.ft,
-        exposure="B")
+        exposure="B",
+        return_markdown=True)
     assert isclose(K_zt, 1.484767957, abs_tol=1e-9)
+    assert markdown == r"""$$ \begin{aligned}
+    L_h &= \operatorname{max}\left(L_h,\ 2 \cdot H\right)
+        = \operatorname{max}\left(1500\ \mathrm{ft},\ 2 \cdot 500\ \mathrm{ft}\right)
+        &= 1500\ \mathrm{ft}
+    \\[10pt]
+    K_1 &= 0.75 \cdot \frac{H}{L_h}
+        = 0.75 \cdot \frac{500\ \mathrm{ft}}{1500\ \mathrm{ft}}
+        &= 0.25
+    \\[10pt]
+    K_2 &= 1 - \frac{|x|}{\mu \cdot L_h}
+        = 1 - \frac{|300\ \mathrm{ft}|}{4 \cdot 1500\ \mathrm{ft}}
+        &= 0.95
+    \\[10pt]
+    K_3 &= e^{- \frac{\gamma \cdot z}{L_h}}
+        = e^{- \frac{2.5 \cdot 50\ \mathrm{ft}}{1500\ \mathrm{ft}}}
+        &= 0.92
+    \\[10pt]
+    K_{zt} &= \left(1 + K_1 \cdot K_2 \cdot K_3\right)^2
+        = \left(1 + 0.25 \cdot 0.95 \cdot 0.92\right)^2
+        &= 1.485
+\end{aligned} $$"""
 
 def test_calc_K_z_low():
-    latex, K_z = asce.wind_loading._calc_K_z(10*unit.ft, 2460*unit.ft, 9.8, return_latex=True)
+    markdown, K_z = asce.wind_loading.calc_K_z(
+        z=10*unit.ft,
+        z_g=2460*unit.ft,
+        alpha=9.8,
+        return_markdown=True)
     assert isclose(K_z, 0.8511539011, abs_tol=1e-10)
-    assert latex == r"""
-    $$ \begin{aligned}
-        K_z &= 2.41 \cdot \frac{\operatorname{max}\left(z, 15 \mathrm{ft}\right)}{z_g}^{\frac{2}{\alpha}} = 2.41 \cdot \frac{\operatorname{max}\left(10\ \mathrm{ft} , 15 \mathrm{ft}\right)}{2460\ \mathrm{ft}}^{\frac{2}{9.8}} &= 0.851
-    \end{aligned} $$
-"""
+    assert markdown == r"""$$ \begin{aligned}
+    K_z &= 2.41 \cdot \left(\frac{\operatorname{max}\left(\operatorname{min}\left(z,\ z_g\right),\ 15\ \mathrm{ft}\right)}{z_g}\right)^{\frac{2}{\alpha}}
+        = 2.41 \cdot \left(\frac{\operatorname{max}\left(\operatorname{min}\left(10\ \mathrm{ft},\ 2460\ \mathrm{ft}\right),\ 15\ \mathrm{ft}\right)}{2460\ \mathrm{ft}}\right)^{\frac{2}{9.8}}
+        &= 0.851
+\end{aligned} $$"""
 
 def test_calc_K_z_mid():
-    latex, K_z = asce.wind_loading._calc_K_z(100*unit.ft, 2460*unit.ft, 9.8, return_latex=True)
+    markdown, K_z = asce.wind_loading.calc_K_z(
+        z=100*unit.ft,
+        z_g=2460*unit.ft,
+        alpha=9.8,
+        return_markdown=True)
     assert isclose(K_z, 1.253581964, abs_tol=1e-9)
-    assert latex == r"""
-    $$ \begin{aligned}
-        K_z &= 2.41 \cdot \frac{\operatorname{max}\left(z, 15 \mathrm{ft}\right)}{z_g}^{\frac{2}{\alpha}} = 2.41 \cdot \frac{\operatorname{max}\left(100\ \mathrm{ft} , 15 \mathrm{ft}\right)}{2460\ \mathrm{ft}}^{\frac{2}{9.8}} &= 1.254
-    \end{aligned} $$
-"""
+    assert markdown == r"""$$ \begin{aligned}
+    K_z &= 2.41 \cdot \left(\frac{\operatorname{max}\left(\operatorname{min}\left(z,\ z_g\right),\ 15\ \mathrm{ft}\right)}{z_g}\right)^{\frac{2}{\alpha}}
+        = 2.41 \cdot \left(\frac{\operatorname{max}\left(\operatorname{min}\left(100\ \mathrm{ft},\ 2460\ \mathrm{ft}\right),\ 15\ \mathrm{ft}\right)}{2460\ \mathrm{ft}}\right)^{\frac{2}{9.8}}
+        &= 1.254
+\end{aligned} $$"""
 
 def test_calc_K_z_high():
-    latex, K_z = asce.wind_loading._calc_K_z(3000*unit.ft, 2460*unit.ft, 9.8, return_latex=True)
+    markdown, K_z = asce.wind_loading.calc_K_z(
+        z=3000*unit.ft,
+        z_g=2460*unit.ft,
+        alpha=9.8,
+        return_markdown=True)
     assert K_z == 2.41
-    assert latex == r"""
-    $$ \begin{aligned}
-        & \text{Since, } \left(z > z_g \Leftarrow 3000\ \mathrm{ft} > 2460\ \mathrm{ft}\right): & K_z &= 2.41
-    \end{aligned} $$
-"""
+    assert markdown == r"""$$ \begin{aligned}
+    K_z &= 2.41 \cdot \left(\frac{\operatorname{max}\left(\operatorname{min}\left(z,\ z_g\right),\ 15\ \mathrm{ft}\right)}{z_g}\right)^{\frac{2}{\alpha}}
+        = 2.41 \cdot \left(\frac{\operatorname{max}\left(\operatorname{min}\left(3000\ \mathrm{ft},\ 2460\ \mathrm{ft}\right),\ 15\ \mathrm{ft}\right)}{2460\ \mathrm{ft}}\right)^{\frac{2}{9.8}}
+        &= 2.41
+\end{aligned} $$"""
 
 def test_calc_q_z():
-    latex, q_z = asce.wind_loading._calc_q_z(1.21, 1, 0.96, 110*unit.mph, return_latex=True)
+    markdown, q_z = asce.wind_loading.calc_q_z(
+        K_z=1.21,
+        K_zt=1,
+        K_e=0.96,
+        V=110*unit.mph,
+        return_markdown=True)
     assert isclose(q_z.to("psf").magnitude, 35.9817216, abs_tol=1e-7)
-    assert latex == r"q_z &= 0.00256 \cdot K_z \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot 110\ \mathrm{mph}^2 &= 35.982\ \mathrm{psf}"
+    assert markdown == r"""$$ \begin{aligned}
+    q_z &= 0.00256 \cdot K_z \cdot K_{zt} \cdot K_e \cdot V^2
+        = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot 110\ \mathrm{mph}^2
+        &= 35.982\ \mathrm{psf}
+\end{aligned} $$"""
 
 def test_calc_wind_server_inputs():
     inputs = asce.wind_loading.calc_wind_server_inputs(
@@ -78,6 +121,7 @@ def test_calc_wind_server_inputs():
     assert isclose(inputs["q_p"].to("psf").magnitude, 24.41477673, abs_tol=1e-8)
     assert isclose(inputs["G_x"], 0.840652037, abs_tol=1e-9)
     assert isclose(inputs["G_y"], 0.8068246373, abs_tol=1e-10)
+    assert isclose(inputs["a"].to("ft").magnitude, 7.85) 
 
 def test_MainWindServer_init_gable():
     MWFRS = asce.wind_loading.MainWindServer(

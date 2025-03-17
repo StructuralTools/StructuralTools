@@ -32,11 +32,10 @@ with open(resources.joinpath("ASCE_combinations.json")) as file:
 decimal_points = 3
 
 type Numeric = Union[int, float, pint.Quantity]
-
 type Area = Annotated[pint.Quantity, float, "[length]**2]"]
-
 type Length = Annotated[pint.Quantity, float, "[length]"]
-
+type Moment = Annotated[pint.Quantity, float, "[moment]"]
 type Pressure = Annotated[pint.Quantity, float, "[pressure]"]
-
+type Stress = Annotated[pint.Quantity, float, "[pressure]"]
+type UnitWeight = Annotated[pint.Quantity, float, "[unit_weight]"]
 type Velocity = Annotated[pint.Quantity, float, "[velocity]"]
