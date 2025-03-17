@@ -13,13 +13,11 @@
 # limitations under the License.
 
 
-from typing import Optional
-
 from numpy import sqrt
 
 from structuraltools import decimal_points, materials, unit, utils
 from structuraltools import Area, Length
-from structuraltools.aci import _development_length_latex as templates
+from structuraltools.aci import _development_length_markdown as templates
 
 
 def straight_bar_factors(
@@ -29,7 +27,7 @@ def straight_bar_factors(
         s: Length,
         concrete_below: bool = False,
         use_psi_s: bool = False,
-        **latex_options) -> tuple[float] | tuple[str, float, ...]:
+        **markdown_options) -> tuple[float] | tuple[str, float, ...]:
     """Returns the modification factors for straight bar development
     length from ACI 318-19 Table 25.4.2.5
 
@@ -129,10 +127,10 @@ def straight_bar(
         c_c: Length,
         s: Length,
         n: int = 1,
-        A_tr: Optional[Area] = None,
+        A_tr: Area = 0*unit.inch**2,
         concrete_below: bool = False,
         use_psi_s: bool = False,
-        **latex_options) -> Length | tuple[str, Length]:
+        **markdown_options) -> Length | tuple[str, Length]:
     """Calculate the development length of deformed bars in tension according
     to ACI 318-19 Section 25.4.2
 
@@ -172,18 +170,12 @@ def straight_bar(
     c_c = c_c.to("inch")
     s = s.to("inch")
 
-    factors_latex, lamb, psi_g, psi_e, psi_s, psi_t = straight_bar_factors(
-        rebar, concrete, c_c, s, concrete_below, use_psi_s, return_latex=True,
-        decimal_points=latex_options.get("dec", decimal_points))
+    factors_markdown, lamb, psi_g, psi_e, psi_s, psi_t = straight_bar_factors(
+        rebar, concrete, c_c, s, concrete_below, use_psi_s, return_markdown=True,
+        decimal_points=markdown_options.get("decimal_points", decimal_points))
 
-    if A_tr:
-        A_tr = A_tr.to("inch**2")
-        K_tr = ((40*A_tr)/(s*n)).to("inch")
-        K_tr_template = templates.straight_K_tr
-    else:
-        K_tr = 0*unit.inch
-        K_tr_template = ""
-
+    A_tr = A_tr.to("inch**2")
+    K_tr = ((40*A_tr)/(s*n)).to("inch")
     c_b = min(c_c+rebar.d_b/2, s/2)
     l_prime_d = ((3*rebar.f_y*min(psi_t*psi_e, 1.7)*psi_s*psi_g*rebar.d_b**2)/ \
                  (40*lamb*sqrt(concrete.f_prime_c*unit.psi)*(c_b+K_tr))).to("inch")
@@ -199,7 +191,7 @@ def standard_hook_factors(
     n: int = 1,
     A_th: Area = 0*unit.inch**2,
     in_column: bool = False,
-    **latex_options) -> tuple[float] | tuple[str, float, ...]:
+    **markdown_options) -> tuple[float] | tuple[str, float, ...]:
     """Returns the modification factors for standard hook development length
     from ACI 318-19 Table 25.4.3.2
 
@@ -286,7 +278,7 @@ def standard_hook_factors(
     psi_c_template = templates.hook_psi_c
 
     return utils.fill_templates(templates.standard_hook_factors, locals(),
-                                lamb, psi_e, psi_r, psi_o, psi_c)
+        lamb, psi_e, psi_r, psi_o, psi_c)
 
 def standard_hook(
     rebar: materials.Rebar,
@@ -296,7 +288,7 @@ def standard_hook(
     n: int = 1,
     A_th: Area = 0*unit.inch**2,
     in_column: bool = False,
-    **latex_options) -> Length | tuple[str, Length]:
+    **markdown_options) -> Length | tuple[str, Length]:
     """Calculate the development length ($l_{dh}$) for a deformed bar in tension
     terminating in a standard hook according to ACI 318-19 Section 25.4.3
 
@@ -328,9 +320,9 @@ def standard_hook(
     s = s.to("inch")
     A_th = A_th.to("inch**2")
 
-    factors_latex, lamb, psi_e, psi_r, psi_o, psi_c = standard_hook_factors(
-        rebar, concrete, c_c_side, s, n, A_th, in_column, return_latex=True,
-        decimal_points=latex_options.get("decimal_points", decimal_points))
+    factors_markdown, lamb, psi_e, psi_r, psi_o, psi_c = standard_hook_factors(
+        rebar, concrete, c_c_side, s, n, A_th, in_column, return_markdown=True,
+        decimal_points=markdown_options.get("decimal_points", decimal_points))
 
     l_prime_dh = (((rebar.f_y*psi_e*psi_r*psi_o*psi_c)/ \
         (55*lamb*sqrt(concrete.f_prime_c*unit.pli)))*rebar.d_b**1.5).to("inch")

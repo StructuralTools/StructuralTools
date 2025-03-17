@@ -190,8 +190,8 @@ plf = lb / ft = _ = pound_per_foot
 kli = kip / inch = _ = kip_per_inch
 klf = kip / ft = _ = kip_per_foot
 
-# Torque
-[torque] = [force] * [length]
+# Moment
+[moment] = [force] * [length]
 Nm = newton * meter = _ = newton_meter
 lbin = lb * inch = _ = pound_inch = pound_inches
 lbft = lb * ft = _ = pound_foot = pound_feet

@@ -13,17 +13,21 @@
 # limitations under the License.
 
 
-from IPython.display import display, Latex
 from numpy import sqrt
 
-from structuraltools import unit
-from structuraltools.aisc import _plate_latex as templates
+from structuraltools import materials, unit, utils
+from structuraltools import Length, Moment
+from structuraltools.aisc import _plate_markdown as templates
 
 class Plate:
     """Class for calculating steel plate strength. For consistency with the
     other shapes the x-axis intersects the width of the plate (b) and
     represents the strong axis for bending."""
-    def __init__(self, d, t, material):
+    def __init__(
+        self,
+        d: Length,
+        t: Length,
+        material: materials.Steel):
         """Create a new steel plate.
 
         Parameters
@@ -41,19 +45,24 @@ class Plate:
         self.d = d.to("inch")
         self.t = t.to("inch")
         self.material = material
+        self.unpack_for_templates = True
 
         self.A = (self.d*self.t).to("inch**2")
         self.W = (self.A*material.w_s).to("plf")
-        self.Sx = (self.t*self.d**2/6).to("inch**3")
-        self.Zx = (self.t*self.d**2/4).to("inch**3")
-        self.Ix = (self.t*self.d**3/12).to("inch**4")
-        self.rx = (sqrt(self.Ix/self.A)).to("inch")
-        self.Sy = (self.d*self.t**2/6).to("inch**3")
-        self.Zy = (self.d*self.t**2/4).to("inch**3")
-        self.Iy = (self.d*self.t**3/12).to("inch**4")
-        self.ry = (sqrt(self.Iy/self.A)).to("inch")
+        self.S_x = (self.t*self.d**2/6).to("inch**3")
+        self.Z_x = (self.t*self.d**2/4).to("inch**3")
+        self.I_x = (self.t*self.d**3/12).to("inch**4")
+        self.r_x = (sqrt(self.I_x/self.A)).to("inch")
+        self.S_y = (self.d*self.t**2/6).to("inch**3")
+        self.Z_y = (self.d*self.t**2/4).to("inch**3")
+        self.I_y = (self.d*self.t**3/12).to("inch**4")
+        self.r_y = (sqrt(self.I_y/self.A)).to("inch")
 
-    def moment_capacity(self, L_b=0*unit.inch, C_b: int = 1, **kwargs):
+    def moment_capacity(
+        self,
+        L_b: Length = 0*unit.inch,
+        C_b: int = 1,
+        **markdown_options) -> tuple[float, Moment] | tuple[str, float, Moment]:
         """Calculate the major axis moment capacity according to
         AISC 360-22 Section F11
 
@@ -64,65 +73,32 @@ class Plate:
             Unbraced length for lateral-torsional buckling
 
         C_b : float
-            Lateral-torsional buckling modification factor. Defaults to 1.
-
-        show : bool, optional
-            Boolean indicating if the calculations shold be shown in
-            Jupyter output
-
-        return_latex : bool, optional
-            Boolean indicating if the latex string should be returned
-
-        decimal_points : int, optional
-            How many decimal places to use when displaying calculations in
-            Jupyter output. Defaults to 3"""
-        dec = kwargs.get("decimal_points", 3)
+            Lateral-torsional buckling modification factor. Defaults to 1."""
         phi_b = 0.9
-        latex = {
-            "C_b": round(C_b, dec),
-            "d" : round(self.d, dec),
-            "E": round(self.material.E, dec),
-            "F_y": round(self.material.F_y, dec),
-            "L_b": round(L_b, dec),
-            "S_x": round(self.Sx, dec),
-            "t": round(self.t, dec),
-            "Z_x": round(self.Zx, dec)
-        }
+        material = self.material
 
         short = 0.08*self.material.E/self.material.F_y
         long = 1.9*self.material.E/self.material.F_y
         length = L_b*self.d/self.t**2
-        M_p = min(self.material.F_y*self.Zx, 1.5*self.material.F_y*self.Sx).to("kipft")
-        latex.update({
-            "short": round(short, dec),
-            "long": round(long, dec),
-            "length": round(length, dec),
-            "M_p": round(M_p, dec)
-        })
+        M_p = min(self.material.F_y*self.Z_x, 1.5*self.material.F_y*self.S_x).to("kipft")
 
         if length <= short:
             M_n = M_p
-            latex.update({"M_n_str": templates.moment_plastic.substitute(
-                M_n=round(M_n, dec), **latex)})
+            M_n_template = templates.moment_plastic
         elif length <= long:
             M_n = min(C_b*(1.52-0.274*(L_b*self.d*self.material.F_y)/
-                (self.t**2*self.material.E))*self.material.F_y*self.Sx, M_p).to("kipft")
-            latex.update({"M_n_str": templates.moment_ltb_short.substitute(
-                M_n=round(M_n, dec), **latex)})
+                (self.t**2*self.material.E))*self.material.F_y*self.S_x, M_p).to("kipft")
+            M_n_template = templates.moment_ltb_short
         else:
-            M_n = min((1.9*self.material.E*C_b*self.t**2*self.Sx)/(L_b*self.d), M_p).to("kipft")
-            latex.update({"M_n_str": templates.moment_ltb_long.substitute(
-                M_n=round(M_n, dec), **latex)})
+            M_n = min((1.9*self.material.E*C_b*self.t**2*self.S_x)/(L_b*self.d), M_p).to("kipft")
+            M_n_template = templates.moment_ltb_long
+        return utils.fill_templates(templates.moment_capacity, locals(), phi_b, M_n)
 
-        if kwargs.get("show") or kwargs.get("return_latex"):
-            latex = templates.moment_capacity.substitute(**latex)
-            if kwargs.get("show"):
-                display(Latex(latex))
-            if kwargs.get("return_latex"):
-                return latex, phi_b, M_n
-        return phi_b, M_n
-
-    def moment_capacity_minor(self, L_b=0*unit.inch, C_b: int = 1, **kwargs):
+    def moment_capacity_minor(
+        self,
+        L_b: Length = 0*unit.inch,
+        C_b: int = 1,
+        **markdown_options) -> tuple[float, Moment] | tuple[str, float, Moment]:
         """Calculate the minor axis moment capacity according to
         AISC 360-22 Section F11
 
@@ -133,61 +109,23 @@ class Plate:
             Unbraced length for lateral-torsional buckling
 
         C_b : float
-            Lateral-torsional buckling modification factor. Defaults to 1.
-
-        show : bool, optional
-            Boolean indicating if the calculations shold be shown in
-            Jupyter output
-
-        return_latex : bool, optional
-            Boolean indicating if the latex string should be returned
-
-        decimal_points : int, optional
-            How many decimal places to use when displaying calculations in
-            Jupyter output. Defaults to 3"""
-        dec = kwargs.get("decimal_points", 3)
+            Lateral-torsional buckling modification factor. Defaults to 1."""
         phi_b = 0.9
-        latex = {
-            "C_b": round(C_b, dec),
-            "d" : round(self.d, dec),
-            "E": round(self.material.E, dec),
-            "F_y": round(self.material.F_y, dec),
-            "L_b": round(L_b, dec),
-            "S_y": round(self.Sy, dec),
-            "t": round(self.t, dec),
-            "Z_y": round(self.Zy, dec)
-        }
+        material = self.material
 
         short = 0.08*self.material.E/self.material.F_y
         long = 1.9*self.material.E/self.material.F_y
         length = L_b*self.t/self.d**2
-        M_p = min(self.material.F_y*self.Zy, 1.5*self.material.F_y*self.Sy).to("kipft")
-        latex.update({
-            "short": round(short, dec),
-            "long": round(long, dec),
-            "length": round(length, dec),
-            "M_p": round(M_p, dec)
-        })
+        M_p = min(self.material.F_y*self.Z_y, 1.5*self.material.F_y*self.S_y).to("kipft")
 
         if length <= short:
             M_n = M_p
-            latex.update({"M_n_str": templates.moment_minor_plastic.substitute(
-                M_n=round(M_n, dec), **latex)})
+            M_n_template = templates.moment_minor_plastic
         elif length <= long:
             M_n = min(C_b*(1.52-0.274*(L_b*self.t*self.material.F_y)/
-                (self.d**2*self.material.E))*self.material.F_y*self.Sy, M_p).to("kipft")
-            latex.update({"M_n_str": templates.moment_minor_ltb_short.substitute(
-                M_n=round(M_n, dec), **latex)})
+                (self.d**2*self.material.E))*self.material.F_y*self.S_y, M_p).to("kipft")
+            M_n_template = templates.moment_minor_ltb_short
         else:
-            M_n = min((1.9*self.material.E*C_b*self.d**2*self.Sy)/(L_b*self.t), M_p).to("kipft")
-            latex.update({"M_n_str": templates.moment_minor_ltb_long.substitute(
-                M_n=round(M_n, dec), **latex)})
-
-        if kwargs.get("show") or kwargs.get("return_latex"):
-            latex = templates.moment_capacity_minor.substitute(**latex)
-            if kwargs.get("show"):
-                display(Latex(latex))
-            if kwargs.get("return_latex"):
-                return latex, phi_b, M_n
-        return phi_b, M_n
-
+            M_n = min((1.9*self.material.E*C_b*self.d**2*self.S_y)/(L_b*self.t), M_p).to("kipft")
+            M_n_template = templates.moment_minor_ltb_long
+        return utils.fill_templates(templates.moment_capacity_minor, locals(), phi_b, M_n)
