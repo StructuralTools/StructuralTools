@@ -15,7 +15,14 @@
 
 from numpy import array, isclose
 
-from structuraltools import analysis, unit
+from structuraltools import analysis, unit, utils
+
+
+def test_reduce_combs():
+    reactions = utils.read_data_table("tests/analysis/test_reactions.csv")
+    reactions = analysis.loads.reduce_combs(reactions)
+    expected_reactions = utils.read_data_table("tests/analysis/reduced_test_reactions.csv")
+    assert all(reactions.eq(expected_reactions))
 
 
 class TestLoadCollector:

@@ -42,23 +42,27 @@ def test_linterp_dicts():
         x_3=2)
     assert dict_3 == {11: {21: 2, 22: 2, "text": "text"}, 12: {21: 2, 22: 2}}
 
-def test_convert_to_unit_1():
+def test_convert_to_unit_Quantity_string():
     result = utils.convert_to_unit("1 ft")
     assert result == 1*unit.ft
 
-def test_convert_to_unit_2():
+def test_convert_to_unit_int():
     result = utils.convert_to_unit(1)
     assert result == 1
 
-def test_convert_to_unit_3():
+def test_convert_to_unit_number_string():
     result = utils.convert_to_unit("1")
     assert result == 1
 
-def test_convert_to_unit_4():
+def test_convert_to_unit_alpha_string():
     result = utils.convert_to_unit("ft")
     assert result == "ft"
 
-def test_convert_to_unit_5():
+def test_convert_to_unit_scientific_Quantity_string():
+    result = utils.convert_to_unit("-9.5e-05 ft")
+    assert result == -9.5e-5*unit.ft
+
+def test_convert_to_unit_Quantity_like_string():
     with pytest.warns(UserWarning) as record:
         result = utils.convert_to_unit("1 xyz")
     assert result == "1 xyz"

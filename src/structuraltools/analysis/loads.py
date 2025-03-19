@@ -16,9 +16,57 @@
 from collections.abc import Iterable
 from itertools import product, starmap
 
-from numpy import maximum, minimum
+from numpy import maximum, minimum, sign
+import pandas as pd
 
 from structuraltools import Numeric, NumericArray
+
+
+pd.options.mode.copy_on_write = True
+
+
+def reduce_combs(cases: pd.DataFrame) -> pd.DataFrame:
+    """Takes a DataFrame of load cases and returns a DataFrame containing only
+    the load combinations that may control.
+
+    Parameters
+    ==========
+
+    cases : pd.DataFrame
+        DataFrame with load directions in columns and load cases in rows"""
+    def may_control(case: pd.Series, cases: pd.DataFrame) -> bool:
+        """Returns a boolean indicating if the load case currently being
+        checked may control.
+
+        Parameters
+        ==========
+
+        case : pd.Series
+            Load case currently being checked
+
+        cases : pd.DataFrame
+            DataFrame of all other load cases to compare against when checking
+            if case may control"""
+        def does_not_control(compare: pd.Series, current: pd.Series) -> bool:
+            """Returns a boolean indicating if the current load case controls
+            over the compare load case. The current load case is considered to
+            control over the compared load case if it is of a greater magnitude
+            and the same direction for every direction considered.
+
+            Parameters
+            ==========
+
+            compare : pd.Series
+                Load case that is being compared against
+
+            current : pd.Series
+                Load case that is being checked to possibly control"""
+            lower_magnitudes = all(current.abs().lt(compare.abs()))
+            same_signs = all(sign(current).eq(sign(compare)))
+            return lower_magnitudes and same_signs
+        return not any(cases.apply(does_not_control, current=case, axis=1))
+    return cases.apply(lambda x: x if may_control(x, cases) else None,
+                       axis=1, result_type="broadcast").dropna()
 
 
 class LoadCollector:

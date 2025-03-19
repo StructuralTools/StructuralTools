@@ -128,7 +128,8 @@ def convert_to_unit(value: any) -> any:
         be converted will be returned unmodified."""
 
     if isinstance(value, str):
-        if value.split(" ")[0].replace(".", "").replace("-", "").isdigit():
+        val = value.split(" ")[0]
+        if val.replace(".", "").replace("-", "").replace("e", "").isdigit():
             try:
                 value = unit(value)
             except UndefinedUnitError:
