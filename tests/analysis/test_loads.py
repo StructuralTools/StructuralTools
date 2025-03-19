@@ -24,6 +24,11 @@ def test_reduce_combs():
     expected_reactions = utils.read_data_table("tests/analysis/reduced_test_reactions.csv")
     assert all(reactions.eq(expected_reactions))
 
+def test_reduce_combs_already_reduced():
+    reactions = utils.read_data_table("tests/analysis/reduced_test_reactions.csv")
+    reduced_reactions = analysis.loads.reduce_combs(reactions)
+    assert all(reduced_reactions.eq(reactions))
+
 
 class TestLoadCollector:
     def setup_method(self, method):

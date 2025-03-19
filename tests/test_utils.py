@@ -15,6 +15,7 @@
 
 from string import Template
 
+from numpy import isclose
 import pytest
 
 from structuraltools import materials, resources, unit, utils
@@ -30,8 +31,7 @@ def test_bound_high():
     assert utils.bound(5, 12, 10) == 10
 
 def test_linterp():
-    y_3 = utils.linterp(1, 1, 3, 3, 2)
-    assert y_3 == 2
+    assert utils.linterp(1, 1, 3, 3, 2) == 2
 
 def test_linterp_dicts():
     dict_3 = utils.linterp_dicts(
@@ -42,25 +42,26 @@ def test_linterp_dicts():
         x_3=2)
     assert dict_3 == {11: {21: 2, 22: 2, "text": "text"}, 12: {21: 2, 22: 2}}
 
+def test_round_to_float():
+    assert utils.round_to(3.5, 5) == 5
+
+def test_round_to_Quantity():
+    assert isclose(utils.round_to(-0.1713*unit.kip, 10*unit.lb), -180*unit.lb)
+
 def test_convert_to_unit_Quantity_string():
-    result = utils.convert_to_unit("1 ft")
-    assert result == 1*unit.ft
+    assert utils.convert_to_unit("1 ft") == 1*unit.ft
 
 def test_convert_to_unit_int():
-    result = utils.convert_to_unit(1)
-    assert result == 1
+    assert utils.convert_to_unit(1) == 1
 
 def test_convert_to_unit_number_string():
-    result = utils.convert_to_unit("1")
-    assert result == 1
+    assert utils.convert_to_unit("1") == 1
 
 def test_convert_to_unit_alpha_string():
-    result = utils.convert_to_unit("ft")
-    assert result == "ft"
+    assert utils.convert_to_unit("ft") == "ft"
 
 def test_convert_to_unit_scientific_Quantity_string():
-    result = utils.convert_to_unit("-9.5e-05 ft")
-    assert result == -9.5e-5*unit.ft
+    assert utils.convert_to_unit("-9.5e-05 ft") == -9.5e-5*unit.ft
 
 def test_convert_to_unit_Quantity_like_string():
     with pytest.warns(UserWarning) as record:

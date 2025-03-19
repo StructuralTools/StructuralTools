@@ -18,6 +18,7 @@ from string import Template
 import warnings
 
 from IPython.display import display_markdown
+from numpy import sign
 import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
@@ -113,6 +114,22 @@ def linterp_dicts(
             else:
                 dict_3[key_1].update({key_2: dict_1[key_1][key_2]})
     return dict_3
+
+def round_to(value: Numeric, to: Numeric) -> Numeric:
+    """Round the provided value away from 0 to the nearest multiple of to
+
+    Parameters
+    ==========
+
+    value : Numeric
+        Value to round
+
+    to : Numeric
+        Rounding target"""
+    to = abs(to)
+    if isinstance(value, Quantity):
+        return to*(abs(value.to(to.units).magnitude)//to.magnitude+1)*sign(value)
+    return to*(abs(value)//to+1)*sign(value)
 
 def convert_to_unit(value: any) -> any:
     """Checks if the given value is likely to be a string of a pint
