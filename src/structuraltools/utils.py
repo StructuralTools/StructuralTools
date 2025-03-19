@@ -135,20 +135,6 @@ def convert_to_unit(value: any) -> any:
                 warnings.warn(f"{value} was not evaluated as a unit")
     return value
 
-def read_data_table(filepath: str) -> pd.DataFrame:
-    """Reads a .csv file and returns a pandas DataFrame with the first column
-    set as the index and convert_to_unit run on all values
-
-    Parameters
-    ==========
-
-    filepath : str
-        Path to the file"""
-    data_table = pd.read_csv(filepath)
-    data_table = data_table.map(convert_to_unit)
-    data_table = data_table.set_index(data_table.columns[0], drop=True)
-    return data_table
-
 def get_table_entry(filepath: str, index: str) -> dict:
     """Returns the specified row from a csv file as a dict. String values that
     are likely to be numeric or contain Pint quantities are evaluated with
@@ -171,6 +157,20 @@ def get_table_entry(filepath: str, index: str) -> dict:
                 break
     data = {key: convert_to_unit(value) for key, value in raw_data.items()}
     return data
+
+def read_data_table(filepath: str) -> pd.DataFrame:
+    """Reads a .csv file and returns a pandas DataFrame with the first column
+    set as the index and convert_to_unit run on all values
+
+    Parameters
+    ==========
+
+    filepath : str
+        Path to the file"""
+    data_table = pd.read_csv(filepath)
+    data_table = data_table.map(convert_to_unit)
+    data_table = data_table.set_index(data_table.columns[0], drop=True)
+    return data_table
 
 def remove_alignment(latex: str) -> str:
     return latex.replace("$$ \\begin{aligned}\n", "").replace("\n\\end{aligned} $$", "")
