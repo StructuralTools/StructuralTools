@@ -43,3 +43,13 @@ class TestModel:
         reactions = self.model.get_node_reactions(1, "service_combinations")
         assert reactions.at["S2", "FX"] == -0.234979829085838*unit.kip
         assert reactions.at["S2", "MX"] == 0*unit.kipft
+
+    def test_get_member_end_forces_start_load_cases(self):
+        end_forces = self.model.get_member_end_forces(1, 1, "load_cases")
+        assert end_forces.at["DL", "Axial"] == 0.025*unit.kip
+        assert end_forces.at["LL", "V2"] == 0.237293954287643*unit.kip
+
+    def test_get_member_end_forces_end_design_combinations(self):
+        end_forces = self.model.get_member_end_forces(3, 3, "design_combinations")
+        assert end_forces.at["D1", "Axial"] == -0.035*unit.kip
+        assert end_forces.at["D2", "M33"] == 0.117095369920119*unit.kipft
