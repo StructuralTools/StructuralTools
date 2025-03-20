@@ -88,24 +88,29 @@ class TestLoadCollector:
         assert self.collector.min_comb == ((("D", "D1"), 1.4),)
 
     def test_eval_combs_quantities(self):
-        self.collector.add_load(("D", "L"), ("D1", "L1"), 1*unit.lb)
+        self.collector.add_load(("D", "L"), ("D1", "L1"), -1*unit.lb)
         self.collector.add_load(("D", "L"), ("D2", "L2"), 2*unit.lb)
         self.collector.eval_combs(self.combs)
         assert isclose(self.collector.max_value, 5.6*unit.lb)
         assert self.collector.max_comb == ((("D", "D2"), 1.2), (("L", "L2"), 1.6))
-        assert isclose(self.collector.min_value, 1.4*unit.lb)
-        assert self.collector.min_comb == ((("D", "D1"), 1.4),)
+        assert isclose(self.collector.min_value, -2.8*unit.lb)
+        assert self.collector.min_comb == ((("D", "D1"), 1.2), (("L", "L1"), 1.6))
+        assert isclose(self.collector.abs_max_value, 5.6*unit.lb)
+        assert self.collector.abs_max_comb == ((("D", "D2"), 1.2), (("L", "L2"), 1.6))
 
     def test_eval_combs_arrays(self):
         self.collector.add_load(("D", "L"), ("D1", "L1"), array([1, 4, 5]))
-        self.collector.add_load(("D", "L"), ("D2", "L2"), array([2, 3, 6]))
+        self.collector.add_load(("D", "L"), ("D2", "L2"), array([-2, 3, 6]))
         self.collector.eval_combs(self.combs)
         assert isclose(self.collector.max_value, 16.8)
         assert self.collector.max_comb == ((("D", "D2"), 1.2), (("L", "L2"), 1.6))
-        assert all(isclose(self.collector.max_envelope, [5.6, 11.2, 16.8]))
-        assert isclose(self.collector.min_value, 1.4)
-        assert self.collector.min_comb == ((("D", "D1"), 1.4),)
-        assert all(isclose(self.collector.min_envelope, [1.4, 4.2, 7]))
+        assert all(isclose(self.collector.max_envelope, [2.8, 11.2, 16.8]))
+        assert isclose(self.collector.min_value, -5.6)
+        assert self.collector.min_comb == ((("D", "D2"), 1.2), (("L", "L2"), 1.6))
+        assert all(isclose(self.collector.min_envelope, [-5.6, 4.2, 7]))
+        assert isclose(self.collector.abs_max_value, 16.8)
+        assert self.collector.abs_max_comb == ((("D", "D2"), 1.2), (("L", "L2"), 1.6))
+        assert all(isclose(self.collector.abs_max_envelope, [5.6, 11.2, 16.8]))
 
     def test_eval_combs_quantity_arrays(self):
         self.collector.add_load(("D", "L"), ("D1", "L1"), [1, 4, 5]*unit.lb)
