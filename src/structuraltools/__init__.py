@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-from typing import Annotated, Union
-
 import importlib.resources
 import json
+from typing import Annotated, Union
 
+from numpy import ndarray
 import pint
 
 
@@ -32,6 +32,8 @@ with open(resources.joinpath("ASCE_combinations.json")) as file:
 decimal_points = 3
 
 type Numeric = Union[int, float, pint.Quantity]
+type NumericArray = Union[ndarray, Annotated[pint.Quantity, ndarray]]
+
 type Area = Annotated[pint.Quantity, float, "[length]**2]"]
 type Length = Annotated[pint.Quantity, float, "[length]"]
 type Moment = Annotated[pint.Quantity, float, "[moment]"]
