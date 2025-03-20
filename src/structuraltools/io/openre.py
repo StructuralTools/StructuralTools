@@ -33,7 +33,9 @@ class Model:
         self.model_tree = ElementTree.parse(filepath)
         self.model = self.model_tree.getroot()
         self.nodes = self.model[0][0]
+        self.members = self.model[0][2]
         self.node_reactions = self.model[2][2]
+        self.member_end_forces = self.model[2][1]
 
         # Get the units from the OpenRE file
         unit_codes = self.model.attrib["Units"].split("-")
@@ -82,7 +84,7 @@ class Model:
             cases = self.load_cases.keys()
         else:
             cases = getattr(self, cases)
-        reactions = pd.DataFrame(columns=("FX", "FY", "FZ", "MX", "MY", "MZ"))
+        reactions = pd.DataFrame(columns=["FX", "FY", "FZ", "MX", "MY", "MZ"])
         for entry in self.node_reactions:
             node_id = entry.get("NodeID")
             case_id = entry.get("LoadCombinationID", entry.get("LoadCaseID"))
@@ -96,3 +98,59 @@ class Model:
             lambda value: value*self.force_unit*self.length_unit)
         return reactions
 
+    def get_member_end_forces(
+        self,
+        member: int,
+        node: int,
+        cases: str) -> pd.DataFrame:
+        """Return the member end reaction forces for the specified member at the
+        specified node.
+
+        Parameters
+        ==========
+
+        member : int
+            ID number of the member
+
+        node : int
+            ID number of the node
+
+        cases : str
+            One of: "load_cases", "design_combinations", or "service_combinations"
+            indicating which load cases/combinations to return the reactions for."""
+        # Determine if the start or the end of the member was requested
+        node = str(node)
+        member_xml = self.members[member-1]
+        member = str(member)
+        assert member_xml.get("ID") == member
+
+        if member_xml.get("StartNodeID") == node:
+            get_0 = True
+        elif member_xml.get("EndNodeID") == node:
+            get_0 = False
+        else:
+            raise ValueError(f"Node {node} is not and end node for member {member}")
+
+        if cases == "load_cases":
+            cases = self.load_cases.keys()
+        else:
+            cases = getattr(self, cases)
+        end_forces = pd.DataFrame(
+            columns=["Axial", "V2", "V3", "Torsion", "M22", "M33"])
+        for entry in self.member_end_forces:
+            member_id = entry.get("MemberID")
+            case_id = entry.get("LoadCombinationID", entry.get("LoadCaseID"))
+            if member_id == member and case_id in cases:
+                end_forces.loc[case_id, :] = 0
+                for end in entry:
+                    if end.get("X") == "0" and get_0:
+                        for force in end:
+                            end_forces.at[case_id, force.tag] = float(force.text)
+                    elif end.get("X") != "0" and not get_0:
+                        for force in end:
+                            end_forces.at[case_id, force.tag] = float(force.text)
+        end_forces.loc[:, "Axial":"V3"] = end_forces.loc[:, "Axial":"V3"].map(
+            lambda value: value*self.force_unit)
+        end_forces.loc[:, "Torsion": "M33"] = end_forces.loc[:, "Torsion": "M33"].map(
+            lambda value: value*self.force_unit*self.length_unit)
+        return end_forces

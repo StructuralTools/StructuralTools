@@ -155,5 +155,22 @@ class LoadCollector:
                 extremes.update({"max_value": max_value, "max_comb": comb})
             if min_value <= extremes.get("min_value", min_value):
                 extremes.update({"min_value": min_value, "min_comb": comb})
+
+        # Calculate absolute max values
+        if extremes.get("max_envelope") is not None:
+            extremes.update({"abs_max_envelope": maximum(
+                abs(extremes["max_envelope"]), abs(extremes["min_envelope"]))})
+        if abs(extremes["max_value"]) >= abs(extremes["min_value"]):
+            extremes.update({
+                "abs_max_value": abs(extremes["max_value"]),
+                "abs_max_comb": extremes["max_comb"]
+            })
+        else:
+            extremes.update({
+                "abs_max_value": abs(extremes["min_value"]),
+                "abs_max_comb": extremes["min_comb"]
+            })
+
+        # Store results as attributes
         for attr, value in extremes.items():
             setattr(self, attr, value)
