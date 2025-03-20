@@ -18,6 +18,7 @@ from string import Template
 import warnings
 
 from IPython.display import display_markdown
+from numpy import sign
 import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
@@ -114,6 +115,22 @@ def linterp_dicts(
                 dict_3[key_1].update({key_2: dict_1[key_1][key_2]})
     return dict_3
 
+def round_to(value: Numeric, to: Numeric) -> Numeric:
+    """Round the provided value away from 0 to the nearest multiple of to
+
+    Parameters
+    ==========
+
+    value : Numeric
+        Value to round
+
+    to : Numeric
+        Rounding target"""
+    to = abs(to)
+    if isinstance(value, Quantity):
+        return to*(abs(value.to(to.units).magnitude)//to.magnitude+1)*sign(value)
+    return to*(abs(value)//to+1)*sign(value)
+
 def convert_to_unit(value: any) -> any:
     """Checks if the given value is likely to be a string of a pint
     Quantity and attempts to read with the set unit registry. This
@@ -128,26 +145,13 @@ def convert_to_unit(value: any) -> any:
         be converted will be returned unmodified."""
 
     if isinstance(value, str):
-        if value.split(" ")[0].replace(".", "").replace("-", "").isdigit():
+        val = value.split(" ")[0]
+        if val.replace(".", "").replace("-", "").replace("e", "").isdigit():
             try:
                 value = unit(value)
             except UndefinedUnitError:
                 warnings.warn(f"{value} was not evaluated as a unit")
     return value
-
-def read_data_table(filepath: str) -> pd.DataFrame:
-    """Reads a .csv file and returns a pandas DataFrame with the first column
-    set as the index and convert_to_unit run on all values
-
-    Parameters
-    ==========
-
-    filepath : str
-        Path to the file"""
-    data_table = pd.read_csv(filepath)
-    data_table = data_table.map(convert_to_unit)
-    data_table = data_table.set_index(data_table.columns[0], drop=True)
-    return data_table
 
 def get_table_entry(filepath: str, index: str) -> dict:
     """Returns the specified row from a csv file as a dict. String values that
@@ -171,6 +175,20 @@ def get_table_entry(filepath: str, index: str) -> dict:
                 break
     data = {key: convert_to_unit(value) for key, value in raw_data.items()}
     return data
+
+def read_data_table(filepath: str) -> pd.DataFrame:
+    """Reads a .csv file and returns a pandas DataFrame with the first column
+    set as the index and convert_to_unit run on all values
+
+    Parameters
+    ==========
+
+    filepath : str
+        Path to the file"""
+    data_table = pd.read_csv(filepath)
+    data_table = data_table.map(convert_to_unit)
+    data_table = data_table.set_index(data_table.columns[0], drop=True)
+    return data_table
 
 def remove_alignment(latex: str) -> str:
     return latex.replace("$$ \\begin{aligned}\n", "").replace("\n\\end{aligned} $$", "")
