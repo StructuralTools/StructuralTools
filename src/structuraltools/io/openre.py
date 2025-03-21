@@ -120,9 +120,14 @@ class Model:
             indicating which load cases/combinations to return the reactions for."""
         # Determine if the start or the end of the member was requested
         node = str(node)
-        member_xml = self.members[member-1]
-        member = str(member)
-        assert member_xml.get("ID") == member
+        try:
+            member_xml = self.members[member-1]
+            member = str(member)
+            assert member_xml.get("ID") == member
+        except AssertionError:
+            for member_xml in self.members:
+                if member_xml.get("ID") == member:
+                    break
 
         if member_xml.get("StartNodeID") == node:
             get_0 = True
