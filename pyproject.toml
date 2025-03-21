@@ -12,6 +12,7 @@ dependencies = [
     "numpy>=2.2.3",
     "pandas>=2.2.3",
     "pint>=0.24.4",
+    "sympy>=1.13.3",
 ]
 
 [build-system]
