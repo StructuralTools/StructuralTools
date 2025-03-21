@@ -27,7 +27,7 @@ unit = pint.UnitRegistry(resources.joinpath("units"))
 unit.formatter.default_format = "~L"
 
 with open(resources.joinpath("ASCE_combinations.json")) as file:
-    load_combinations = json.load(file)
+    combs = json.load(file)
 
 decimal_points = 3
 

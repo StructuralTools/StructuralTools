@@ -13,10 +13,7 @@
 # limitations under the License.
 
 
-from .plate import Plate
-from .wide_flange import WideFlange
+from string import Template
 
-__all__ = (
-    Plate,
-    WideFlange
-)
+
+moment_capacity = Template("")
