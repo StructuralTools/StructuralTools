@@ -124,7 +124,7 @@ class ContinuumBeam:
             order,
             end)})
 
-    def remove_load(self, name: Optional[str]) -> None:
+    def remove_load(self, name: Optional[str] = None) -> None:
         """Remove the specified load from the beam
 
         Parameters
