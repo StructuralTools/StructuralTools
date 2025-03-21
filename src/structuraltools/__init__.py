@@ -27,7 +27,7 @@ unit = pint.UnitRegistry(resources.joinpath("units"))
 unit.formatter.default_format = "~L"
 
 with open(resources.joinpath("ASCE_combinations.json")) as file:
-    load_combinations = json.load(file)
+    combs = json.load(file)
 
 decimal_points = 3
 
@@ -37,6 +37,7 @@ type NumericArray = Union[ndarray, Annotated[pint.Quantity, ndarray]]
 type Area = Annotated[pint.Quantity, float, "[length]**2]"]
 type Length = Annotated[pint.Quantity, float, "[length]"]
 type Moment = Annotated[pint.Quantity, float, "[moment]"]
+type MomentOfInertia = Annotated[pint.Quantity, float, "[moment]**4"]
 type Pressure = Annotated[pint.Quantity, float, "[pressure]"]
 type Stress = Annotated[pint.Quantity, float, "[pressure]"]
 type UnitWeight = Annotated[pint.Quantity, float, "[unit_weight]"]
