@@ -20,7 +20,7 @@ from structuraltools import Length, Moment
 from structuraltools.aisc import _wide_flange_markdown as templates
 
 
-shape_database = utils.read_data_table(resources.joinpath("AISC_WideFlange.csv"))
+database = utils.read_data_table(resources.joinpath("AISC_WideFlange.csv"))
 
 
 class WideFlange:
@@ -38,7 +38,7 @@ class WideFlange:
             Material to use for the member"""
         self.size = size
         self.material = material
-        dimensions = shape_database.loc[size, :].to_dict()
+        dimensions = database.loc[size, :].to_dict()
         for attribute, value in dimensions.items():
             setattr(self, attribute, value)
 
