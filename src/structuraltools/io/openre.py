@@ -64,7 +64,18 @@ class Model:
                     self.service_combs.add(loading.get("ID"))
                 else:
                     raise ValueError(
-                        f"Unsupported load combination type: {load_condition.get("Type")}")
+                        f"Unsupported load combination type: {loading.get("Type")}")
+
+    def get_node_location(self, node: int | str) -> dict:
+        """Return the location of the specified node
+
+        Parameters
+        ==========
+
+        node : int or str
+            ID number of the node"""
+        node = self.model.find(f"Data/Nodes/Node[@ID='{str(node)}']")
+        return {axis: float(node.get(axis, 0))*self.length_unit for axis in ["X", "Y", "Z"]}
 
     def get_node_reactions(self, node: int | str, cases: str) -> pd.DataFrame:
         """Return the reaction forces for the specified node
@@ -85,17 +96,17 @@ class Model:
 
         reactions = pd.DataFrame(columns=["FX", "FY", "FZ", "MX", "MY", "MZ"])
         search = f"Output/NodeReactions/Reactions[@NodeID='{str(node)}']"
-        for entry in self.model.iterfind(search):
-            case_id = entry.get("LoadCombinationID", entry.get("LoadCaseID"))
+        for reaction in self.model.iterfind(search):
+            case_id = reaction.get("LoadCombinationID", reaction.get("LoadCaseID"))
             if case_id in cases:
                 reactions.loc[case_id, :] = 0
-                for reaction in entry:
-                    reactions.at[case_id, reaction.tag] = float(reaction.text)
+                for direction in reaction:
+                    reactions.at[case_id, direction.tag] = direction.text
 
         reactions.loc[:, "FX":"FZ"] = reactions.loc[:, "FX":"FZ"].map(
-            lambda value: value*self.force_unit)
+            lambda value: float(value)*self.force_unit)
         reactions.loc[:, "MX":"MZ"] = reactions.loc[:, "MX":"MZ"].map(
-            lambda value: value*self.force_unit*self.length_unit)
+            lambda value: float(value)*self.force_unit*self.length_unit)
         return reactions
 
     def get_member_end_forces(
@@ -138,15 +149,15 @@ class Model:
         end_forces = pd.DataFrame(
             columns=["Axial", "V2", "V3", "Torsion", "M22", "M33"])
         search = f"Output/MemberEndForces/EndForce[@MemberID='{member}']"
-        for entry in self.model.iterfind(search):
-            case_id = entry.get("LoadCombinationID", entry.get("LoadCaseID"))
+        for end_force in self.model.iterfind(search):
+            case_id = end_force.get("LoadCombinationID", end_force.get("LoadCaseID"))
             if case_id in cases:
                 end_forces.loc[case_id, :] = 0
-                for force in entry.iterfind(end_search):
-                    end_forces.at[case_id, force.tag] = float(force.text)
+                for force in end_force.iterfind(end_search):
+                    end_forces.at[case_id, force.tag] = force.text
 
         end_forces.loc[:, "Axial":"V3"] = end_forces.loc[:, "Axial":"V3"].map(
-            lambda value: value*self.force_unit)
+            lambda value: float(value)*self.force_unit)
         end_forces.loc[:, "Torsion": "M33"] = end_forces.loc[:, "Torsion": "M33"].map(
-            lambda value: value*self.force_unit*self.length_unit)
+            lambda value: float(value)*self.force_unit*self.length_unit)
         return end_forces

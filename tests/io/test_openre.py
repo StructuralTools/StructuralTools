@@ -29,6 +29,16 @@ class TestModel:
     def setup_method(self):
         self.model = io.openre.Model("./tests/io/test.oex.xml")
 
+    def test_get_node_location(self):
+        location = self.model.get_node_location(3)
+        expected_location = {
+            "X": 0.833333333333333*unit.ft,
+            "Y": 0.833333333333333*unit.ft,
+            "Z": 0*unit.ft
+        }
+        assert location == expected_location
+
+
     def test_get_node_reactions_load_cases(self):
         reactions = self.model.get_node_reactions(1, "load_cases")
         assert reactions.at["DL", "FY"] == 0.025*unit.kip
