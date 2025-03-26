@@ -38,6 +38,7 @@ class WideFlange:
             Material to use for the member"""
         self.size = size
         self.material = material
+        self.unpack_for_templates = True
         dimensions = database.loc[size, :].to_dict()
         for attribute, value in dimensions.items():
             setattr(self, attribute, value)
@@ -78,11 +79,14 @@ class WideFlange:
             +6.76*(0.7*self.material.F_y/self.material.E)**2))
         if L_b <= L_p:
             M_ltb = M_p
+            M_ltb_template = templates.M_ltb_plastic
         elif L_b <= L_r:
             M_ltb = C_b*(M_p-(M_p-0.7*self.material.F_y*self.S_x)*(L_b-L_p)/(L_r-L_p))
+            M_ltb_template = templates.M_ltb_inelastic
         else:
             M_ltb = self.S_x*C_b*pi**2*self.material.E/(L_b/self.r_ts)**2*sqrt(
                 1+0.078*self.J*c/(self.S_x*self.h_o)*(L_b/self.r_ts)**2)
+            M_ltb_template = templates.M_ltb_elastic
         M_ltb = M_ltb.to("kipft")
 
         # Flange local buckling moment
@@ -90,12 +94,15 @@ class WideFlange:
         lamb_rf = sqrt_E_F_y
         if self.lamb_f < lamb_pf:
             M_flb = M_p
+            M_flb_template = templates.M_flb_compact
         elif self.lamb_f < lamb_rf:
             M_flb = M_p-(M_p-0.7*self.material.F_y*self.S_x) \
                 *(self.lamb_f-lamb_pf)/(lamb_rf-lamb_pf)
+            M_flb_template = templates.M_flb_noncompact
         else:
             k_c = min(max(0.35, 4/sqrt(self.lamb_w)), 0.76)
             M_flb = 0.9*self.material.E*k_c*self.S_x/self.lamb_f**2
+            M_flb_template = templates.M_flb_slender
         M_flb = M_flb.to("kipft")
 
         M_n = min(M_p, M_ltb, M_flb)
