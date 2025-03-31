@@ -35,6 +35,7 @@ type Numeric = Union[int, float, pint.Quantity]
 type NumericArray = Union[ndarray, Annotated[pint.Quantity, ndarray]]
 
 type Area = Annotated[pint.Quantity, float, "[length]**2]"]
+type Force = Annotated[pint.Quantity, float, "[force]"]
 type Length = Annotated[pint.Quantity, float, "[length]"]
 type Moment = Annotated[pint.Quantity, float, "[moment]"]
 type MomentOfInertia = Annotated[pint.Quantity, float, "[moment]**4"]
