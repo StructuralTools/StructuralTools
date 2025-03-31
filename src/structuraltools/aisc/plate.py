@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-from numpy import sqrt
+from numpy import pi, sqrt
 
 from structuraltools import materials, unit, utils
-from structuraltools import Length, Moment
+from structuraltools import Force, Length, Moment
 from structuraltools.aisc import _plate_markdown as templates
 
 class Plate:
@@ -57,6 +57,41 @@ class Plate:
         self.Z_y = (self.d*self.t**2/4).to("inch**3")
         self.I_y = (self.d*self.t**3/12).to("inch**4")
         self.r_y = (sqrt(self.I_y/self.A)).to("inch")
+
+    def compression_capacity(
+        self,
+        L_x: Length,
+        L_y: Length,
+        **markdown_options) -> tuple[float, Force] | tuple[str, float, Force]:
+        """Calculate the axial compression capacity according to
+        AISC 360-22 Section E3
+
+        Parameters
+        ==========
+
+        L_x : Length
+            Critical length with respect to r_x
+
+        L_x : Length
+            Critical length with respect to r_y"""
+        phi_c = 0.9
+        material = self.material
+
+        F_e_x = (self.material.E*pi**2)/((L_x/self.r_x)**2)
+        if self.material.F_y/F_e_x <= 2.25:
+            F_n_x = (0.658**(self.material.F_y/F_e_x))*self.material.F_y
+        else:
+            F_n_x = 0.877*F_e_x
+
+        F_e_y = (self.material.E*pi**2)/((L_y/self.r_y)**2)
+        if self.material.F_y/F_e_y <= 2.25:
+            F_n_y = (0.658**(self.material.F_y/F_e_y))*self.material.F_y
+        else:
+            F_n_y = 0.877*F_e_y
+
+        P_n = min(F_n_x, F_n_y)*self.A
+        return phi_c, P_n
+
 
     def moment_capacity(
         self,

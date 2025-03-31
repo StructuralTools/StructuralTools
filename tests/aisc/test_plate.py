@@ -37,6 +37,14 @@ class TestPlate:
         self.steel = materials.Steel("A36")
         self.plate = aisc.Plate(12*unit.inch, 1*unit.inch, self.steel)
 
+    def test_compression_capacity_inelastic(self):
+        phi, P_n = self.plate.compression_capacity(L_x=3*unit.ft, L_y=3*unit.ft)
+        assert isclose(P_n, 190.50898212391965*unit.kip)
+
+    def test_compression_capacity_elastic(self):
+        phi, P_n = self.plate.compression_capacity(L_x=4*unit.ft, L_y=4*unit.ft)
+        assert isclose(P_n, 108.94689615143473*unit.kip)
+
     def test_moment_capacity_major_plastic(self):
         markdown, phi, M_n = self.plate.moment_capacity(return_markdown=True)
         assert isclose(M_n, 108*unit.kipft)
