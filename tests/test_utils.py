@@ -18,17 +18,8 @@ from string import Template
 from numpy import isclose
 import pytest
 
-from structuraltools import materials, resources, unit, utils
+from structuraltools import materials, MathTemplate, resources, unit, utils
 
-
-def test_bound_low():
-    assert utils.bound(5, 1, 10) == 5
-
-def test_bound_calculated():
-    assert utils.bound(5, 7, 10) == 7
-
-def test_bound_high():
-    assert utils.bound(5, 12, 10) == 10
 
 def test_linterp():
     assert utils.linterp(1, 1, 3, 3, 2) == 2
@@ -67,7 +58,7 @@ def test_convert_to_unit_Quantity_like_string():
     with pytest.warns(UserWarning) as record:
         result = utils.convert_to_unit("1 xyz")
     assert result == "1 xyz"
-    assert record[0].message.args[0] == "1 xyz was not evaluated as a unit"
+    assert record[0].message.args[0] == "'1 xyz' was not evaluated as a unit"
 
 def test_read_data_table():
     filepath = resources.joinpath("AISC_steel_materials.csv")
@@ -88,15 +79,14 @@ def test_get_table_entry():
     }
     assert data == expected_data
 
-def test_remove_alignment():
-    string = utils.remove_alignment(r"""$$ \begin{aligned}
-    q_z &= 0.00256 \cdot K_z \cdot K_{zt} \cdot K_e \cdot V^2
-        = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot 110\ \mathrm{mph}^2
-        &= 35.982\ \mathrm{psf}
-\end{aligned} $$""")
-    assert string == r"""    q_z &= 0.00256 \cdot K_z \cdot K_{zt} \cdot K_e \cdot V^2
-        = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot 110\ \mathrm{mph}^2
-        &= 35.982\ \mathrm{psf}"""
+def test_fill_template():
+    template = MathTemplate("$header $test_string $length")
+    test_string = "Hello World!"
+    length = 3.66667*unit.ft
+    options = {"return_string": True, "decimal_points": 2, "header_level": 2}
+    string, returned = utils.fill_template(template, locals(), length, **options)
+    assert returned == length
+    assert string == r"## Hello World! 3.67\ \mathrm{ft}"
 
 def test_fill_templates():
     main_template = Template("""

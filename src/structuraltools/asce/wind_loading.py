@@ -237,17 +237,13 @@ def calc_wind_server_inputs(
     # ASCE 7-22 Equation 26.10-1
     K_h_markdown, K_h = calc_K_z(h, values["z_g"], values["alpha"], "h",
         return_markdown=True, decimal_points=dec)
-    K_h_markdown = utils.remove_alignment(K_h_markdown)
     q_h_markdown, q_h = calc_q_z(K_h, K_zt, K_e, V, "h",
         return_markdown=True, decimal_points=dec)
-    q_h_markdown = utils.remove_alignment(q_h_markdown)
     if h_p:
         K_p_markdown, K_p = calc_K_z(h_p, values["z_g"], values["alpha"], "p",
             return_markdown=True, decimal_points=dec)
-        K_p_markdown = utils.remove_alignment(K_p_markdown)
         q_p_markdown, q_p = calc_q_z(K_p, K_zt, K_e, V, "p",
             return_markdown=True, decimal_points=dec)
-        q_p_markdown = utils.remove_alignment(q_p_markdown)
     else:
         K_p_template = ""
         q_p_template, q_p = ("", None)

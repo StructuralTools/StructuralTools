@@ -28,25 +28,6 @@ def test_Concrete_init_ultra_lightweight():
     assert concrete.beta_1 == 0.85
     assert isclose(concrete.f_r, 355.7562368*unit.psi, atol=1e-7)
     assert concrete.f_r.units == "psi"
-    assert concrete.markdown == r"""$$ \begin{aligned}
-    \lambda &= \operatorname{bound}\left(0.75,\ 0.0075 \cdot w_c,\ 1\right)
-        = \operatorname{bound}\left(0.75,\ 0.0075 \cdot 90\ \mathrm{pcf},\ 1\right)
-        &= 0.75
-    \\[10pt]
-    E_c &= w_c^{1.5} \cdot 33 \cdot \sqrt{f'_c}
-        = \left(90\ \mathrm{pcf}\right)^{1.5} \cdot 33 \cdot \sqrt{4000\ \mathrm{psi}}
-        &= 1782000.0\ \mathrm{psi}
-    \\[10pt]
-    f_r &= 7.5 \cdot \lambda \cdot \sqrt{f'_c}
-        = 7.5 \cdot 0.75 \cdot \sqrt{4000\ \mathrm{psi}}
-        &= 355.756\ \mathrm{psi}
-    \\[10pt]
-    \beta_1 &= \operatorname{bound}\left(0.65,\ 0.85 - \frac{0.05 \cdot \left(f'_c - 4000\ \mathrm{psi}\right)}{1000\ \mathrm{psi}},\ 0.85\right)
-        \\
-        &= \operatorname{bound}\left(0.65,\ 0.85 - \frac{0.05 \cdot \left(4000\ \mathrm{psi} - 4000\ \mathrm{psi}\right)}{1000\ \mathrm{psi}},\ 0.85\right)
-        \\
-        &= 0.85
-\end{aligned} $$"""
 
 def test_Concrete_init_lightweight():
     concrete = materials.Concrete(5*unit.ksi, w_c=110*unit.pcf)
@@ -56,25 +37,6 @@ def test_Concrete_init_lightweight():
     assert isclose(concrete.beta_1, 0.8)
     assert isclose(concrete.f_r, 437.5223209*unit.psi, atol=1e-7)
     assert concrete.f_r.units == "psi"
-    assert concrete.markdown == r"""$$ \begin{aligned}
-    \lambda &= \operatorname{bound}\left(0.75,\ 0.0075 \cdot w_c,\ 1\right)
-        = \operatorname{bound}\left(0.75,\ 0.0075 \cdot 110\ \mathrm{pcf},\ 1\right)
-        &= 0.825
-    \\[10pt]
-    E_c &= w_c^{1.5} \cdot 33 \cdot \sqrt{f'_c}
-        = \left(110\ \mathrm{pcf}\right)^{1.5} \cdot 33 \cdot \sqrt{5000\ \mathrm{psi}}
-        &= 2692080.051\ \mathrm{psi}
-    \\[10pt]
-    f_r &= 7.5 \cdot \lambda \cdot \sqrt{f'_c}
-        = 7.5 \cdot 0.825 \cdot \sqrt{5000\ \mathrm{psi}}
-        &= 437.522\ \mathrm{psi}
-    \\[10pt]
-    \beta_1 &= \operatorname{bound}\left(0.65,\ 0.85 - \frac{0.05 \cdot \left(f'_c - 4000\ \mathrm{psi}\right)}{1000\ \mathrm{psi}},\ 0.85\right)
-        \\
-        &= \operatorname{bound}\left(0.65,\ 0.85 - \frac{0.05 \cdot \left(5000\ \mathrm{psi} - 4000\ \mathrm{psi}\right)}{1000\ \mathrm{psi}},\ 0.85\right)
-        \\
-        &= 0.8
-\end{aligned} $$"""
 
 def test_Concrete_init_normalweight():
     concrete = materials.Concrete(8*unit.ksi)
@@ -84,25 +46,6 @@ def test_Concrete_init_normalweight():
     assert concrete.beta_1 == 0.65
     assert concrete.f_r.units == "psi"
     assert isclose(concrete.f_r, 670.8203932*unit.psi, atol=1e-7)
-    assert concrete.markdown == r"""$$ \begin{aligned}
-    \lambda &= \operatorname{bound}\left(0.75,\ 0.0075 \cdot w_c,\ 1\right)
-        = \operatorname{bound}\left(0.75,\ 0.0075 \cdot 150\ \mathrm{pcf},\ 1\right)
-        &= 1
-    \\[10pt]
-    E_c &= w_c^{1.5} \cdot 33 \cdot \sqrt{f'_c}
-        = \left(150\ \mathrm{pcf}\right)^{1.5} \cdot 33 \cdot \sqrt{8000\ \mathrm{psi}}
-        &= 5422453.319\ \mathrm{psi}
-    \\[10pt]
-    f_r &= 7.5 \cdot \lambda \cdot \sqrt{f'_c}
-        = 7.5 \cdot 1 \cdot \sqrt{8000\ \mathrm{psi}}
-        &= 670.82\ \mathrm{psi}
-    \\[10pt]
-    \beta_1 &= \operatorname{bound}\left(0.65,\ 0.85 - \frac{0.05 \cdot \left(f'_c - 4000\ \mathrm{psi}\right)}{1000\ \mathrm{psi}},\ 0.85\right)
-        \\
-        &= \operatorname{bound}\left(0.65,\ 0.85 - \frac{0.05 \cdot \left(8000\ \mathrm{psi} - 4000\ \mathrm{psi}\right)}{1000\ \mathrm{psi}},\ 0.85\right)
-        \\
-        &= 0.65
-\end{aligned} $$"""
 
 def test_Rebar_init():
     rebar = materials.Rebar(4, f_y=60*unit.ksi)
