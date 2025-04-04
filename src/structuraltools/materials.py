@@ -65,9 +65,9 @@ class Concrete:
             self.w_c = w_c.to("pcf")
 
         self.E_c = (self.w_c.magnitude)**1.5*33*sqrt(self.f_prime_c*unit.psi)
-        self.lamb = utils.bound(0.75, 0.0075*w_c.magnitude, 1)
+        self.lamb = min(max(0.75, 0.0075*w_c.magnitude), 1)
         self.f_r = 7.5*self.lamb*sqrt(self.f_prime_c*unit.psi)
-        self.beta_1 = utils.bound(0.65, 0.85-0.05*(self.f_prime_c.magnitude-4000)/1000, 0.85)
+        self.beta_1 = min(max(0.65, 0.85-0.05*(self.f_prime_c.magnitude-4000)/1000), 0.85)
 
         markdown_options.update({"return_markdown": True})
         self.markdown = utils.fill_templates(templates.Concrete, locals())
