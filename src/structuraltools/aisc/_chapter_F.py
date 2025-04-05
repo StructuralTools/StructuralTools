@@ -13,6 +13,8 @@
 # limitations under the License.
 
 
+import copy
+
 from numpy import pi, sqrt
 
 from structuraltools import aisc, unit, utils
@@ -21,7 +23,8 @@ from structuraltools import (Length, Moment, MomentOfInertia, SectionModulus,
 from structuraltools.aisc import _chapter_F_templates as templates
 
 
-def eq_F2_1(F_y: Stress, Z_x: SectionModulus, **display_options) -> Moment:
+def eq_F2_1(F_y: Stress, Z_x: SectionModulus, **display_options
+            ) -> Moment | tuple[str, Moment]:
     """AISC 360-22 Equation F2-1
 
     Parameters
@@ -33,10 +36,11 @@ def eq_F2_1(F_y: Stress, Z_x: SectionModulus, **display_options) -> Moment:
     Z_x : SectionModulus
         Major axis plastic section modulus"""
     M_p = (F_y*Z_x).to("kipft")
-    return utils.fill_templates(templates.eq_F2_1, locals(), M_p)
+    return utils.fill_template(templates.eq_F2_1, locals(), M_p, **display_options)
 
 def eq_F2_2(C_b: float, M_p: Moment, F_y: Stress, S_x: SectionModulus,
-            L_b: Length, L_p: Length, L_r: Length, **display_options) -> Moment:
+        L_b: Length, L_p: Length, L_r: Length, **display_options
+        ) -> Moment | tuple[str, Moment]:
     """AISC 360-22 Equation F2-2
 
     Parameters
@@ -63,9 +67,10 @@ def eq_F2_2(C_b: float, M_p: Moment, F_y: Stress, S_x: SectionModulus,
     L_r : Length
         Limiting length for elastic lateral-torsional buckling"""
     M_ltb = (C_b*(M_p-(M_p-0.7*F_y*S_x)*(L_b-L_p)/(L_r-L_p))).to("kipft")
-    return utils.fill_templates(templates.eq_F2_2, locals(), M_ltb)
+    return utils.fill_template(templates.eq_F2_2, locals(), M_ltb, **display_options)
 
-def eq_F2_3(F_cr: Stress, S_x: SectionModulus, **display_options) -> Moment:
+def eq_F2_3(F_cr: Stress, S_x: SectionModulus, **display_options
+            ) -> Moment | tuple[str, Moment]:
     """AISC 360-22 Equation F2-3
 
     Parameters
@@ -77,10 +82,11 @@ def eq_F2_3(F_cr: Stress, S_x: SectionModulus, **display_options) -> Moment:
     S_x : SectionModulus
         Major axis elastic section modulus"""
     M_ltb = (F_cr*S_x).to("kipft")
-    return utils.fill_templates(templates.eq_F2_3, locals(), M_ltb)
+    return utils.fill_template(templates.eq_F2_3, locals(), M_ltb, **display_options)
 
 def eq_F2_4(C_b: float, E: Stress, L_b: Length, r_ts: Length, J: TorsionalConstant,
-            c: float, S_x: SectionModulus, h_o: Length, **display_options) -> Moment:
+        c: float, S_x: SectionModulus, h_o: Length, **display_options
+        ) -> Moment | tuple[str, Moment]:
     """AISC 360-22 Equation F2-4
 
     Parameters
@@ -110,9 +116,10 @@ def eq_F2_4(C_b: float, E: Stress, L_b: Length, r_ts: Length, J: TorsionalConsta
     h_o : Length
         Distance between the flange centroids"""
     F_cr = (C_b*E*pi**2/(L_b/r_ts)**2*sqrt(1+0.078*J*c/(S_x*h_o)*(L_b/r_ts)**2)).to("ksi")
-    return utils.fill_templates(templates.eq_F2_4, locals(), F_cr)
+    return utils.fill_template(templates.eq_F2_4, locals(), F_cr, **display_options)
 
-def eq_F2_5(r_y: Length, E: Stress, F_y: Stress, **display_options) -> Length:
+def eq_F2_5(r_y: Length, E: Stress, F_y: Stress, **display_options
+            ) -> Length | tuple[str, Length]:
     """AISC 360-22 Equation F2-5
 
     Parameters
@@ -127,10 +134,11 @@ def eq_F2_5(r_y: Length, E: Stress, F_y: Stress, **display_options) -> Length:
     F_y : Stress
         Steel yield stress"""
     L_p = (1.76*r_y*sqrt(E/F_y)).to("ft")
-    return utils.fill_templates(templates.eq_F2_5, locals(), L_p)
+    return utils.fill_template(templates.eq_F2_5, locals(), L_p, **display_options)
 
-def eq_F2_6(r_ts: Length, E: Stress, F_y: Stress, J: TorsionalConstant, c: float,
-            S_x: SectionModulus, h_o: Length, **display_options) -> Length:
+def eq_F2_6(r_ts: Length, E: Stress, F_y: Stress, J: TorsionalConstant,
+        c: float, S_x: SectionModulus, h_o: Length, **display_options
+        ) -> Length | tuple[str, Length]:
     """AISC 360-22 Equation F2-6
 
     Parameters
@@ -158,10 +166,10 @@ def eq_F2_6(r_ts: Length, E: Stress, F_y: Stress, J: TorsionalConstant, c: float
         Distance between the flange centroids"""
     L_r = (1.95*r_ts*E/(0.7*F_y)*sqrt(J*c/(S_x*h_o) \
         +sqrt((J*c/(S_x*h_o))**2+6.76*(0.7*F_y/E)**2))).to("ft")
-    return utils.fill_templates(templates.eq_F2_6, locals(), L_p)
+    return utils.fill_template(templates.eq_F2_6, locals(), L_r, **display_options)
 
 def eq_F2_8b(h_o: Length, I_y: MomentOfInertia, C_w: WarpingConstant,
-             **display_options) -> float:
+             **display_options) -> float | tuple[str, float]:
     """AISC 360-22 Equation F2-8b
 
     Parameters
@@ -175,8 +183,90 @@ def eq_F2_8b(h_o: Length, I_y: MomentOfInertia, C_w: WarpingConstant,
 
     C_w : WarpingConstant
         Warping constant"""
-    c = h_o/2*sqrt(I_y/C_w)
-    return utils.fill_templates(templates.eq_F2_8b, locals(), c)
+    c = (h_o/2*sqrt(I_y/C_w)).to("dimensionless").magnitude
+    return utils.fill_template(templates.eq_F2_8b, locals(), c, **display_options)
 
-def sec_F2_2(shape, M_p: Moment, **display_options) -> Moment:
-    pass
+def sec_F2_1(shape, **display_options) -> Moment | tuple[str, Moment]:
+    """Calculate the major axis plastic moment capacity of an I shape with a
+    compact web according to AISC 360-22 Section F2.2
+
+    Parameters
+    ==========
+
+    shape : aisc.WideFlange
+        Shape to calculate the plastic moment capacity of"""
+    options = copy.copy(display_options)
+    options.update({"display": False, "return_string": True})
+
+    M_p_str, M_p = eq_F2_1(shape.material.F_y, shape.Z_x, **options)
+    return utils.fill_template(templates.sec_F2_1, locals(), M_p, **display_options)
+
+def sec_F2_2(shape, L_b: Length, M_p: Moment, C_b: float, **display_options
+             ) -> Moment | tuple[str, Moment]:
+    """Calculate the major axis nominal moment capacity of an I shape with a
+    compact web based on the limit of lateral torsional buckling according to
+    AISC 360-22 Section F2.2.
+
+    Parameters
+    ==========
+
+    shape : aisc.WideFlange
+        Shape to calculate the lateral torsional buckling moment of
+
+    L_b : Length
+        Compression flange unbraced length
+
+    M_p : Moment
+        Major axis nominal plastic moment capacity of the section
+
+    C_b : float
+        Lateral-torsional buckling modification factor"""
+    options = copy.copy(display_options)
+    options.update({"display": False, "return_string": True})
+
+    if isinstance(shape, aisc.WideFlange):
+        c = 1
+        c_str = ""
+    else:
+        c_str, c = eq_F2_8b(shape.h_o, shape.I_y, shape.C_w, **options)
+
+    L_p_str, L_p = eq_F2_5(shape.r_y, shape.material.E, shape.material.F_y,
+        **options)
+    L_r_str, L_r = eq_F2_6(shape.r_ts, shape.material.E, shape.material.F_y,
+        shape.J, c, shape.S_x, shape.h_o, **options)
+    if L_b <= L_p:
+        M_ltb = M_p
+        template = templates.sec_F2_2_plastic
+    elif L_b <= L_r:
+        M_ltb_str, M_ltb = eq_F2_2(C_b, M_p, shape.material.F_y, shape.S_x, L_b,
+            L_p, L_r, **options)
+        template = templates.sec_F2_2_inelastic
+    else:
+        F_cr_str, F_cr = eq_F2_4(C_b, shape.material.E, L_b, shape.r_ts,
+            shape.J, c, shape.S_x, shape.h_o, **options)
+        M_ltb_str, M_ltb = eq_F2_3(F_cr, shape.S_x, **options)
+        template = templates.sec_F2_2_elastic
+    return utils.fill_template(template, locals(), M_ltb, **display_options)
+    
+def sec_F2(shape, L_b: Length, C_b: float, **display_options) -> Moment | tuple[str, Moment]:
+    """Calculate the major axis nominal moment capacity of a compact I shape
+    according to AISC 360-22 Section F2.
+
+    Parameters
+    ==========
+
+    shape : aisc.WideFlange
+        Shape to calculate the nominal moment capacity of
+
+    L_b : Length
+        Compression flange unbraced length
+
+    C_b : float
+        Lateral-torsional buckling modification factor"""
+    options = copy.copy(display_options)
+    options.update({"display": False, "return_string": True})
+
+    M_p_str, M_p = sec_F2_1(shape, **options)
+    M_ltb_str, M_ltb = sec_F2_2(shape, L_b, M_p, C_b, **options)
+    M_n = min(M_p, M_ltb)
+    return utils.fill_template(templates.sec_F2, locals(), M_n, **display_options)

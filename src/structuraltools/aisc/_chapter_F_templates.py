@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-from structuraltools import MathTemplate
+from structuraltools import LatexTemplate, MarkdownTemplate, MathTemplate
 
 
 eq_F2_1 = MathTemplate(r"M_p &= F_y \cdot Z_x = $F_y \cdot $Z_x &= $M_p")
@@ -41,3 +41,46 @@ eq_F2_6 = MathTemplate(r"""L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y
     &= $L_r""")
 
 eq_F2_8b = MathTemplate(r"c &= \frac{h_o}{2} \cdot \sqrt{\frac{I_y}{C_w}} = \frac{$h_o}{2} \cdot \sqrt{\frac{$I_y}{$C_w}} &= $c")
+
+sec_F2_1 = LatexTemplate(r"""\begin{aligned}
+    $M_p_str
+\end{aligned}""")
+
+sec_F2_2_plastic = LatexTemplate(r"""\begin{aligned}
+    $L_p_str
+    \\[10pt]
+    \text{Since, } & \left(L_b \leq L_p \Leftarrow $L_b \leq $L_p\right):
+        \\[10pt]
+        M_{ltb} &= M_p = $M_p &= $M_ltb
+\end{aligned}""")
+
+sec_F2_2_inelastic = LatexTemplate(r"""\begin{aligned}
+    $L_p_str
+    \\[10pt]
+    $L_r_str
+    \\[10pt]
+    \text{Since, } & \left(L_p < L_b \leq L_r \Leftarrow $L_p < $L_b \leq $L_r\right):
+        \\[10pt]
+        $M_ltb_str
+\end{aligned}""")
+
+sec_F2_2_elastic = LatexTemplate(r"""\begin{aligned}
+    $L_r_str
+    \\[10pt]
+    \text{Since, } & \left(L_b > L_r \Leftarrow $L_b > $L_r\right):
+        \\[10pt]
+        $F_cr_str
+        \\[10pt]
+        $M_ltb_str
+\end{aligned}""")
+
+sec_F2 = MarkdownTemplate(r"""$header Plastic Moment Capacity
+$$$$ $M_p_str $$$$
+<br/>
+$header Lateral-Torsional Buckling Moment Capacity
+$$$$ $M_ltb_str $$$$
+<br/>
+$header Nominal Moment Capacity
+$$$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left($M_p,\ $M_ltb\right) &= $M_n
+\end{aligned} $$$$""")
