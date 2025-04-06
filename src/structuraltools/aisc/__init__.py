@@ -19,7 +19,7 @@ import pandas as pd
 from structuraltools import materials, resources, unit, utils
 from structuraltools import Force, Length, Moment
 
-from . import _chapter_F
+from . import chapter_F
 from . import _plate_markdown as templates
 
 
