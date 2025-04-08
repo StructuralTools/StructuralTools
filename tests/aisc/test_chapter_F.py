@@ -74,3 +74,51 @@ def test_eq_F2_4():
     &= \frac{1 \cdot \pi^2 \cdot 29000\ \mathrm{ksi}}{\left(\frac{15\ \mathrm{ft}}{1.04\ \mathrm{in}}\right)^2} \cdot \sqrt{1 + 0.078 \cdot \frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}} \cdot \left(\frac{15\ \mathrm{ft}}{1.04\ \mathrm{in}}\right)^2}
     \\
     &= 17.265\ \mathrm{ksi}"""
+
+def test_eq_F2_5():
+    string, L_p = chapter_F.eq_F2_5(
+        r_y=0.848*unit.inch,
+        E=29000*unit.ksi,
+        F_y=50*unit.ksi,
+        return_string=True)
+    assert isclose(L_p, 2.995306513*unit.ft, atol=1e-8*unit.ft)
+    assert L_p.units == "ft"
+    assert string == r"L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}"
+
+def test_eq_F2_6():
+    string, L_r = chapter_F.eq_F2_6(
+        r_ts=1.04*unit.inch,
+        E=29000*unit.ksi,
+        F_y=50*unit.ksi,
+        J=0.293*unit.inch**4,
+        c=1,
+        S_x=25.4*unit.inch**3,
+        h_o=11.9*unit.inch,
+        return_string=True)
+    assert isclose(L_r, 9.132623412*unit.ft, atol=1e-9*unit.ft)
+    assert L_r.units == "ft"
+    assert string == r"""L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
+    \\
+    &= 1.95 \cdot 1.04\ \mathrm{in} \frac{29000\ \mathrm{ksi}}{0.7 \cdot 50\ \mathrm{ksi}} \cdot \sqrt{\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}} + \sqrt{\left(\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot 50\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right)^2}}
+    \\
+    &= 9.133\ \mathrm{ft}"""
+
+def test_eq_F2_8b():
+    string, c = chapter_F.eq_F2_8b(
+        h_o=9.56*unit.inch,
+        I_y=2.8*unit.inch**4,
+        C_w=56.9*unit.inch**6,
+        return_string=True)
+    assert isclose(c, 1.060353756, atol=1e-9)
+    assert isinstance(c, float)
+    assert string == r"c &= \frac{h_o}{2} \cdot \sqrt{\frac{I_y}{C_w}} = \frac{9.56\ \mathrm{in}}{2} \cdot \sqrt{\frac{2.8\ \mathrm{in}^{4}}{56.9\ \mathrm{in}^{6}}} &= 1.06"
+
+def test_sec_F2_1():
+    shape = aisc.WideFlange("W12X22", materials.Steel("A992"))
+    string, M_p = chapter_F.sec_F2_1(shape, return_string=True)
+    assert isclose(M_p, 122.0833333*unit.kipft, atol=1e-7*unit.kipft)
+    assert M_p.units == "kipft"
+    assert string == r"""\begin{aligned}
+    M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.083\ \mathrm{kipft}
+\end{aligned}"""
+
