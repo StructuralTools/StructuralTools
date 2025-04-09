@@ -84,3 +84,8 @@ $header Nominal Moment Capacity
 $$$$ \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left($M_p,\ $M_ltb\right) &= $M_n
 \end{aligned} $$$$""")
+
+eq_F3_1 = MathTemplate(r"""M_flb &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
+    \\
+    &= $M_p - \left($M_p - 0.7 \cdot $F_y \cdot $S_x\right) \left(\frac{$lamb_f - $lamb_pf}{$lamb_rf - $lamb_pf}\right)
+    &= $M_flb""")

@@ -270,3 +270,29 @@ def sec_F2(shape, L_b: Length, C_b: float, **display_options) -> Moment | tuple[
     M_ltb_str, M_ltb = sec_F2_2(shape, L_b, M_p, C_b, **options)
     M_n = min(M_p, M_ltb)
     return utils.fill_template(templates.sec_F2, locals(), M_n, **display_options)
+
+def eq_F3_1(M_p: Moment, F_y: Stress, S_x: SectionModulus, lamb_f: float,
+        lamb_pf: float, lamb_rf: float, **display_options) -> Moment | tuple[str, Moment]:
+    """AISC 360-22 Equation F3-1
+
+    Parameters
+    ==========
+
+    M_p : Moment
+        Major axis nominal plastic moment capacity of the section
+
+    F_y : Stress
+        Steel yield stress
+
+    S_x : SectionModulus
+        Major axis elastic section modulus
+
+    lamb_f : float
+        Section flange slenderness for flexure
+
+    lamb_pf : float
+        Compact section flange slenderness limit for flexure
+
+    lamb_rf : float
+        Noncompact section flange slenderness limit for flexure"""
+    M_flb = (M_p-(M_p-0.7*F_y*S_x)*(lamb_f-lamb_pf)/(lamb_rf-lamb_pf)).to("kipft")

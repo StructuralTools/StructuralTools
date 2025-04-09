@@ -122,3 +122,120 @@ def test_sec_F2_1():
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.083\ \mathrm{kipft}
 \end{aligned}"""
 
+def test_sec_F2_2_plastic_WideFlange():
+    shape = aisc.WideFlange("W12X22", materials.Steel("A992"))
+    M_p = chapter_F.sec_F2_1(shape)
+    string, M_ltb = chapter_F.sec_F2_2(
+        shape=shape,
+        L_b=2*unit.ft,
+        M_p=M_p,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_ltb, 122.0833333*unit.kipft, atol=1e-7*unit.kipft)
+    assert M_ltb.units == "kipft"
+    assert string == r"""\begin{aligned}
+    L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
+    \\[10pt]
+    \text{Since, } & \left(L_b \leq L_p \Leftarrow 2\ \mathrm{ft} \leq 2.995\ \mathrm{ft}\right):
+        \\[10pt]
+        M_{ltb} &= M_p = 122.083\ \mathrm{kipft} &= 122.083\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F2_2_inelastic_WideFlange():
+    shape = aisc.WideFlange("W12X22", materials.Steel("A992"))
+    M_p = chapter_F.sec_F2_1(shape)
+    string, M_ltb = chapter_F.sec_F2_2(
+        shape=shape,
+        L_b=7*unit.ft,
+        M_p=M_p,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_ltb, 90.7*unit.kipft, atol=1*unit.kipft)
+    assert M_ltb.units == "kipft"
+    assert string == r"""\begin{aligned}
+    L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
+    \\[10pt]
+    L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
+    \\
+    &= 1.95 \cdot 1.04\ \mathrm{in} \frac{29000\ \mathrm{ksi}}{0.7 \cdot 50\ \mathrm{ksi}} \cdot \sqrt{\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}} + \sqrt{\left(\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot 50\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right)^2}}
+    \\
+    &= 9.133\ \mathrm{ft}
+    \\[10pt]
+    \text{Since, } & \left(L_p < L_b \leq L_r \Leftarrow 2.995\ \mathrm{ft} < 7\ \mathrm{ft} \leq 9.133\ \mathrm{ft}\right):
+        \\[10pt]
+        M_{ltb} &= C_b \cdot \left(M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \cdot \left(\frac{L_b - L_p}{L_r - L_p}\right)\right)
+    \\
+    &= 1 \cdot \left(122.083\ \mathrm{kipft} - \left(122.083\ \mathrm{kipft} - 0.7 \cdot 50\ \mathrm{ksi} \cdot 25.4\ \mathrm{in}^{3}\right) \cdot \left(\frac{7\ \mathrm{ft} - 2.995\ \mathrm{ft}}{9.133\ \mathrm{ft} - 2.995\ \mathrm{ft}}\right)\right)
+    \\
+    &= 90.763\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F2_2_elastic_WideFlange():
+    shape = aisc.WideFlange("W12X22", materials.Steel("A992"))
+    M_p = chapter_F.sec_F2_1(shape)
+    string, M_ltb = chapter_F.sec_F2_2(
+        shape=shape,
+        L_b=15*unit.ft,
+        M_p=M_p,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_ltb, 36.5*unit.kipft, atol=1*unit.kipft)
+    assert M_ltb.units == "kipft"
+    assert string == r"""\begin{aligned}
+    L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
+    \\
+    &= 1.95 \cdot 1.04\ \mathrm{in} \frac{29000\ \mathrm{ksi}}{0.7 \cdot 50\ \mathrm{ksi}} \cdot \sqrt{\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}} + \sqrt{\left(\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot 50\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right)^2}}
+    \\
+    &= 9.133\ \mathrm{ft}
+    \\[10pt]
+    \text{Since, } & \left(L_b > L_r \Leftarrow 15\ \mathrm{ft} > 9.133\ \mathrm{ft}\right):
+        \\[10pt]
+        F_{cr} &= \frac{C_b \cdot \pi^2 \cdot E}{\left(\frac{L_b}{r_{ts}}\right)^2} \cdot \sqrt{1 + 0.078 \cdot \frac{J \cdot c}{S_x \cdot h_o} \cdot \left(\frac{L_b}{r_{ts}}\right)^2}
+    \\
+    &= \frac{1 \cdot \pi^2 \cdot 29000\ \mathrm{ksi}}{\left(\frac{15\ \mathrm{ft}}{1.04\ \mathrm{in}}\right)^2} \cdot \sqrt{1 + 0.078 \cdot \frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}} \cdot \left(\frac{15\ \mathrm{ft}}{1.04\ \mathrm{in}}\right)^2}
+    \\
+    &= 17.265\ \mathrm{ksi}
+        \\[10pt]
+        M_{ltb} &= F_{cr} \cdot S_x = 17.265\ \mathrm{ksi} \cdot 25.4\ \mathrm{in}^{3} &= 36.544\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F2():
+    shape = aisc.WideFlange("W12X22", materials.Steel("A992"))
+    string, M_n = chapter_F.sec_F2(
+        shape=shape,
+        L_b=7*unit.ft,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_n, 90.7*unit.kipft, atol=0.1*unit.kipft)
+    assert M_n.units == "kipft"
+    assert string == r"""#### Plastic Moment Capacity
+$$ \begin{aligned}
+    M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.083\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Lateral-Torsional Buckling Moment Capacity
+$$ \begin{aligned}
+    L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
+    \\[10pt]
+    L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
+    \\
+    &= 1.95 \cdot 1.04\ \mathrm{in} \frac{29000\ \mathrm{ksi}}{0.7 \cdot 50\ \mathrm{ksi}} \cdot \sqrt{\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}} + \sqrt{\left(\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot 50\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right)^2}}
+    \\
+    &= 9.133\ \mathrm{ft}
+    \\[10pt]
+    \text{Since, } & \left(L_p < L_b \leq L_r \Leftarrow 2.995\ \mathrm{ft} < 7\ \mathrm{ft} \leq 9.133\ \mathrm{ft}\right):
+        \\[10pt]
+        M_{ltb} &= C_b \cdot \left(M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \cdot \left(\frac{L_b - L_p}{L_r - L_p}\right)\right)
+    \\
+    &= 1 \cdot \left(122.083\ \mathrm{kipft} - \left(122.083\ \mathrm{kipft} - 0.7 \cdot 50\ \mathrm{ksi} \cdot 25.4\ \mathrm{in}^{3}\right) \cdot \left(\frac{7\ \mathrm{ft} - 2.995\ \mathrm{ft}}{9.133\ \mathrm{ft} - 2.995\ \mathrm{ft}}\right)\right)
+    \\
+    &= 90.763\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Nominal Moment Capacity
+$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(122.083\ \mathrm{kipft},\ 90.763\ \mathrm{kipft}\right) &= 90.763\ \mathrm{kipft}
+\end{aligned} $$"""
+
+def test_eq_F3_1():
+    assert False
