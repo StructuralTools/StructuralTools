@@ -238,4 +238,44 @@ $$ \begin{aligned}
 \end{aligned} $$"""
 
 def test_eq_F3_1():
-    assert False
+    string, M_flb = chapter_F.eq_F3_1(
+        M_p=122*unit.kipft,
+        F_y=50*unit.ksi,
+        S_x=25.4*unit.inch**3,
+        lamb_f=15,
+        lamb_pf=9,
+        lamb_rf=24,
+        return_string=True)
+    assert isclose(M_flb, 102.8333333*unit.kipft, atol=1e-7*unit.kipft)
+    assert M_flb.units == "kipft"
+    assert string == r"""M_{flb} &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
+    \\
+    &= 122\ \mathrm{kipft} - \left(122\ \mathrm{kipft} - 0.7 \cdot 50\ \mathrm{ksi} \cdot 25.4\ \mathrm{in}^{3}\right) \left(\frac{15 - 9}{24 - 9}\right)
+    \\
+    &= 102.833\ \mathrm{kipft}"""
+
+def test_eq_F3_2():
+    string, M_flb = chapter_F.eq_F3_2(
+        E=29000*unit.ksi,
+        k_c=0.5,
+        S_x=25*unit.inch**3,
+        lamb_f=30,
+        return_string=True)
+    assert isclose(M_flb, 30.20833333*unit.kipft, atol=1e-8*unit.kipft)
+    assert M_flb.units == "kipft"
+    assert string == r"M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\lambda_f^2} = \frac{0.9 \cdot 29000\ \mathrm{ksi} \cdot 0.5 \cdot 25\ \mathrm{in}^{3}}{30^2} &= 30.208\ \mathrm{kipft}"
+
+def test_eq_F3_2a_low():
+    string, k_c = chapter_F.eq_F3_2a(lamb_w=250, return_string=True)
+    assert k_c == 0.35
+    assert string == r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{250}}\right),\ 0.76\right) &= 0.35"
+
+def test_eq_F3_2a_calculated():
+    string, k_c = chapter_F.eq_F3_2a(lamb_w=100, return_string=True)
+    assert isclose(k_c, 0.4)
+    assert string == r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{100}}\right),\ 0.76\right) &= 0.4"
+
+def test_eq_F3_2a_high():
+    string, k_c = chapter_F.eq_F3_2a(lamb_w=20, return_string=True)
+    assert k_c == 0.76
+    assert string == r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{20}}\right),\ 0.76\right) &= 0.76"

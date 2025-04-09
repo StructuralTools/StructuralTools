@@ -85,7 +85,12 @@ $$$$ \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left($M_p,\ $M_ltb\right) &= $M_n
 \end{aligned} $$$$""")
 
-eq_F3_1 = MathTemplate(r"""M_flb &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
+eq_F3_1 = MathTemplate(r"""M_{flb} &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
     \\
     &= $M_p - \left($M_p - 0.7 \cdot $F_y \cdot $S_x\right) \left(\frac{$lamb_f - $lamb_pf}{$lamb_rf - $lamb_pf}\right)
+    \\
     &= $M_flb""")
+
+eq_F3_2 = MathTemplate(r"M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\lambda_f^2} = \frac{0.9 \cdot $E \cdot $k_c \cdot $S_x}{$lamb_f^2} &= $M_flb")
+
+eq_F3_2a = MathTemplate(r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{$lamb_w}}\right),\ 0.76\right) &= $k_c")

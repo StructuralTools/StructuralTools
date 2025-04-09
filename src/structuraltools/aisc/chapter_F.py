@@ -296,3 +296,36 @@ def eq_F3_1(M_p: Moment, F_y: Stress, S_x: SectionModulus, lamb_f: float,
     lamb_rf : float
         Noncompact section flange slenderness limit for flexure"""
     M_flb = (M_p-(M_p-0.7*F_y*S_x)*(lamb_f-lamb_pf)/(lamb_rf-lamb_pf)).to("kipft")
+    return utils.fill_template(templates.eq_F3_1, locals(), M_flb, **display_options)
+
+def eq_F3_2(E: Stress, k_c: float, S_x: SectionModulus, lamb_f: float,
+        **display_options) -> Moment | tuple[str, Moment]:
+    """AISC 360-22 Equation F3-2
+
+    Parameters
+    ==========
+
+    E : Stress
+        Steel elastic modulus
+
+    k_c : float
+        k_c for AISC 360-22 Section F3.2b
+
+    S_x : SectionModulus
+        Major axis elastic section modulus
+
+    lamb_f : float
+        Section flange slenderness for flexure"""
+    M_flb = (0.9*E*k_c*S_x/lamb_f**2).to("kipft")
+    return utils.fill_template(templates.eq_F3_2, locals(), M_flb, **display_options)
+
+def eq_F3_2a(lamb_w: float, **display_options) -> float | tuple[str, float]:
+    """Calculate k_c according to AISC 360-22 Section F3.2b
+
+    Parameters
+    ==========
+
+    lamb_w : float
+        Section web slenderness for flexure"""
+    k_c = min(max(0.35, 4/sqrt(lamb_w)), 0.76)
+    return utils.fill_template(templates.eq_F3_2a, locals(), k_c, **display_options)
