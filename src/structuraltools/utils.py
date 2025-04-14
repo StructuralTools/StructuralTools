@@ -23,32 +23,16 @@ import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
 
-from structuraltools import decimal_points, unit
+from structuraltools import decimal_points, header_level, DisplayTemplate, unit
 from structuraltools import Numeric
 
 
-def bound(low: Numeric, calculated: Numeric, high: Numeric) -> Numeric:
-    """Return the calculated value bounded by the values of high and low
-
-    Parameters
-    ==========
-
-    low : Numeric
-        Lower bound to return if the calculated value is below the range
-
-    calculated : Numeric
-        Value to return if the calculated value is in range
-
-    high : Numeric
-        Upper bound to return if the calculated value is below the range"""
-    return min(max(low, calculated), high)
-
 def linterp(
-    x_1: Numeric,
-    y_1: Numeric,
-    x_2: Numeric,
-    y_2: Numeric,
-    x_3: Numeric) -> Numeric:
+        x_1: Numeric,
+        y_1: Numeric,
+        x_2: Numeric,
+        y_2: Numeric,
+        x_3: Numeric) -> Numeric:
     """Linear interpolation between two points
 
     Parameters
@@ -72,11 +56,11 @@ def linterp(
     return y_3
 
 def linterp_dicts(
-    x_1: Numeric,
-    dict_1: dict[any, dict],
-    x_2: Numeric,
-    dict_2: dict[any, dict],
-    x_3: Numeric) -> dict[any, dict]:
+        x_1: Numeric,
+        dict_1: dict[any, dict],
+        x_2: Numeric,
+        dict_2: dict[any, dict],
+        x_3: Numeric) -> dict[any, dict]:
     """Returns a dictionary that is a linear interpolation between two provided
     dictionaries of dictionaries with the same keys. Numeric value are
     interpolated all other values are taken from dict_1.
@@ -132,25 +116,23 @@ def round_to(value: Numeric, to: Numeric) -> Numeric:
     return to*(abs(value)//to+1)*sign(value)
 
 def convert_to_unit(value: any) -> any:
-    """Checks if the given value is likely to be a string of a pint
-    Quantity and attempts to read with the set unit registry. This
-    is designed to help with reading serialized data.
+    """Attempts to convert the given value to a Quantity if it is a string.
+    The value is returned unmodified if it cannot be converted.
 
     Parameters
     ==========
 
     value : any
-        Value to convert. If this is a string that starts with a number it will
-        attempt to convert it to a Quantity. Any non-string or string that can't
-        be converted will be returned unmodified."""
-
+        Value to convert"""
     if isinstance(value, str):
-        val = value.split(" ")[0]
-        if val.replace(".", "").replace("-", "").replace("e", "").isdigit():
+        first_value = value.split(" ")[0]
+        for character in ".-eE":
+            first_value = first_value.replace(character, "")
+        if first_value.isdigit():
             try:
                 value = unit(value)
             except UndefinedUnitError:
-                warnings.warn(f"{value} was not evaluated as a unit")
+                warnings.warn(f"'{value}' was not evaluated as a unit")
     return value
 
 def get_table_entry(filepath: str, index: str) -> dict:
@@ -190,8 +172,64 @@ def read_data_table(filepath: str) -> pd.DataFrame:
     data_table = data_table.set_index(data_table.columns[0], drop=True)
     return data_table
 
-def remove_alignment(latex: str) -> str:
-    return latex.replace("$$ \\begin{aligned}\n", "").replace("\n\\end{aligned} $$", "")
+def fill_template(
+        template: DisplayTemplate,
+        variables: dict,
+        *return_values,
+        display: bool = False,
+        return_string: bool = False,
+        decimal_points: int = decimal_points,
+        header_level: int = header_level) -> any:
+    """Function to fill out calculation templates and display the result. This
+    is designed to be used in the return statement of another function.
+
+    Parameters
+    ==========
+
+    template : ShowTemplate
+        Template to fill and display
+
+    variables : dict
+        Values to fill out the template with
+
+    *return_values : any
+        Values to return. If return_string is specified the string will be
+        prepended to return_values and the result returned.
+
+    display : bool, Optional
+        Whether or not to display the filled template
+
+    return_string : bool, Optional
+        Whether or not to return the filled template
+
+    decimal_points : int, Optional
+        How many decimal points to round to when writing values into the template
+
+    header_level : int, Optional
+        Header level to use when filling in markdown templates"""
+    if not (display or return_string):
+        if len(return_values) == 1:
+            return return_values[0]
+        else:
+            return return_values
+
+    _ = variables.pop("self", None)
+    rounded_variables = {"header": "#"*header_level}
+    for key, value in variables.items():
+        if isinstance(value, Quantity | float):
+            rounded_variables.update({key: round(value, decimal_points)})
+        else:
+            rounded_variables.update({key: value})
+
+    template.fill(**rounded_variables)
+    if display:
+        template.display()
+    if return_string:
+        return_values = (template.string, *return_values)
+    if len(return_values) == 1:
+        return return_values[0]
+    else:
+        return return_values
 
 def fill_templates(main_template: Template, variables: dict, *return_vals) -> any:
     """Function to fill out latex templates used for displaying calculations.
