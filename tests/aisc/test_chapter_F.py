@@ -279,3 +279,77 @@ def test_eq_F3_2a_high():
     string, k_c = chapter_F.eq_F3_2a(lamb_w=20, return_string=True)
     assert k_c == 0.76
     assert string == r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{20}}\right),\ 0.76\right) &= 0.76"
+
+def test_sec_F3_2_noncompact():
+    shape = aisc.WideFlange("W10X12", materials.Steel("A992"))
+    string, M_flb = chapter_F.sec_F3_2(shape, 52.5*unit.kipft, return_string=True)
+    assert isclose(M_flb, 52.11390857*unit.kipft, atol=1e-8*unit.kipft)
+    assert string == r"""\begin{aligned}
+    \lambda_{pf} &= 0.38 \cdot \sqrt{\frac{E}{F_y}} = 0.38 \cdot \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 9.152
+    \\[10pt]
+    \lambda_{rf} &= \sqrt{\frac{E}{F_y}} = \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 24.083
+    \\[10pt]
+    \text{Since, } & \left(\lambda_{pf} \leq \lambda_f < \lambda_{rf} \Leftarrow 9.152 \leq 9.43 < 24.083\right):
+        \\[10pt]
+        M_{flb} &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
+    \\
+    &= 52.5\ \mathrm{kipft} - \left(52.5\ \mathrm{kipft} - 0.7 \cdot 50\ \mathrm{ksi} \cdot 10.9\ \mathrm{in}^{3}\right) \left(\frac{9.43 - 9.152}{24.083 - 9.152}\right)
+    \\
+    &= 52.114\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F3_2_slender():
+    """This test fakes a slender flange, and doesn't actually calculate the
+    moment capacity of an actual steel section. Ideally this is updated to use a
+    custom section."""
+    shape = aisc.WideFlange("W10X12", materials.Steel("A992"))
+    shape.lamb_f = 26.4
+    string, M_flb = chapter_F.sec_F3_2(shape, 52.5*unit.kipft, return_string=True)
+    assert isclose(M_flb, 19.93172738*unit.kipft, atol=1e-8*unit.kipft)
+    assert string == r"""\begin{aligned}
+    \lambda_{rf} &= \sqrt{\frac{E}{F_y}} = \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 24.083
+    \\[10pt]
+    \text{Since, } & \left(\lambda_f \geq \lambda_{rf} \Leftarrow 26.4 \geq 24.083\right):
+        \\[10pt]
+        k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{46.6}}\right),\ 0.76\right) &= 0.586
+        \\[10pt]
+        M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\lambda_f^2} = \frac{0.9 \cdot 29000\ \mathrm{ksi} \cdot 0.586 \cdot 10.9\ \mathrm{in}^{3}}{26.4^2} &= 19.932\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F3():
+    shape = aisc.WideFlange("W10X12", materials.Steel("A992"))
+    string, M_n = chapter_F.sec_F3(shape, 0*unit.ft, 1, return_string=True)
+    assert isclose(M_n, 52.11390857*unit.kipft, atol=1e-8*unit.kipft)
+    assert string == r"""#### Plastic Moment
+$$ \begin{aligned}
+    M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 12.6\ \mathrm{in}^{3} &= 52.5\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Lateral-Torsional Buckling Moment Capacity
+$$ \begin{aligned}
+    L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.785\ \mathrm{in} \cdot \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.773\ \mathrm{ft}
+    \\[10pt]
+    \text{Since, } & \left(L_b \leq L_p \Leftarrow 0\ \mathrm{ft} \leq 2.773\ \mathrm{ft}\right):
+        \\[10pt]
+        M_{ltb} &= M_p = 52.5\ \mathrm{kipft} &= 52.5\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Compression Flange Local Buckling Moment Capacity
+$$ \begin{aligned}
+    \lambda_{pf} &= 0.38 \cdot \sqrt{\frac{E}{F_y}} = 0.38 \cdot \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 9.152
+    \\[10pt]
+    \lambda_{rf} &= \sqrt{\frac{E}{F_y}} = \sqrt{\frac{29000\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 24.083
+    \\[10pt]
+    \text{Since, } & \left(\lambda_{pf} \leq \lambda_f < \lambda_{rf} \Leftarrow 9.152 \leq 9.43 < 24.083\right):
+        \\[10pt]
+        M_{flb} &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
+    \\
+    &= 52.5\ \mathrm{kipft} - \left(52.5\ \mathrm{kipft} - 0.7 \cdot 50\ \mathrm{ksi} \cdot 10.9\ \mathrm{in}^{3}\right) \left(\frac{9.43 - 9.152}{24.083 - 9.152}\right)
+    \\
+    &= 52.114\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Nominal Moment Capacity
+$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_{ltb},\ M_{flb}\right) = \operatorname{min} \left(52.5\ \mathrm{kipft},\ 52.114\ \mathrm{kipft}\right) &= 52.114\ \mathrm{kipft}
+\end{aligned} $$"""

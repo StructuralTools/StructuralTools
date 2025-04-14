@@ -13,14 +13,16 @@
 # limitations under the License.
 
 
+import copy
+
 from numpy import pi, sqrt
-import pandas as pd
 
 from structuraltools import materials, resources, unit, utils
 from structuraltools import Force, Length, Moment
 
-from . import chapter_F
-from . import _plate_markdown as templates
+from . import chapter_B, chapter_F
+from . import _aisc_templates as templates
+from . import _plate_markdown as plate_templates
 
 
 class Shape:
@@ -109,7 +111,6 @@ class Plate:
         L_x : Length
             Critical length with respect to r_y"""
         phi_c = 0.9
-        material = self.material
 
         F_e_x = (self.material.E*pi**2)/((L_x/self.r_x)**2)
         if self.material.F_y/F_e_x <= 2.25:
@@ -153,15 +154,15 @@ class Plate:
 
         if length <= short:
             M_n = M_p
-            M_n_template = templates.moment_plastic
+            M_n_template = plate_templates.moment_plastic
         elif length <= long:
             M_n = min(C_b*(1.52-0.274*(L_b*self.d*self.material.F_y)/
                 (self.t**2*self.material.E))*self.material.F_y*self.S_x, M_p).to("kipft")
-            M_n_template = templates.moment_ltb_short
+            M_n_template = plate_templates.moment_ltb_short
         else:
             M_n = min((1.9*self.material.E*C_b*self.t**2*self.S_x)/(L_b*self.d), M_p).to("kipft")
-            M_n_template = templates.moment_ltb_long
-        return utils.fill_templates(templates.moment_capacity, locals(), phi_b, M_n)
+            M_n_template = plate_templates.moment_ltb_long
+        return utils.fill_templates(plate_templates.moment_capacity, locals(), phi_b, M_n)
 
     def moment_capacity_minor(
         self,
@@ -189,15 +190,15 @@ class Plate:
 
         if length <= short:
             M_n = M_p
-            M_n_template = templates.moment_minor_plastic
+            M_n_template = plate_templates.moment_minor_plastic
         elif length <= long:
             M_n = min(C_b*(1.52-0.274*(L_b*self.t*self.material.F_y)/
                 (self.d**2*self.material.E))*self.material.F_y*self.S_y, M_p).to("kipft")
-            M_n_template = templates.moment_minor_ltb_short
+            M_n_template = plate_templates.moment_minor_ltb_short
         else:
             M_n = min((1.9*self.material.E*C_b*self.d**2*self.S_y)/(L_b*self.t), M_p).to("kipft")
-            M_n_template = templates.moment_minor_ltb_long
-        return utils.fill_templates(templates.moment_capacity_minor, locals(), phi_b, M_n)
+            M_n_template = plate_templates.moment_minor_ltb_long
+        return utils.fill_templates(plate_templates.moment_capacity_minor, locals(), phi_b, M_n)
 
 
 class RectHSS(Shape):
@@ -213,3 +214,30 @@ class RoundHSS(Shape):
 class WideFlange(Shape):
     """Class to represent wide-flange shapes"""
     database = utils.read_data_table(resources.joinpath("AISC_WideFlange.csv"))
+
+    def moment_capacity(self, L_b: Length = 0*unit.ft, C_b: float = 1, **display_options
+                        ) -> tuple[float, Moment] | tuple[str, float, Moment]:
+        """Calculate the major axis nominal moment capacity of an I shape with
+        a compact web according to AISC 360-22 Sections F2 and F3.
+
+        Parameters
+        ==========
+
+        L_b : Length
+            Compression flange unbraced length
+
+        C_b : float
+            Lateral-torsional buckling modification factor"""
+        options = copy.copy(display_options)
+        options.update({"display": False, "return_string": True})
+
+        phi_b = 0.9
+
+        if self.lamb_w >= chapter_B.table_B4_1b_15_lamb_p(self.material.E, self.material.F_y):
+            raise ValueError("Only sections with compact webs are supported")
+        elif self.lamb_f >= chapter_B.table_B4_1b_10_lamb_p(self.material.E, self.material.F_y):
+            M_n_str, M_n = chapter_F.sec_F3(self, L_b, C_b, **options)
+        else:
+            M_n_str, M_n = chapter_F.sec_F2(self, L_b, C_b, **options)
+        return utils.fill_template(templates.WideFlange_moment_capacity,
+                                   locals(), phi_b, M_n, **display_options)

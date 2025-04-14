@@ -18,7 +18,7 @@ import json
 from string import Template
 from typing import Annotated, Union
 
-from IPython.display import display, Latex, Markdown, Math
+from IPython.display import display, Latex, Markdown
 from numpy import ndarray
 import pint
 
