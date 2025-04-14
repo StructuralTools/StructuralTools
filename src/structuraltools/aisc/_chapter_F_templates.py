@@ -94,3 +94,37 @@ eq_F3_1 = MathTemplate(r"""M_{flb} &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\
 eq_F3_2 = MathTemplate(r"M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\lambda_f^2} = \frac{0.9 \cdot $E \cdot $k_c \cdot $S_x}{$lamb_f^2} &= $M_flb")
 
 eq_F3_2a = MathTemplate(r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{$lamb_w}}\right),\ 0.76\right) &= $k_c")
+
+sec_F3_2_noncompact = LatexTemplate(r"""\begin{aligned}
+    $lamb_pf_str
+    \\[10pt]
+    $lamb_rf_str
+    \\[10pt]
+    \text{Since, } & \left(\lambda_{pf} \leq \lambda_f < \lambda_{rf} \Leftarrow $lamb_pf \leq $lamb_f < $lamb_rf\right):
+        \\[10pt]
+        $M_flb_str
+\end{aligned}""")
+
+sec_F3_2_slender = LatexTemplate(r"""\begin{aligned}
+    $lamb_rf_str
+    \\[10pt]
+    \text{Since, } & \left(\lambda_f \geq \lambda_{rf} \Leftarrow $lamb_f \geq $lamb_rf\right):
+        \\[10pt]
+        $k_c_str
+        \\[10pt]
+        $M_flb_str
+\end{aligned}""")
+
+sec_F3 = MarkdownTemplate(r"""$header Plastic Moment
+$$$$ $M_p_str $$$$
+<br/>
+$header Lateral-Torsional Buckling Moment Capacity
+$$$$ $M_ltb_str $$$$
+<br/>
+$header Compression Flange Local Buckling Moment Capacity
+$$$$ $M_flb_str $$$$
+<br/>
+$header Nominal Moment Capacity
+$$$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_{ltb},\ M_{flb}\right) = \operatorname{min} \left($M_ltb,\ $M_flb\right) &= $M_n
+\end{aligned} $$$$""")

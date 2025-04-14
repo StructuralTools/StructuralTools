@@ -17,7 +17,7 @@ import csv
 from string import Template
 import warnings
 
-from IPython.display import display, Latex, Markdown, Math
+from IPython.display import display_markdown
 from numpy import sign
 import pandas as pd
 from pint import Quantity
@@ -213,6 +213,7 @@ def fill_template(
         else:
             return return_values
 
+    _ = variables.pop("self", None)
     rounded_variables = {"header": "#"*header_level}
     for key, value in variables.items():
         if isinstance(value, Quantity | float):
