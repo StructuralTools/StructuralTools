@@ -106,14 +106,15 @@ def test_eq_26_11_8():
         L=50*unit.ft,
         h=75*unit.ft,
         L_bar_z=355*unit.ft,
-        axis="x",
+        axis_1="x",
+        axis_2="y",
         return_string=True)
     assert isclose(Q_x, 0.8682859277, atol=1e-10)
-    assert string == r"Q_{x} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{x} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{50\ \mathrm{ft} + 75\ \mathrm{ft}}{355\ \mathrm{ft}}\right)^{0.63}}} &= 0.868"
+    assert string == r"Q_{x} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{y} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{50\ \mathrm{ft} + 75\ \mathrm{ft}}{355\ \mathrm{ft}}\right)^{0.63}}} &= 0.868"
 
 def test_eq_26_11_9():
     string, L_bar_z = chapter_26.eq_26_11_9(
-        l=320*unit.ft,
+        L=320*unit.ft,
         bar_z=45*unit.ft,
         bar_epsilon=1/3,
         return_string=True)

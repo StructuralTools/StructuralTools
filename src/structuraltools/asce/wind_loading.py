@@ -13,121 +13,19 @@
 # limitations under the License.
 
 
+import copy
 import json
 from typing import Optional
 
-from numpy import e, log10, sign, sqrt
+from numpy import log10, sign
 
-from structuraltools import decimal_points, resources, unit, utils
+from structuraltools import resources, unit, utils
 from structuraltools import Area, Length, Pressure, Velocity
+
 from structuraltools.asce import chapter_26
 from structuraltools.asce import _wind_loading_templates as templates
 
 
-def calc_K_zt(
-    feature: str,
-    H: Length,
-    L_h: Length,
-    x: Length,
-    z: Length,
-    exposure: str = "D",
-    location: str = "downwind",
-    **markdown_options) -> float | tuple[str, float]:
-    """Calculate the topographic factor (K_zt) per ASCE 7-22 Figure 26.8-1.
-
-    Parameters
-    ==========
-
-    feature : str
-        Topographic feature causing wind speed-up.
-        One of: "ridge", "escarpment", or "hill"
-
-    H : Length
-        Height of feature relative to the upwind terrain
-
-    L_h : Length
-        Distance upwind of crest to where the difference in ground elevation is
-        half of the height of the feature
-
-    x : Length
-        Distance (upwind or downwind) from the crest to the site of
-        the structure
-
-    z : Length
-        Height of the structure above the ground surface at the site
-
-    exposure : str, optional
-        Exposure catagory. One of: "B", "C", or "D".
-        Conservatively defaults to "D"
-
-    location : str, optional
-        On of: "upwind" or "downwind", indicating the location of the structure
-        relative to the feature. Conservatively defaults to "downwind"."""
-    with open(resources.joinpath("ASCE_TopoCoefficients.json"), "r") as file:
-        topo_coefs = json.load(file)[feature]
-
-    K_1_factor = topo_coefs["K_1/(H/L_h)"][exposure]
-    mu = topo_coefs["mu"][location]
-    gamma = topo_coefs["gamma"]
-
-    L_h_bounded = max(L_h, 2*H)
-    K_1 = (K_1_factor*H/L_h_bounded).to("dimensionless").magnitude
-    K_2 = (1-abs(x)/(mu*L_h_bounded)).to("dimensionless").magnitude
-    K_3 = e**(-gamma*z/L_h_bounded)
-    K_zt = (1+K_1*K_2*K_3)**2
-    return utils.fill_templates(templates.calc_K_zt, locals(), K_zt)
-
-def calc_K_z(
-    z: Length,
-    z_g: Length,
-    alpha: float,
-    subscript: str = "z",
-    **markdown_options) -> float | tuple[str, float]:
-    """Calculate the velocity pressure exposure coefficient (K_z) per
-    ASCE 7-22 Table 26.10-1 footnote 1
-
-    Parameters
-    ==========
-
-    z : Length
-        Elevation to calculate the K_z at
-
-    z_g : Length
-        Elevation of maximum K_z
-
-    alpha : float
-        Terrain exposure constant alpha from ASCE 7-22 Table 26.11-1"""
-    if z < 0*unit.ft or 3280*unit.ft < z:
-        raise ValueError("z is outside of the bounds supported by ASCE 7-22")
-    K_z = 2.41*(max(min(z, z_g), 15*unit.ft)/z_g).to("dimensionless").magnitude**(2/alpha)
-    return utils.fill_templates(templates.calc_K_z, locals(), K_z)
-
-def calc_q_z(
-    K_z: float,
-    K_zt: float,
-    K_e: float,
-    V: Velocity,
-    subscript: str = "z",
-    **markdown_options) -> Pressure | tuple[str, Pressure]:
-    """Calculate the velocity pressure (q_z) per ASCE 7-22 Equation 26.10-1
-
-    Parameters
-    ==========
-
-    K_z : float
-        Velocity pressure exposure coefficient from ASCE 7-22 Table 26.10-1
-
-    K_zt : float
-        Topographic factor from ASCE 7-22 Figure 26.8-1
-
-    K_e : float
-        Ground elevation factor from ASCE 7-22 Table 26.9-1
-
-    V : Velocity
-        Basic wind speed from the ASCE 7 Hazard tool"""
-    V = V.to("mph")
-    q_z = 0.00256*K_z*K_zt*K_e*((V.magnitude)**2)*unit.psf
-    return utils.fill_templates(templates.calc_q_z, locals(), q_z)
 
 def calc_wind_server_inputs(
     V: Velocity,
@@ -141,12 +39,12 @@ def calc_wind_server_inputs(
     ridge_axis: Optional[str] = None,
     K_d: float = 0.85,
     K_zt: float = 1,
-    Z_e: Length = 0*unit.ft,
+    z_e: Length = 0*unit.ft,
     GC_pi: float = 0.18,
     h_p: Optional[Length] = None,
     h_e: Optional[Length] = None,
     h_c: Optional[Length] = None,
-    **markdown_options) -> dict[str, any] | tuple[str, dict[str, any]]:
+    **display_options) -> dict[str, any] | tuple[str, dict[str, any]]:
     """Performs calculations from ASCE 7-22 Chapter 26 and returns a dictionary
     of results that can be used as input for a MainWindServer or a CandCServer.
 
@@ -202,7 +100,7 @@ def calc_wind_server_inputs(
         in the upper one-half of a hill or ridge or near the crest of an
         escarpment.
 
-    Z_e : Length, optional
+    z_e : Length, optional
         Ground elevation above sea level. Defaults to 0, which can
         conservatively be used in all cases.
 
@@ -223,51 +121,47 @@ def calc_wind_server_inputs(
         Canopy height. Should be set if wind loads on canopies are needed.
         Note: This can also be set when initializing a CandCServer if multiple
         canopy heights are needed."""
-    dec = markdown_options.get("decimal_points", decimal_points)
+    options = copy.copy(display_options)
+    options.update({"display": False, "return_string": True})
 
-    values = utils.get_table_entry(
-        resources.joinpath("ASCE_Table_26-11-1.csv"),
-        exposure)
+    values = chapter_26.table_26_11_1.loc[exposure, :].to_dict()
 
     # Calculate K_e according to ASCE 7-22 Table 26.9-1 footnotes 1 and 2
-    Z_e = Z_e.to("ft")
-    K_e = e**(-0.0000362*Z_e.magnitude)
+    K_e_str, K_e = chapter_26.table_26_9_1(z_e, **options)
 
     # Calculate velocity pressure at the roof height and the parapet height,
     # if applicable, according to ASCE 7-22 Table 26.10-1 footnote 1 and
     # ASCE 7-22 Equation 26.10-1
-    K_h_markdown, K_h = calc_K_z(h, values["z_g"], values["alpha"], "h",
-        return_markdown=True, decimal_points=dec)
-    q_h_markdown, q_h = calc_q_z(K_h, K_zt, K_e, V, "h",
-        return_markdown=True, decimal_points=dec)
+    K_h_str, K_h = chapter_26.table_26_10_1(h, values["z_g"], values["alpha"],
+        "h", **options)
+    q_h_str, q_h = chapter_26.eq_26_10_1(K_h, K_zt, K_e, V, "h", **options)
     if h_p:
-        K_p_markdown, K_p = calc_K_z(h_p, values["z_g"], values["alpha"], "p",
-            return_markdown=True, decimal_points=dec)
-        q_p_markdown, q_p = calc_q_z(K_p, K_zt, K_e, V, "p",
-            return_markdown=True, decimal_points=dec)
+        K_p_str, K_p = chapter_26.table_26_10_1(h_p, values["z_g"],
+            values["alpha"], "p", **options)
+        q_p_str, q_p = chapter_26.eq_26_10_1(K_p, K_zt, K_e, V, "p", **options)
+        template = templates.calc_wind_server_inputs_with_parapet
     else:
-        K_p_template = ""
-        q_p_template, q_p = ("", None)
+        template = templates.calc_wind_server_inputs
+        q_p = None
 
 
     # Calculate the gust effect factor for the x and y directions according to
     # ASCE 7-22 Section 26.11.4
-    g_Q = 3.4
-    g_v = 3.4
-    z_bar = max(0.6*h, values["z_min"]).to("ft")
-    L_z = values["l"]*(z_bar/(33*unit.ft))**values["bar_epsilon"]  # (26.11-9)
-    I_z = values["c"]*(33/z_bar.magnitude)**(1/6)  # (26.11-7)
+    z_min = values["z_min"]
+    bar_z = max(0.6*h, z_min).to("ft")
+    I_bar_z_str, I_bar_z = chapter_26.eq_26_11_7(values["c"], bar_z, **options)
+    L_bar_z_str, L_bar_z = chapter_26.eq_26_11_9(values["l"], bar_z,
+        values["bar_epsilon"], **options)
 
-    Q_x = sqrt(1/(1+0.63*((L_y+h)/L_z).to("dimensionless").magnitude**0.63))  # (26.11-8)
-    G_x = 0.925*((1+1.7*g_Q*I_z*Q_x)/(1+1.7*g_v*I_z))  # (26.11-6)
+    Q_x_str, Q_x = chapter_26.eq_26_11_8(L_y, h, L_bar_z, "x", "y", **options)
+    G_x_str, G_x = chapter_26.eq_26_11_6(I_bar_z, Q_x, "x", **options)
 
-    Q_y = sqrt(1/(1+0.63*((L_x+h)/L_z).to("dimensionless").magnitude**0.63))  # (26.11-8)
-    G_y = 0.925*((1+1.7*g_Q*I_z*Q_y)/(1+1.7*g_v*I_z))  # (26.11-6)
+    Q_y_str, Q_y = chapter_26.eq_26_11_8(L_x, h, L_bar_z, "y", "x", **options)
+    G_y_str, G_y = chapter_26.eq_26_11_6(I_bar_z, Q_y, "y", **options)
+
 
     # Calculate length a for C&C wind loads
     a = max(min(0.1*L_x, 0.1*L_y, 0.4*h), 0.04*min(L_x, L_y), 3*unit.ft).to("ft")
-
-    values.update(locals())
 
     # Assemble and return the values dictionary
     return_values = {
@@ -293,7 +187,7 @@ def calc_wind_server_inputs(
         "G_y": G_y,
         "a": a
     }
-    return utils.fill_templates(templates.calc_wind_server_inputs, values, return_values)
+    return utils.fill_template(template, locals(), return_values, **display_options)
 
 
 class MainWindServer:
@@ -496,8 +390,8 @@ class MainWindServer:
             case "q_h":
                 q_z = self.q_h
             case "q_z":
-                K_z = calc_K_z(d, self.z_g, self.alpha)
-                q_z = calc_q_z(K_z, self.K_zt, self.K_e, self.V)
+                K_z = chapter_26.table_26_10_1(d, self.z_g, self.alpha)
+                q_z = chapter_26.eq_26_10_1(K_z, self.K_zt, self.K_e, self.V)
             case "q_p":
                 q_z = self.q_p
 

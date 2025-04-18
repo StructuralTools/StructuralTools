@@ -179,8 +179,8 @@ def eq_26_11_7(c: float, bar_z: Length, **display_options) -> float | tuple[str,
     I_bar_z = c*(33/bar_z.magnitude)**(1/6)
     return fill_template(templates.eq_26_11_7, locals(), I_bar_z, **display_options)
 
-def eq_26_11_8(L: Length, h: Length, L_bar_z: Length, axis: str = "",
-        **display_options) -> float | tuple[str, float]:
+def eq_26_11_8(L: Length, h: Length, L_bar_z: Length, axis_1: str = "",
+        axis_2: str = "", **display_options) -> float | tuple[str, float]:
     """ASCE 7-22 Equation 26.11-8
 
     Parameters
@@ -195,19 +195,23 @@ def eq_26_11_8(L: Length, h: Length, L_bar_z: Length, axis: str = "",
     L_bar_z : Length
         Integral length scale of turbulence from ASCE 7-22 Equation 26.11-9
 
-    axis : str
-        Subscript to indicate the axis the gust effect factor is calculated for"""
+    axis_1 : str
+        Subscript to indicate the axis the gust effect factor is calculated for
+
+    axis_2 : str
+        Subscript to indicate the axis perpendicular to the axis the gust effect
+        factor is calculated for"""
     Q = sqrt(1/(1+0.63*((L+h)/L_bar_z)**0.63)).to("dimensionless").magnitude
     return fill_template(templates.eq_26_11_8, locals(), Q, **display_options)
 
-def eq_26_11_9(l: Length, bar_z: Length, bar_epsilon: float, **display_options
+def eq_26_11_9(L: Length, bar_z: Length, bar_epsilon: float, **display_options
                ) -> Length | tuple[str, Length]:
     r"""ASCE 7-22 Equation 26.11-9
 
     Parameters
     ==========
 
-    l : Length
+    L : Length
         Terrain exposure constant $l$ from ASCE 7-22 Table 26.11-1
 
     bar_z : Length
@@ -217,5 +221,5 @@ def eq_26_11_9(l: Length, bar_z: Length, bar_epsilon: float, **display_options
     bar_epsilon : float
         Terrain exposure constant $\bar{\epsilon}$ for ASCE 7-22 Table 26.11-1"""
     bar_z = bar_z.to("ft")
-    L_bar_z = l*(bar_z.magnitude/33)**bar_epsilon
+    L_bar_z = L*(bar_z.magnitude/33)**bar_epsilon
     return fill_template(templates.eq_26_11_9, locals(), L_bar_z, **display_options)

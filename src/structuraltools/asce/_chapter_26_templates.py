@@ -38,6 +38,6 @@ eq_26_11_6 = MathTemplate(r"G_{$axis} &= 0.925 \cdot \left(\frac{1 + 1.7 \cdot g
 
 eq_26_11_7 = MathTemplate(r"I_\bar{z} &= c \cdot \left(\frac{33}{\bar{z}}\right)^\frac{1}{6} = $c \cdot \left(\frac{33}{$bar_z}\right)^\frac{1}{6} &= $I_bar_z")
 
-eq_26_11_8 = MathTemplate(r"Q_{$axis} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{$axis} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{$L + $h}{$L_bar_z}\right)^{0.63}}} &= $Q")
+eq_26_11_8 = MathTemplate(r"Q_{$axis_1} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{$axis_2} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{$L + $h}{$L_bar_z}\right)^{0.63}}} &= $Q")
 
-eq_26_11_9 = MathTemplate(r"L_\bar{z} &= l \cdot \left(\frac{\bar{z}}{33}\right)^{\bar{\epsilon}} = $l \cdot \left(\frac{$bar_z}{33}\right)^{$bar_epsilon} &= $L_bar_z")
+eq_26_11_9 = MathTemplate(r"L_\bar{z} &= l \cdot \left(\frac{\bar{z}}{33}\right)^{\bar{\epsilon}} = $L \cdot \left(\frac{$bar_z}{33}\right)^{$bar_epsilon} &= $L_bar_z")

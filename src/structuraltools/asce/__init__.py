@@ -15,9 +15,11 @@
 
 from . import chapter_26
 from . import wind_loading
+from .wind_loading import calc_wind_server_inputs
 
 
 __all__ = (
+    calc_wind_server_inputs,
     chapter_26,
     wind_loading
 )
