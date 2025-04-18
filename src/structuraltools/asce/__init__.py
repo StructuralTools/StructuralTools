@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
+from . import chapter_26
 from . import wind_loading
 
+
 __all__ = (
+    chapter_26,
     wind_loading
 )

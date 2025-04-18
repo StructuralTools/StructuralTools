@@ -20,7 +20,8 @@ from numpy import e, log10, sign, sqrt
 
 from structuraltools import decimal_points, resources, unit, utils
 from structuraltools import Area, Length, Pressure, Velocity
-from structuraltools.asce import _wind_loading_markdown as templates
+from structuraltools.asce import chapter_26
+from structuraltools.asce import _wind_loading_templates as templates
 
 
 def calc_K_zt(
@@ -254,7 +255,7 @@ def calc_wind_server_inputs(
     g_Q = 3.4
     g_v = 3.4
     z_bar = max(0.6*h, values["z_min"]).to("ft")
-    L_z = values["l"]*(z_bar/(33*unit.ft))**values["epsilon_bar"]  # (26.11-9)
+    L_z = values["l"]*(z_bar/(33*unit.ft))**values["bar_epsilon"]  # (26.11-9)
     I_z = values["c"]*(33/z_bar.magnitude)**(1/6)  # (26.11-7)
 
     Q_x = sqrt(1/(1+0.63*((L_y+h)/L_z).to("dimensionless").magnitude**0.63))  # (26.11-8)
