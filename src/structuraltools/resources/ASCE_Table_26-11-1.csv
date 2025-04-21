@@ -1,4 +1,4 @@
-Exposure,alpha,z_g,alpha_hat,b_hat,alpha_bar,b_bar,c,l,epsilon_bar,z_min
+Exposure,alpha,z_g,hat_alpha,hat_b,bar_alpha,bar_b,c,l,bar_epsilon,z_min
 B,7.5,3280 ft,0.13333333333333333,0.84,0.2222222222222222,0.47,0.3,320 ft,0.3333333333333333,30 ft
 C,9.8,2460 ft,0.1020408163265306,1.0,0.15625,0.66,0.2,500 ft,0.2,15 ft
 D,11.5,1935 ft,0.08695652173913043,1.09,0.125,0.78,0.15,650 ft,0.125,7 ft
