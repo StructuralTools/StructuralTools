@@ -24,6 +24,7 @@ from structuraltools import Area, Length, Pressure, Velocity
 
 from structuraltools.asce import chapter_26
 from structuraltools.asce import _wind_loading_templates as templates
+from structuraltools.asce.chapter_26 import fig_26_8_1 as calc_K_zt
 
 
 
