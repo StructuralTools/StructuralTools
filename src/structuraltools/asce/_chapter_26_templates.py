@@ -32,7 +32,7 @@ table_26_9_1 = MathTemplate(r"K_e &= e^{-0.0000362 \cdot z_e} = e^{-0.0000362 \c
 
 table_26_10_1 = MathTemplate(r"K_{$elevation} &= 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ $elevation\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ $z\right),\ $z_g\right)}{$z_g}\right)^{\frac{2}{$alpha}} &= $K_z")
 
-eq_26_10_1 = MathTemplate(r"q_{$elevation} &= 0.00256 \cdot K_{$elevation} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot $K_z \cdot $K_zt \cdot K_e \cdot \left($V\right)^2 &= $q_z")
+eq_26_10_1 = MathTemplate(r"q_{$elevation} &= 0.00256 \cdot K_{$elevation} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot $K_z \cdot $K_zt \cdot $K_e \cdot \left($V\right)^2 &= $q_z")
 
 eq_26_11_6 = MathTemplate(r"G_{$axis} &= 0.925 \cdot \left(\frac{1 + 1.7 \cdot g_Q \cdot I_\bar{z} \cdot Q_{$axis}}{1 + 1.7 \cdot g_v \cdot I_\bar{z}}\right) = 0.925 \cdot \left(\frac{1 + 1.7 \cdot $g_Q \cdot $I_bar_z \cdot $Q}{1 + 1.7 \cdot $g_v \cdot $I_bar_z}\right) &= $G")
 
