@@ -15,11 +15,10 @@
 
 import importlib.resources
 import json
-from string import Template
 from typing import Annotated, Union
 
-from IPython.display import display, Latex, Markdown
 from numpy import ndarray
+from numpy import sqrt as np_sqrt
 import pint
 
 
@@ -51,31 +50,11 @@ type Velocity = Annotated[pint.Quantity, float, "[velocity]"]
 type WarpingConstant = Annotated[pint.Quantity, float, "[length]**6"]
 
 
-class DisplayTemplate(Template):
-    """Subclass of Template from the string module that can fill in place. This
-    is supposed to be a base class for templates that can display themselves."""
-    def fill(self, **variables):
-        """Fill the template using the Template.substitute method"""
-        self.string = self.substitute(**variables)
-
-    def display(self):
-        """Display the filled template"""
-        display(Latex(self.string))
-
-
-class LatexTemplate(DisplayTemplate):
-    """General LaTeX template class that can display the filled template"""
-
-
-class MarkdownTemplate(DisplayTemplate):
-    """General markdown template class that can display the filled template"""
-    def display(self):
-        """Display the filled template"""
-        display(Markdown(self.string))
-
-
-class MathTemplate(DisplayTemplate):
-    """Template for single LaTeX equations"""
-    def display(self):
-        """Display the filled template in a LaTeX equation alignment"""
-        display(Latex(rf"\begin{{aligned}} {self.string} \end{{aligned}}"))
+def sqrt(value: any) -> any:
+    try:
+        return np_sqrt(value)
+    except TypeError as type_error:
+        try:
+            return np_sqrt(value.value)
+        except AttributeError:
+            raise type_error

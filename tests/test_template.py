@@ -13,7 +13,16 @@
 # limitations under the License.
 
 
-from structuraltools.template import Template
+from structuraltools import unit
+
+from structuraltools.template import Result, Template
 
 
-WideFlange_moment_capacity = Template("Markdown", r"""$M_n_str""")
+def test_Template():
+    template = Template("Markdown", "$header $test_string $length $length_str")
+    test_string = "Hello World!"
+    length = Result("length", 3.66667*unit.ft)
+    options = {"return_string": True, "decimal_points": 2, "header_level": 2}
+    result = template.fill(locals(), length, **options)
+    assert result == length
+    assert result.string == r"## Hello World! 3.67\ \mathrm{ft} length"

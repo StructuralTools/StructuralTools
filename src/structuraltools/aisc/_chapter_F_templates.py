@@ -13,40 +13,40 @@
 # limitations under the License.
 
 
-from structuraltools import LatexTemplate, MarkdownTemplate, MathTemplate
+from structuraltools.template import Template
 
 
-eq_F2_1 = MathTemplate(r"M_p &= F_y \cdot Z_x = $F_y \cdot $Z_x &= $M_p")
+eq_F2_1 = Template("Math", r"M_p &= F_y \cdot Z_x = $F_y \cdot $Z_x &= $M_p")
 
-eq_F2_2 = MathTemplate(r"""M_{ltb} &= C_b \cdot \left(M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \cdot \left(\frac{L_b - L_p}{L_r - L_p}\right)\right)
+eq_F2_2 = Template("Math", r"""M_{ltb} &= C_b \cdot \left(M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \cdot \left(\frac{L_b - L_p}{L_r - L_p}\right)\right)
     \\
     &= $C_b \cdot \left($M_p - \left($M_p - 0.7 \cdot $F_y \cdot $S_x\right) \cdot \left(\frac{$L_b - $L_p}{$L_r - $L_p}\right)\right)
     \\
     &= $M_ltb""")
 
-eq_F2_3 = MathTemplate(r"M_{ltb} &= F_{cr} \cdot S_x = $F_cr \cdot $S_x &= $M_ltb")
+eq_F2_3 = Template("Math", r"M_{ltb} &= F_{cr} \cdot S_x = $F_cr \cdot $S_x &= $M_ltb")
 
-eq_F2_4 = MathTemplate(r"""F_{cr} &= \frac{C_b \cdot \pi^2 \cdot E}{\left(\frac{L_b}{r_{ts}}\right)^2} \cdot \sqrt{1 + 0.078 \cdot \frac{J \cdot c}{S_x \cdot h_o} \cdot \left(\frac{L_b}{r_{ts}}\right)^2}
+eq_F2_4 = Template("Math", r"""F_{cr} &= \frac{C_b \cdot \pi^2 \cdot E}{\left(\frac{L_b}{r_{ts}}\right)^2} \cdot \sqrt{1 + 0.078 \cdot \frac{J \cdot c}{S_x \cdot h_o} \cdot \left(\frac{L_b}{r_{ts}}\right)^2}
     \\
     &= \frac{$C_b \cdot \pi^2 \cdot $E}{\left(\frac{$L_b}{$r_ts}\right)^2} \cdot \sqrt{1 + 0.078 \cdot \frac{$J \cdot $c}{$S_x \cdot $h_o} \cdot \left(\frac{$L_b}{$r_ts}\right)^2}
     \\
     &= $F_cr""")
 
-eq_F2_5 = MathTemplate(r"L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot $r_y \cdot \sqrt{\frac{$E}{$F_y}} &= $L_p")
+eq_F2_5 = Template("Math", r"L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot $r_y \cdot \sqrt{\frac{$E}{$F_y}} &= $L_p")
 
-eq_F2_6 = MathTemplate(r"""L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
+eq_F2_6 = Template("Math", r"""L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
     \\
     &= 1.95 \cdot $r_ts \frac{$E}{0.7 \cdot $F_y} \cdot \sqrt{\frac{$J \cdot $c}{$S_x \cdot $h_o} + \sqrt{\left(\frac{$J \cdot $c}{$S_x \cdot $h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot $F_y}{$E}\right)^2}}
     \\
     &= $L_r""")
 
-eq_F2_8b = MathTemplate(r"c &= \frac{h_o}{2} \cdot \sqrt{\frac{I_y}{C_w}} = \frac{$h_o}{2} \cdot \sqrt{\frac{$I_y}{$C_w}} &= $c")
+eq_F2_8b = Template("Math", r"c &= \frac{h_o}{2} \cdot \sqrt{\frac{I_y}{C_w}} = \frac{$h_o}{2} \cdot \sqrt{\frac{$I_y}{$C_w}} &= $c")
 
-sec_F2_1 = LatexTemplate(r"""\begin{aligned}
+sec_F2_1 = Template("Latex", r"""\begin{aligned}
     $M_p_str
 \end{aligned}""")
 
-sec_F2_2_plastic = LatexTemplate(r"""\begin{aligned}
+sec_F2_2_plastic = Template("Latex", r"""\begin{aligned}
     $L_p_str
     \\[10pt]
     \text{Since, } & \left(L_b \leq L_p \Leftarrow $L_b \leq $L_p\right):
@@ -54,7 +54,7 @@ sec_F2_2_plastic = LatexTemplate(r"""\begin{aligned}
         M_{ltb} &= M_p = $M_p &= $M_ltb
 \end{aligned}""")
 
-sec_F2_2_inelastic = LatexTemplate(r"""\begin{aligned}
+sec_F2_2_inelastic = Template("Latex", r"""\begin{aligned}
     $L_p_str
     \\[10pt]
     $L_r_str
@@ -64,7 +64,7 @@ sec_F2_2_inelastic = LatexTemplate(r"""\begin{aligned}
         $M_ltb_str
 \end{aligned}""")
 
-sec_F2_2_elastic = LatexTemplate(r"""\begin{aligned}
+sec_F2_2_elastic = Template("Latex", r"""\begin{aligned}
     $L_r_str
     \\[10pt]
     \text{Since, } & \left(L_b > L_r \Leftarrow $L_b > $L_r\right):
@@ -74,7 +74,7 @@ sec_F2_2_elastic = LatexTemplate(r"""\begin{aligned}
         $M_ltb_str
 \end{aligned}""")
 
-sec_F2 = MarkdownTemplate(r"""$header Plastic Moment Capacity
+sec_F2 = Template("Markdown", r"""$header Plastic Moment Capacity
 $$$$ $M_p_str $$$$
 <br/>
 $header Lateral-Torsional Buckling Moment Capacity
@@ -85,17 +85,17 @@ $$$$ \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left($M_p,\ $M_ltb\right) &= $M_n
 \end{aligned} $$$$""")
 
-eq_F3_1 = MathTemplate(r"""M_{flb} &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
+eq_F3_1 = Template("Math", r"""M_{flb} &= M_p - \left(M_p - 0.7 \cdot F_y \cdot S_x\right) \left(\frac{\lambda_f - \lambda_{pf}}{\lambda_{rf} - \lambda_{pf}}\right)
     \\
     &= $M_p - \left($M_p - 0.7 \cdot $F_y \cdot $S_x\right) \left(\frac{$lamb_f - $lamb_pf}{$lamb_rf - $lamb_pf}\right)
     \\
     &= $M_flb""")
 
-eq_F3_2 = MathTemplate(r"M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\lambda_f^2} = \frac{0.9 \cdot $E \cdot $k_c \cdot $S_x}{$lamb_f^2} &= $M_flb")
+eq_F3_2 = Template("Math", r"M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\lambda_f^2} = \frac{0.9 \cdot $E \cdot $k_c \cdot $S_x}{$lamb_f^2} &= $M_flb")
 
-eq_F3_2a = MathTemplate(r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{$lamb_w}}\right),\ 0.76\right) &= $k_c")
+eq_F3_2a = Template("Math", r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{$lamb_w}}\right),\ 0.76\right) &= $k_c")
 
-sec_F3_2_noncompact = LatexTemplate(r"""\begin{aligned}
+sec_F3_2_noncompact = Template("Latex", r"""\begin{aligned}
     $lamb_pf_str
     \\[10pt]
     $lamb_rf_str
@@ -105,7 +105,7 @@ sec_F3_2_noncompact = LatexTemplate(r"""\begin{aligned}
         $M_flb_str
 \end{aligned}""")
 
-sec_F3_2_slender = LatexTemplate(r"""\begin{aligned}
+sec_F3_2_slender = Template("Latex", r"""\begin{aligned}
     $lamb_rf_str
     \\[10pt]
     \text{Since, } & \left(\lambda_f \geq \lambda_{rf} \Leftarrow $lamb_f \geq $lamb_rf\right):
@@ -115,7 +115,7 @@ sec_F3_2_slender = LatexTemplate(r"""\begin{aligned}
         $M_flb_str
 \end{aligned}""")
 
-sec_F3 = MarkdownTemplate(r"""$header Plastic Moment
+sec_F3 = Template("Markdown", r"""$header Plastic Moment
 $$$$ $M_p_str $$$$
 <br/>
 $header Lateral-Torsional Buckling Moment Capacity

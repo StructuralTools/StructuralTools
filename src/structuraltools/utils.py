@@ -23,7 +23,7 @@ import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
 
-from structuraltools import decimal_points, header_level, DisplayTemplate, unit
+from structuraltools import decimal_points, header_level, unit
 from structuraltools import Numeric
 
 
@@ -173,7 +173,7 @@ def read_data_table(filepath: str) -> pd.DataFrame:
     return data_table
 
 def fill_template(
-        template: DisplayTemplate,
+        template,
         variables: dict,
         *return_values,
         display: bool = False,

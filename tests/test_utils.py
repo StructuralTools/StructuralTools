@@ -79,15 +79,6 @@ def test_get_table_entry():
     }
     assert data == expected_data
 
-def test_fill_template():
-    template = MathTemplate("$header $test_string $length")
-    test_string = "Hello World!"
-    length = 3.66667*unit.ft
-    options = {"return_string": True, "decimal_points": 2, "header_level": 2}
-    string, returned = utils.fill_template(template, locals(), length, **options)
-    assert returned == length
-    assert string == r"## Hello World! 3.67\ \mathrm{ft}"
-
 def test_fill_templates():
     main_template = Template("""
         Sub-template: $sub_template
