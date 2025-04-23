@@ -85,7 +85,7 @@ def test_eq_26_10_1():
         elevation="h",
         return_string=True)
     assert isclose(q_h, 35.9817216*unit.psf, atol=1e-7*unit.psf)
-    assert string == r"q_{h} &= 0.00256 \cdot K_{h} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 1.21 \cdot 1 \cdot K_e \cdot 110\ \mathrm{mph}^2 &= 35.982\ \mathrm{psf}"
+    assert string == r"q_{h} &= 0.00256 \cdot K_{h} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 1.21 \cdot 1 \cdot 0.96 \cdot \left(110\ \mathrm{mph}\right)^2 &= 35.982\ \mathrm{psf}"
 
 def test_eq_26_11_6():
     string, G_x = chapter_26.eq_26_11_6(
