@@ -199,7 +199,7 @@ def sec_F2_1(shape, **display_options) -> Moment | tuple[str, Moment]:
     options = copy.copy(display_options)
     options.update({"display": False, "return_string": True})
 
-    M_p_str, M_p = eq_F2_1(shape.material.F_y, shape.Z_x, **options)
+    M_p_str, M_p = eq_F2_1(shape.F_y, shape.Z_x, **options)
     return fill_template(templates.sec_F2_1, locals(), M_p, **display_options)
 
 def sec_F2_2(shape, L_b: Length, M_p: Moment, C_b: float, **display_options
@@ -231,20 +231,18 @@ def sec_F2_2(shape, L_b: Length, M_p: Moment, C_b: float, **display_options
     else:
         c_str, c = eq_F2_8b(shape.h_o, shape.I_y, shape.C_w, **options)
 
-    L_p_str, L_p = eq_F2_5(shape.r_y, shape.material.E, shape.material.F_y,
-        **options)
-    L_r_str, L_r = eq_F2_6(shape.r_ts, shape.material.E, shape.material.F_y,
-        shape.J, c, shape.S_x, shape.h_o, **options)
+    L_p_str, L_p = eq_F2_5(shape.r_y, shape.E, shape.F_y, **options)
+    L_r_str, L_r = eq_F2_6(shape.r_ts, shape.E, shape.F_y, shape.J, c,
+        shape.S_x, shape.h_o, **options)
     if L_b <= L_p:
         M_ltb = M_p
         template = templates.sec_F2_2_plastic
     elif L_b <= L_r:
-        M_ltb_str, M_ltb = eq_F2_2(C_b, M_p, shape.material.F_y, shape.S_x, L_b,
-            L_p, L_r, **options)
+        M_ltb_str, M_ltb = eq_F2_2(C_b, M_p, shape.F_y, shape.S_x, L_b, L_p, L_r, **options)
         template = templates.sec_F2_2_inelastic
     else:
-        F_cr_str, F_cr = eq_F2_4(C_b, shape.material.E, L_b, shape.r_ts,
-            shape.J, c, shape.S_x, shape.h_o, **options)
+        F_cr_str, F_cr = eq_F2_4(C_b, shape.E, L_b, shape.r_ts, shape.J, c,
+            shape.S_x, shape.h_o, **options)
         M_ltb_str, M_ltb = eq_F2_3(F_cr, shape.S_x, **options)
         template = templates.sec_F2_2_elastic
     return fill_template(template, locals(), M_ltb, **display_options)
@@ -348,18 +346,15 @@ def sec_F3_2(shape, M_p: Moment, **display_options) -> Moment | tuple[str, Momen
     options.update({"display": False, "return_string": True})
 
     lamb_f = shape.lamb_f
-    lamb_pf_str, lamb_pf = chapter_B.table_B4_1b_10_lamb_p(
-        shape.material.E, shape.material.F_y, **options)
-    lamb_rf_str, lamb_rf = chapter_B.table_B4_1b_10_lamb_r(
-        shape.material.E, shape.material.F_y, **options)
+    lamb_pf_str, lamb_pf = chapter_B.table_B4_1b_10_lamb_p(shape.E, shape.F_y, **options)
+    lamb_rf_str, lamb_rf = chapter_B.table_B4_1b_10_lamb_r(shape.E, shape.F_y, **options)
     if lamb_f < lamb_rf:
-        M_flb_str, M_flb = eq_F3_1(M_p, shape.material.F_y, shape.S_x,
-            shape.lamb_f, lamb_pf, lamb_rf, **options)
+        M_flb_str, M_flb = eq_F3_1(M_p, shape.F_y, shape.S_x, shape.lamb_f,
+            lamb_pf, lamb_rf, **options)
         template = templates.sec_F3_2_noncompact
     else:
         k_c_str, k_c = eq_F3_2a(shape.lamb_w, **options)
-        M_flb_str, M_flb = eq_F3_2(shape.material.E, k_c, shape.S_x,
-            shape.lamb_f, **options)
+        M_flb_str, M_flb = eq_F3_2(shape.E, k_c, shape.S_x, shape.lamb_f, **options)
         template = templates.sec_F3_2_slender
     return fill_template(template, locals(), M_flb, **display_options)
 

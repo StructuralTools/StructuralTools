@@ -19,7 +19,7 @@ from structuraltools import aisc, materials, unit
 
 def test_Plate_init():
     steel = materials.Steel("A36")
-    plate = aisc.Plate(4*unit.inch, 1*unit.inch, steel)
+    plate = aisc.Plate(4*unit.inch, 1*unit.inch)
     assert isclose(plate.A, 4*unit.inch**2)
     assert isclose(plate.W, 13.61111111*unit.plf, atol=1e-8)
     assert isclose(plate.S_x, 2.66666667*unit.inch**3, atol=1e-8)

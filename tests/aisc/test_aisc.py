@@ -22,7 +22,7 @@ from structuraltools import aisc
 
 def test_WideFlange_init():
     steel = materials.Steel("A992")
-    wide_flange = aisc.WideFlange("W10X12", steel)
+    wide_flange = aisc.WideFlange("W10X12")
     assert wide_flange.W == 12*unit.plf
 
 
@@ -31,7 +31,7 @@ class TestWideFlange:
         self.steel = materials.Steel("A992")
 
     def test_moment_capacity_plastic(self):
-        wide_flange = aisc.WideFlange("W12X22", self.steel)
+        wide_flange = aisc.WideFlange("W12X22")
         string, phi_b, M_n = wide_flange.moment_capacity(return_string=True)
         assert isclose(phi_b*M_n, 110*unit.kipft, atol=1*unit.kipft)
         assert string == r"""#### Plastic Moment Capacity
