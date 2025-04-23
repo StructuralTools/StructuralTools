@@ -47,14 +47,14 @@ $$ \begin{aligned}
 $$ \begin{aligned}
     K_{h} &= 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ h\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 51.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.795
     \\[10pt]
-    q_{h} &= 0.00256 \cdot K_{h} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.795 \cdot 1 \cdot K_e \cdot 110\ \mathrm{mph}^2 &= 24.167\ \mathrm{psf}
+    q_{h} &= 0.00256 \cdot K_{h} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.795 \cdot 1 \cdot 0.981 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.167\ \mathrm{psf}
 \end{aligned} $$
 <br/>
 #### Parapet Velocity Pressure
 $$ \begin{aligned}
     K_{p} &= 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ p\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 53.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.803
     \\[10pt]
-    q_{p} &= 0.00256 \cdot K_{p} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.803 \cdot 1 \cdot K_e \cdot 110\ \mathrm{mph}^2 &= 24.415\ \mathrm{psf}
+    q_{p} &= 0.00256 \cdot K_{p} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.803 \cdot 1 \cdot 0.981 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.415\ \mathrm{psf}
 \end {aligned} $$
 <br/>
 #### Gust Effect Factor
