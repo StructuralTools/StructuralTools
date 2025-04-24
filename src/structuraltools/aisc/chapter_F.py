@@ -228,8 +228,7 @@ def sec_F2_2(shape, L_b: Length, M_p: Moment, C_b: float, **display_options) -> 
         M_ltb = M_p
         template = templates.sec_F2_2_plastic
     elif L_b <= L_r:
-        M_ltb_str, M_ltb = eq_F2_2(C_b, M_p, shape.F_y, shape.S_x, L_b, L_p,
-            L_r, **display_options)
+        M_ltb = eq_F2_2(C_b, M_p, shape.F_y, shape.S_x, L_b, L_p, L_r, **display_options)
         template = templates.sec_F2_2_inelastic
     else:
         F_cr = eq_F2_4(C_b, shape.E, L_b, shape.r_ts, shape.J, c, shape.S_x, shape.h_o, **display_options)

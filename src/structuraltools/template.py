@@ -378,6 +378,7 @@ class Template:
 
         header_level : int
             Header level to use when filling in markdown templates"""
+        return_value = tuple(v.value if isinstance(v, Result) else v for v in return_value)
         if not (display or return_string):
             return Result("", *return_value)
 
