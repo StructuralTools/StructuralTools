@@ -13,11 +13,9 @@
 # limitations under the License.
 
 
-from numpy import isclose
-
-from structuraltools import unit
-
 from structuraltools.aisc import chapter_B
+from structuraltools.unit import unit
+from structuraltools.utils import isclose
 
 
 def test_table_B4_1b_10_lamb_p():

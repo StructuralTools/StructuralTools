@@ -13,13 +13,23 @@
 # limitations under the License.
 
 
+import importlib.resources
 from string import Template
 
-from numpy import isclose
 import pytest
 
-from structuraltools import materials, MathTemplate, resources, unit, utils
+from structuraltools.template import Result
+from structuraltools.unit import unit
+from structuraltools import utils
 
+
+resources = importlib.resources.files("structuraltools.resources")
+
+
+def test_isclose():
+    result = Result("", 15.01*unit.ft)
+    assert utils.isclose(result, 15*unit.ft, atol=0.1*unit.ft)
+    assert not utils.isclose(result, 15*unit.ft)
 
 def test_linterp():
     assert utils.linterp(1, 1, 3, 3, 2) == 2
@@ -37,7 +47,7 @@ def test_round_to_float():
     assert utils.round_to(3.5, 5) == 5
 
 def test_round_to_Quantity():
-    assert isclose(utils.round_to(-0.1713*unit.kip, 10*unit.lb), -180*unit.lb)
+    assert utils.isclose(utils.round_to(-0.1713*unit.kip, 10*unit.lb), -180*unit.lb)
 
 def test_convert_to_unit_Quantity_string():
     assert utils.convert_to_unit("1 ft") == 1*unit.ft
@@ -64,43 +74,3 @@ def test_read_data_table():
     filepath = resources.joinpath("AISC_steel_materials.csv")
     steel_table = utils.read_data_table(filepath)
     assert steel_table.at["A36", "F_y"] == 36*unit.ksi
-
-def test_get_table_entry():
-    filepath = resources.joinpath("AISC_steel_materials.csv")
-    data = utils.get_table_entry(filepath, "A36")
-    expected_data = {
-        "name": "A36",
-        "F_y": 36*unit.ksi,
-        "F_u": 58*unit.ksi,
-        "E": 29000*unit.ksi,
-        "G": 11200*unit.ksi,
-        "v": 0.3,
-        "w_s": 490*unit.pcf
-    }
-    assert data == expected_data
-
-def test_fill_templates():
-    main_template = Template("""
-        Sub-template: $sub_template
-        Test string: $test_string
-        Test class attribute: $f_y
-        Test quantity: $length""")
-    sub_template = Template("Sub-template value: $length")
-    rebar = materials.Rebar(4)
-    test_string = "Test string"
-    length = 3.66667*unit.ft
-    markdown_options = {"return_markdown": True, "decimal_points": 2}
-    markdown, returned = utils.fill_templates(main_template, locals(), length)
-    assert returned == length
-    assert markdown == r"""
-        Sub-template: Sub-template value: 3.67\ \mathrm{ft}
-        Test string: Test string
-        Test class attribute: 60000\ \mathrm{psi}
-        Test quantity: 3.67\ \mathrm{ft}"""
-
-def test_fill_templates_single_return():
-    assert utils.fill_templates("", {}, "test") == "test"
-
-def test_fill_templates_return_markdown_only():
-    values = {"markdown_options": {"return_markdown": True}}
-    assert utils.fill_templates(Template("test"), values) == "test"

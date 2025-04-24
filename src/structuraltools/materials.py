@@ -13,15 +13,16 @@
 # limitations under the License.
 
 
+import importlib.resources
+
 from numpy import isclose, sqrt
 
-from structuraltools import resources, unit, utils
-from structuraltools import Length, Stress, UnitWeight
-from structuraltools import _materials_markdown as templates
+from structuraltools import utils
+from structuraltools.unit import unit, Length, Stress, UnitWeight
+from structuraltools import _materials_templates as templates
 
 
-rebar_database = utils.read_data_table(resources.joinpath("ACI_rebar_sizes.csv"))
-steel_database = utils.read_data_table(resources.joinpath("AISC_steel_materials.csv"))
+resources = importlib.resources.files("structuraltools.resources")
 
 
 class Concrete:
@@ -69,12 +70,11 @@ class Concrete:
         self.f_r = 7.5*self.lamb*sqrt(self.f_prime_c*unit.psi)
         self.beta_1 = min(max(0.65, 0.85-0.05*(self.f_prime_c.magnitude-4000)/1000), 0.85)
 
-        markdown_options.update({"return_markdown": True})
-        self.markdown = utils.fill_templates(templates.Concrete, locals())
-
 
 class Rebar:
     """Class to store data for rebar"""
+    database = utils.read_data_table(resources.joinpath("ACI_rebar_sizes.csv"))
+
     def __init__(
         self,
         size: int,
@@ -112,13 +112,15 @@ class Rebar:
         else:
             self.E_s = E_s.to("psi")
 
-        dimensions = rebar_database.loc[size, :].to_dict()
+        dimensions = self.database.loc[size, :].to_dict()
         for attribute, value in dimensions.items():
             setattr(self, attribute, value)
 
 
 class Steel:
     """Class to store data for steel materials"""
+    database = utils.read_data_table(resources.joinpath("AISC_steel_materials.csv"))
+
     def __init__(self, name: str):
         """Initialize a steel from the structuraltools steel database. Custom steel
         types are not currently supported.
@@ -131,6 +133,6 @@ class Steel:
             database."""
         self.name = name
         self.unpack_for_templates = True
-        properties = steel_database.loc[name, :].to_dict()
+        properties = self.database.loc[name, :].to_dict()
         for attribute, value in properties.items():
             setattr(self, attribute, value)

@@ -13,9 +13,26 @@
 # limitations under the License.
 
 
-from structuraltools import unit
+from structuraltools.unit import unit
 
 from structuraltools.template import Result, Template
+
+
+class TestResult:
+    def setup_method(self, method):
+        self.result = Result("text", 1, 2, 3)
+
+    def test_iter(self):
+        result = []
+        for value in self.result:
+            result.append(value)
+        assert result == [1, 2, 3]
+
+    def test_reversed(self):
+        result = []
+        for value in reversed(self.result):
+            result.append(value)
+        assert result == [3, 2, 1]
 
 
 def test_Template():

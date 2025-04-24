@@ -13,11 +13,10 @@
 # limitations under the License.
 
 
-from numpy import isclose
-
-from structuraltools import aisc, materials, unit
-
+from structuraltools import aisc, materials
 from structuraltools.aisc import chapter_F
+from structuraltools.unit import unit
+from structuraltools.utils import isclose
 
 
 def test_eq_F2_1():

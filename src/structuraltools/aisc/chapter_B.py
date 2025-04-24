@@ -13,11 +13,10 @@
 # limitations under the License.
 
 
-from numpy import sqrt
-
-from structuraltools import Stress
 from structuraltools.aisc import _chapter_B_templates as templates
 from structuraltools.template import Result
+from structuraltools.unit import Stress
+from structuraltools.utils import sqrt
 
 
 def table_B4_1b_10_lamb_p(E: Stress, F_y: Stress, **display_options) -> Result[float]:

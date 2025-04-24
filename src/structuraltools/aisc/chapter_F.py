@@ -14,15 +14,14 @@
 
 
 import copy
+from math import pi
 
-from numpy import pi
-
-from structuraltools import sqrt
-from structuraltools import (Length, Moment, MomentOfInertia, SectionModulus,
-                             Stress, TorsionalConstant, WarpingConstant)
 from structuraltools.aisc import chapter_B
 from structuraltools.aisc import _chapter_F_templates as templates
 from structuraltools.template import Result
+from structuraltools.unit import (Length, Moment, MomentOfInertia,
+    SectionModulus, Stress, TorsionalConstant, WarpingConstant)
+from structuraltools.utils import sqrt
 
 
 def eq_F2_1(F_y: Stress, Z_x: SectionModulus, **display_options) -> Result[Moment]:

@@ -19,8 +19,6 @@ from IPython.display import display, Latex, Markdown
 from numpy import ceil, floor, trunc
 from pint import Quantity
 
-from structuraltools import decimal_points, header_level
-
 
 class ResultIterator:
     def __init__(self, result, reverse: bool = False):
@@ -353,8 +351,8 @@ class Template:
             *return_value,
             display: bool = False,
             return_string: bool = False,
-            decimal_points: int = decimal_points,
-            header_level: int = header_level) -> Result:
+            decimal_points: int = 3,
+            header_level: int = 4) -> Result:
         """Pass provided values through and display or fill the representation
         string if desired. This is designed to be used in the return statement
         of a function.
