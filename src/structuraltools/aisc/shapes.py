@@ -13,13 +13,15 @@
 # limitations under the License.
 
 
+from copy import copy
 import importlib.resources
 from math import pi
 from typing import Optional
 
-from structuraltools import materials, utils
+from structuraltools import materials, sections, utils
 from structuraltools.aisc import chapter_B, chapter_F
 from structuraltools.aisc import _shapes_templates as templates
+from structuraltools.template import Result
 from structuraltools.unit import unit, Force, Length, Moment
 from structuraltools.utils import sqrt
 
@@ -44,10 +46,10 @@ class Shape:
         properties = self.database.loc[size, :].to_dict()
         if not material:
             material = self.default_material
-        self.material = material.name
         properties.update(vars(material))
         for attribute, value in properties.items():
             setattr(self, attribute, value)
+        delattr(self, "name")
 
 
 class Angle(Shape):
@@ -62,7 +64,7 @@ class Channel(Shape):
     default_material = materials.Steel("A992")
 
 
-class Plate:
+class Plate(sections.Rectangle):
     """Class for calculating steel plate strength. For consistency with the
     other shapes the x-axis intersects the width of the plate (b) and
     represents the strong axis for bending."""
@@ -87,130 +89,50 @@ class Plate:
 
         material : structuraltools.materials.Steel instance
             Material to use for the member"""
-        self.d = d.to("inch")
-        self.t = t.to("inch")
-        if not material:
-            self.material = self.default_material
-        else:
-            self.material = material
-        self.unpack_for_templates = True
+        super().__init__(d, t)
+        self.t = self.b
+        delattr(self, "b")
 
-        self.A = (self.d*self.t).to("inch**2")
-        self.W = (self.A*self.material.w_s).to("plf")
-        self.S_x = (self.t*self.d**2/6).to("inch**3")
         self.Z_x = (self.t*self.d**2/4).to("inch**3")
-        self.I_x = (self.t*self.d**3/12).to("inch**4")
-        self.r_x = (sqrt(self.I_x/self.A)).to("inch")
-        self.S_y = (self.d*self.t**2/6).to("inch**3")
         self.Z_y = (self.d*self.t**2/4).to("inch**3")
-        self.I_y = (self.d*self.t**3/12).to("inch**4")
-        self.r_y = (sqrt(self.I_y/self.A)).to("inch")
 
-    def compression_capacity(
-        self,
-        L_x: Length,
-        L_y: Length,
-        **markdown_options) -> tuple[float, Force] | tuple[str, float, Force]:
-        """Calculate the axial compression capacity according to
-        AISC 360-22 Section E3
+        if not material:
+            material = self.default_material
+        material = vars(material)
+        for attribute, value in material.items():
+            setattr(self, attribute, value)
+        delattr(self, "name")
 
-        Parameters
-        ==========
-
-        L_x : Length
-            Critical length with respect to r_x
-
-        L_x : Length
-            Critical length with respect to r_y"""
-        phi_c = 0.9
-
-        F_e_x = (self.material.E*pi**2)/((L_x/self.r_x)**2)
-        if self.material.F_y/F_e_x <= 2.25:
-            F_n_x = (0.658**(self.material.F_y/F_e_x))*self.material.F_y
-        else:
-            F_n_x = 0.877*F_e_x
-
-        F_e_y = (self.material.E*pi**2)/((L_y/self.r_y)**2)
-        if self.material.F_y/F_e_y <= 2.25:
-            F_n_y = (0.658**(self.material.F_y/F_e_y))*self.material.F_y
-        else:
-            F_n_y = 0.877*F_e_y
-
-        P_n = min(F_n_x, F_n_y)*self.A
-        return phi_c, P_n
-
-
-    def moment_capacity(
-        self,
-        L_b: Length = 0*unit.inch,
-        C_b: int = 1,
-        **markdown_options) -> tuple[float, Moment] | tuple[str, float, Moment]:
-        """Calculate the major axis moment capacity according to
-        AISC 360-22 Section F11
+    def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
+            C_b: float = 1, **display_options) -> Result[Moment]:
+        """Calculate the nominal moment capacity of a plate according to
+        AISC 360-22 Section F11.
 
         Parameters
         ==========
 
-        L_b : pint length quantity, optional
-            Unbraced length for lateral-torsional buckling
+        axis : str
+            Member local axis to calculate the moment capacity about
+
+        L_b : Length
+            Compression side unbraced length
 
         C_b : float
-            Lateral-torsional buckling modification factor. Defaults to 1."""
+            Lateral-torsional buckling modification factor"""
+        display = display_options.pop("display", False)
         phi_b = 0.9
-        material = self.material
-
-        short = 0.08*self.material.E/self.material.F_y
-        long = 1.9*self.material.E/self.material.F_y
-        length = L_b*self.d/self.t**2
-        M_p = min(self.material.F_y*self.Z_x, 1.5*self.material.F_y*self.S_x).to("kipft")
-
-        if length <= short:
-            M_n = M_p
-            M_n_template = plate_templates.moment_plastic
-        elif length <= long:
-            M_n = min(C_b*(1.52-0.274*(L_b*self.d*self.material.F_y)/
-                (self.t**2*self.material.E))*self.material.F_y*self.S_x, M_p).to("kipft")
-            M_n_template = plate_templates.moment_ltb_short
+        if axis == "x":
+            M_n = chapter_F.sec_F11(self, L_b, C_b, **display_options)
+            template = templates.Plate_moment_capacity_x
+        elif axis == "y":
+            F_y = self.F_y
+            Z_y = self.Z_y
+            S_y = self.S_y
+            M_n = min(F_y*Z_y, 1.5*F_y*S_y).to("kipft")
+            template = templates.Plate_moment_capacity_y
         else:
-            M_n = min((1.9*self.material.E*C_b*self.t**2*self.S_x)/(L_b*self.d), M_p).to("kipft")
-            M_n_template = plate_templates.moment_ltb_long
-        return utils.fill_templates(plate_templates.moment_capacity, locals(), phi_b, M_n)
-
-    def moment_capacity_minor(
-        self,
-        L_b: Length = 0*unit.inch,
-        C_b: int = 1,
-        **markdown_options) -> tuple[float, Moment] | tuple[str, float, Moment]:
-        """Calculate the minor axis moment capacity according to
-        AISC 360-22 Section F11
-
-        Parameters
-        ==========
-
-        L_b : pint length quantity, optional
-            Unbraced length for lateral-torsional buckling
-
-        C_b : float
-            Lateral-torsional buckling modification factor. Defaults to 1."""
-        phi_b = 0.9
-        material = self.material
-
-        short = 0.08*self.material.E/self.material.F_y
-        long = 1.9*self.material.E/self.material.F_y
-        length = L_b*self.t/self.d**2
-        M_p = min(self.material.F_y*self.Z_y, 1.5*self.material.F_y*self.S_y).to("kipft")
-
-        if length <= short:
-            M_n = M_p
-            M_n_template = plate_templates.moment_minor_plastic
-        elif length <= long:
-            M_n = min(C_b*(1.52-0.274*(L_b*self.t*self.material.F_y)/
-                (self.d**2*self.material.E))*self.material.F_y*self.S_y, M_p).to("kipft")
-            M_n_template = plate_templates.moment_minor_ltb_short
-        else:
-            M_n = min((1.9*self.material.E*C_b*self.d**2*self.S_y)/(L_b*self.t), M_p).to("kipft")
-            M_n_template = plate_templates.moment_minor_ltb_long
-        return utils.fill_templates(plate_templates.moment_capacity_minor, locals(), phi_b, M_n)
+            raise ValueError(f"Unsupported axis: {axis}")
+        return template.fill(locals(), phi_b, M_n, display=display, **display_options)
 
 
 class RectHSS(Shape):
@@ -243,10 +165,10 @@ class RoundHSS(Shape):
                 material = self.RoundHSS_default_material
             else:
                 material = self.Pipe_default_material
-        self.material = material.name
         properties.update(vars(material))
         for attribute, value in properties.items():
             setattr(self, attribute, value)
+        delattr(self, "name")
 
 
 class WideFlange(Shape):
@@ -254,29 +176,31 @@ class WideFlange(Shape):
     database = utils.read_data_table(resources.joinpath("AISC_WideFlange.csv"))
     default_material = materials.Steel("A992")
 
-    def moment_capacity(self, L_b: Length = 0*unit.ft, C_b: float = 1, **display_options
-                        ) -> tuple[float, Moment] | tuple[str, float, Moment]:
-        """Calculate the major axis nominal moment capacity of an I shape with
-        a compact web according to AISC 360-22 Sections F2 and F3.
+    def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
+            C_b: float = 1, **display_options) -> Result[Moment]:
+        """Calculate the nominal moment capacity of an I shape with a compact
+        web according to AISC 360-22 Sections F2 and F3.
 
         Parameters
         ==========
+
+        axis : str
+            Member local axis to calculate the moment capacity about
 
         L_b : Length
             Compression flange unbraced length
 
         C_b : float
             Lateral-torsional buckling modification factor"""
-        options = copy.copy(display_options)
-        options.update({"display": False, "return_string": True})
+        display = display_options.pop("display", False)
 
         phi_b = 0.9
 
         if self.lamb_w >= chapter_B.table_B4_1b_15_lamb_p(self.E, self.F_y):
             raise ValueError("Only sections with compact webs are supported")
         elif self.lamb_f >= chapter_B.table_B4_1b_10_lamb_p(self.E, self.F_y):
-            M_n_str, M_n = chapter_F.sec_F3(self, L_b, C_b, **options)
+            M_n = chapter_F.sec_F3(self, L_b, C_b, **display_options)
         else:
-            M_n_str, M_n = chapter_F.sec_F2(self, L_b, C_b, **options)
-        return utils.fill_template(templates.WideFlange_moment_capacity,
-                                   locals(), phi_b, M_n, **display_options)
+            M_n = chapter_F.sec_F2(self, L_b, C_b, **display_options)
+        return templates.WideFlange_moment_capacity.fill(locals(), phi_b, M_n,
+            display=display, **display_options)

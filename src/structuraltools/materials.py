@@ -54,7 +54,6 @@ class Concrete:
             Poisson's ration of the concrete"""
         self.max_agg = max_agg.to("inch")
         self.v = v
-        self.unpack_for_templates = True
 
         if isclose(f_prime_c.to("psi"), round(f_prime_c.to("psi"))):
             f_prime_c = round(f_prime_c.to("psi").magnitude)*unit.psi
@@ -100,7 +99,6 @@ class Rebar:
             Modulus of elasticity to use for the rebar. Defaults to 29000 ksi"""
         self.size = size
         self.coated = coated
-        self.unpack_for_templates = True
 
         if isclose(f_y.to("psi"), round(f_y.to("psi"))):
             self.f_y = round(f_y.to("psi").magnitude)*unit.psi
@@ -132,7 +130,6 @@ class Steel:
             Name of the steel. Must match a name in the structuraltools steel
             database."""
         self.name = name
-        self.unpack_for_templates = True
         properties = self.database.loc[name, :].to_dict()
         for attribute, value in properties.items():
             setattr(self, attribute, value)

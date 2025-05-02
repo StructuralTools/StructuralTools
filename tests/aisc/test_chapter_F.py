@@ -109,7 +109,6 @@ def test_eq_F2_8b():
         C_w=56.9*unit.inch**6,
         return_string=True)
     assert isclose(c, 1.060353756, atol=1e-9)
-    assert isinstance(c.value, float)
     assert c.string == r"c &= \frac{h_o}{2} \cdot \sqrt{\frac{I_y}{C_w}} = \frac{9.56\ \mathrm{in}}{2} \cdot \sqrt{\frac{2.8\ \mathrm{in}^{4}}{56.9\ \mathrm{in}^{6}}} &= 1.06"
 
 def test_sec_F2_1():
@@ -351,4 +350,137 @@ $$ \begin{aligned}
 #### Nominal Moment Capacity
 $$ \begin{aligned}
     M_n &= \operatorname{min}\left(M_{ltb},\ M_{flb}\right) = \operatorname{min} \left(52.5\ \mathrm{kipft},\ 52.114\ \mathrm{kipft}\right) &= 52.114\ \mathrm{kipft}
+\end{aligned} $$"""
+
+def test_eq_F11_1():
+    M_p = chapter_F.eq_F11_1(
+        F_y=50*unit.ksi,
+        Z_x=12*unit.inch**3,
+        S_x=8*unit.inch**3,
+        return_string=True)
+    assert isclose(M_p, 50*unit.kipft)
+    assert M_p.string == r"M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(50\ \mathrm{ksi} \cdot 12\ \mathrm{in}^{3},\ 1.5 \cdot 50\ \mathrm{ksi} \cdot 8\ \mathrm{in}^{3}\right) &= 50.0\ \mathrm{kipft}"
+
+def test_eq_F11_3():
+    M_ltb = chapter_F.eq_F11_3(
+        C_b=1,
+        L_b=12*unit.inch,
+        d=6*unit.inch,
+        t=1*unit.inch,
+        F_y=50*unit.ksi,
+        E=29000*unit.ksi,
+        S_x=6*unit.inch**3,
+        return_string=True)
+    assert isclose(M_ltb, 37.14965517*unit.kipft, atol=1e-8*unit.kipft)
+    assert M_ltb.string == r"""M_{ltb} &= C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{L_b \cdot d}{t^2}\right) \cdot \frac{F_y}{E}\right) \cdot F_y \cdot S_x
+    \\
+    &= 1 \cdot \left(1.52 - 0.274 \cdot \left(\frac{12\ \mathrm{in} \cdot 6\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}\right) \cdot \frac{50\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right) \cdot 50\ \mathrm{ksi} \cdot 6\ \mathrm{in}^{3}
+    \\
+    &= 37.15\ \mathrm{kipft}"""
+
+def test_eq_F11_4():
+    M_ltb = chapter_F.eq_F11_4(38*unit.ksi, 24*unit.inch**3, return_string=True)
+    assert isclose(M_ltb, 76*unit.kipft)
+    assert M_ltb.string == r"M_{ltb} &= F_{cr} \cdot S_x = 38\ \mathrm{ksi} \cdot 24\ \mathrm{in}^{3} &= 76.0\ \mathrm{kipft}"
+
+def test_eq_F11_5():
+    F_cr = chapter_F.eq_F11_5(
+        E=29000*unit.ksi,
+        C_b=1,
+        L_b=120*unit.inch,
+        d=12*unit.inch,
+        t=1*unit.inch,
+        return_string=True)
+    assert isclose(F_cr, 38.26388889*unit.ksi, atol=1e-8*unit.ksi)
+    assert F_cr.string == r"F_{cr} &= \frac{1.9 \cdot E \cdot C_b}{\frac{L_b \cdot d}{t^2}} = \frac{1.9 \cdot 29000\ \mathrm{ksi} \cdot 1}{\frac{120\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}} &= 38.264\ \mathrm{ksi}"
+
+def test_sec_F11_1_rect():
+    shape = aisc.Plate(4*unit.inch, 1*unit.inch)
+    M_p = chapter_F.sec_F11_1(shape, return_string=True)
+    assert isclose(M_p, 12*unit.kipft)
+    assert M_p.string == r"""\begin{aligned}
+    M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 4.0\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}\right) &= 12.0\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F11_2_plastic():
+    shape = aisc.Plate(4*unit.inch, 1*unit.inch)
+    M_p = chapter_F.sec_F11_1(shape)
+    M_ltb = chapter_F.sec_F11_2(
+        shape=shape,
+        L_b=12*unit.inch,
+        M_p=M_p,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_ltb, 12*unit.kipft)
+    assert M_ltb.string == r"""\begin{aligned}
+    \text{Since, } & \left(\frac{L_b \cdot d}{t^2} \leq \frac{0.08 \cdot E}{F_y} \Leftarrow \frac{12\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{0.08 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
+        \\[10pt]
+        M_{ltb} &= M_p = 12.0\ \mathrm{kipft} &= 12.0\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F11_2_inelastic():
+    shape = aisc.Plate(4*unit.inch, 1*unit.inch)
+    M_p = chapter_F.sec_F11_1(shape)
+    M_ltb = chapter_F.sec_F11_2(
+        shape=shape,
+        L_b=24*unit.inch,
+        M_p=M_p,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_ltb, 11.89877407*unit.kipft, atol=1e-8*unit.kipft)
+    assert M_ltb.string == r"""\begin{aligned}
+    \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}} < \frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{1.9 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
+        \\[10pt]
+        M_{ltb} &= C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{L_b \cdot d}{t^2}\right) \cdot \frac{F_y}{E}\right) \cdot F_y \cdot S_x
+    \\
+    &= 1 \cdot \left(1.52 - 0.274 \cdot \left(\frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}\right) \cdot \frac{36\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right) \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}
+    \\
+    &= 11.899\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F11_2_elastic():
+    shape = aisc.Plate(12*unit.inch, 1*unit.inch)
+    M_p = chapter_F.sec_F11_1(shape)
+    M_ltb = chapter_F.sec_F11_2(
+        shape=shape,
+        L_b=130*unit.inch,
+        M_p=M_p,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_ltb, 70.64102564*unit.kipft, atol=1e-8*unit.kipft)
+    assert M_ltb.string == r"""\begin{aligned}
+    \text{Since, } & \left(\frac{L_b \cdot d}{t^2} > \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{130\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} > \frac{1.9 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
+        \\[10pt]
+        F_{cr} &= \frac{1.9 \cdot E \cdot C_b}{\frac{L_b \cdot d}{t^2}} = \frac{1.9 \cdot 29000\ \mathrm{ksi} \cdot 1}{\frac{130\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}} &= 35.321\ \mathrm{ksi}
+        \\[10pt]
+        M_{ltb} &= F_{cr} \cdot S_x = 35.321\ \mathrm{ksi} \cdot 24.0\ \mathrm{in}^{3} &= 70.641\ \mathrm{kipft}
+\end{aligned}"""
+
+def test_sec_F11():
+    shape = aisc.Plate(4*unit.inch, 1*unit.inch)
+    M_n = chapter_F.sec_F11(
+        shape=shape,
+        L_b=24*unit.inch,
+        C_b=1,
+        return_string=True)
+    assert isclose(M_n, 11.89877407*unit.kipft, atol=1e-8*unit.kipft)
+    assert M_n.string == r"""#### Plastic Moment Capacity
+$$ \begin{aligned}
+    M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 4.0\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}\right) &= 12.0\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Lateral-Torsional Buckling Moment Capacity
+$$ \begin{aligned}
+    \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}} < \frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{1.9 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
+        \\[10pt]
+        M_{ltb} &= C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{L_b \cdot d}{t^2}\right) \cdot \frac{F_y}{E}\right) \cdot F_y \cdot S_x
+    \\
+    &= 1 \cdot \left(1.52 - 0.274 \cdot \left(\frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}\right) \cdot \frac{36\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right) \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}
+    \\
+    &= 11.899\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Nominal Moment Capacity
+$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(12.0\ \mathrm{kipft},\ 11.899\ \mathrm{kipft}\right) &= 11.899\ \mathrm{kipft}
 \end{aligned} $$"""

@@ -13,19 +13,21 @@
 # limitations under the License.
 
 
-from numpy import array, isclose
+from numpy import array
 
-from structuraltools import analysis, unit, utils
+from structuraltools import analysis
+from structuraltools.unit import unit
+from structuraltools.utils import isclose, read_data_table
 
 
 def test_reduce_combs():
-    reactions = utils.read_data_table("tests/analysis/test_reactions.csv")
+    reactions = read_data_table("tests/analysis/test_reactions.csv")
     reactions = analysis.loads.reduce_combs(reactions)
-    expected_reactions = utils.read_data_table("tests/analysis/reduced_test_reactions.csv")
+    expected_reactions = read_data_table("tests/analysis/reduced_test_reactions.csv")
     assert all(reactions.eq(expected_reactions))
 
 def test_reduce_combs_already_reduced():
-    reactions = utils.read_data_table("tests/analysis/reduced_test_reactions.csv")
+    reactions = read_data_table("tests/analysis/reduced_test_reactions.csv")
     reduced_reactions = analysis.loads.reduce_combs(reactions)
     assert all(reduced_reactions.eq(reactions))
 

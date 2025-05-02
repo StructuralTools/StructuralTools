@@ -14,18 +14,20 @@
 
 
 import copy
+import importlib.resources
 import json
 from typing import Optional
 
 from numpy import log10, sign
 
-from structuraltools import resources, unit, utils
-from structuraltools import Area, Length, Pressure, Velocity
-
+from structuraltools import utils
 from structuraltools.asce import chapter_26
 from structuraltools.asce import _wind_loading_templates as templates
 from structuraltools.asce.chapter_26 import fig_26_8_1 as calc_K_zt
+from structuraltools.unit import unit, Area, Length, Pressure, Velocity
 
+
+resources = importlib.resources.files("structuraltools.resources")
 
 
 def calc_wind_server_inputs(
@@ -122,24 +124,21 @@ def calc_wind_server_inputs(
         Canopy height. Should be set if wind loads on canopies are needed.
         Note: This can also be set when initializing a CandCServer if multiple
         canopy heights are needed."""
-    options = copy.copy(display_options)
-    options.update({"display": False, "return_string": True})
+    display = display_options.pop("display", False)
 
     values = chapter_26.table_26_11_1.loc[exposure, :].to_dict()
 
     # Calculate K_e according to ASCE 7-22 Table 26.9-1 footnotes 1 and 2
-    K_e_str, K_e = chapter_26.table_26_9_1(z_e, **options)
+    K_e = chapter_26.table_26_9_1(z_e, **display_options)
 
     # Calculate velocity pressure at the roof height and the parapet height,
     # if applicable, according to ASCE 7-22 Table 26.10-1 footnote 1 and
     # ASCE 7-22 Equation 26.10-1
-    K_h_str, K_h = chapter_26.table_26_10_1(h, values["z_g"], values["alpha"],
-        "h", **options)
-    q_h_str, q_h = chapter_26.eq_26_10_1(K_h, K_zt, K_e, V, "h", **options)
+    K_h = chapter_26.table_26_10_1(h, values["z_g"], values["alpha"], "h", **display_options)
+    q_h = chapter_26.eq_26_10_1(K_h, K_zt, K_e, V, "h", **display_options)
     if h_p:
-        K_p_str, K_p = chapter_26.table_26_10_1(h_p, values["z_g"],
-            values["alpha"], "p", **options)
-        q_p_str, q_p = chapter_26.eq_26_10_1(K_p, K_zt, K_e, V, "p", **options)
+        K_p = chapter_26.table_26_10_1(h_p, values["z_g"], values["alpha"], "p", **display_options)
+        q_p = chapter_26.eq_26_10_1(K_p, K_zt, K_e, V, "p", **display_options)
         template = templates.calc_wind_server_inputs_with_parapet
     else:
         template = templates.calc_wind_server_inputs
@@ -150,15 +149,14 @@ def calc_wind_server_inputs(
     # ASCE 7-22 Section 26.11.4
     z_min = values["z_min"]
     bar_z = max(0.6*h, z_min).to("ft")
-    I_bar_z_str, I_bar_z = chapter_26.eq_26_11_7(values["c"], bar_z, **options)
-    L_bar_z_str, L_bar_z = chapter_26.eq_26_11_9(values["l"], bar_z,
-        values["bar_epsilon"], **options)
+    I_bar_z = chapter_26.eq_26_11_7(values["c"], bar_z, **display_options)
+    L_bar_z = chapter_26.eq_26_11_9(values["l"], bar_z, values["bar_epsilon"], **display_options)
 
-    Q_x_str, Q_x = chapter_26.eq_26_11_8(L_y, h, L_bar_z, "x", "y", **options)
-    G_x_str, G_x = chapter_26.eq_26_11_6(I_bar_z, Q_x, "x", **options)
+    Q_x = chapter_26.eq_26_11_8(L_y, h, L_bar_z, "x", "y", **display_options)
+    G_x = chapter_26.eq_26_11_6(I_bar_z, Q_x, "x", **display_options)
 
-    Q_y_str, Q_y = chapter_26.eq_26_11_8(L_x, h, L_bar_z, "y", "x", **options)
-    G_y_str, G_y = chapter_26.eq_26_11_6(I_bar_z, Q_y, "y", **options)
+    Q_y = chapter_26.eq_26_11_8(L_x, h, L_bar_z, "y", "x", **display_options)
+    G_y = chapter_26.eq_26_11_6(I_bar_z, Q_y, "y", **display_options)
 
 
     # Calculate length a for C&C wind loads
@@ -188,7 +186,7 @@ def calc_wind_server_inputs(
         "G_y": G_y,
         "a": a
     }
-    return utils.fill_template(template, locals(), return_values, **display_options)
+    return template.fill(locals(), return_values, **display_options)
 
 
 class MainWindServer:

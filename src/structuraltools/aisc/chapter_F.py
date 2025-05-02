@@ -183,7 +183,7 @@ def eq_F2_8b(h_o: Length, I_y: MomentOfInertia, C_w: WarpingConstant,
 
 def sec_F2_1(shape, **display_options) -> Result[Moment]:
     """Calculate the major axis plastic moment capacity of an I shape with a
-    compact web according to AISC 360-22 Section F2.2
+    compact web according to AISC 360-22 Section F2.1
 
     Parameters
     ==========
@@ -204,13 +204,13 @@ def sec_F2_2(shape, L_b: Length, M_p: Moment, C_b: float, **display_options) -> 
     ==========
 
     shape : aisc.WideFlange
-        Shape to calculate the lateral torsional buckling moment of
+        Shape to calculate the lateral-torsional buckling moment of
 
     L_b : Length
         Compression flange unbraced length
 
     M_p : Moment
-        Major axis nominal plastic moment capacity of the section
+        Major axis plastic moment capacity of the section
 
     C_b : float
         Lateral-torsional buckling modification factor"""
@@ -367,3 +367,167 @@ def sec_F3(shape, L_b: Length, C_b: float, **display_options) -> Result[Moment]:
     M_flb = sec_F3_2(shape, M_p, **display_options)
     M_n = min(M_ltb, M_flb)
     return templates.sec_F3.fill(locals(), M_n, display=display, **display_options)
+
+def eq_F11_1(F_y: Stress, Z_x: SectionModulus, S_x: SectionModulus,
+        **display_options) -> Result[Moment]:
+    """AISC 360-22 Equation F11-1
+
+    Parameters
+    ==========
+
+    F_y : Stress
+        Steel yield stress
+
+    Z_x : SectionModulus
+        Major axis plastic section modulus
+
+    S : SectionModulus
+        Major axis elastic section modulus"""
+    M_p = min(F_y*Z_x, 1.5*F_y*S_x).to("kipft")
+    return templates.eq_F11_1.fill(locals(), M_p, **display_options)
+
+def eq_F11_3(C_b: float, L_b: Length, d: Length, t: Length, F_y: Stress,
+        E: Stress, S_x: SectionModulus, **display_options) -> Result[Moment]:
+    """AISC 360-22 Equation F11-3
+
+    Parameters
+    ==========
+
+    C_b : float
+        Lateral-torsional buckling modification factor
+
+    L_b : Length
+        Compression side unbraced length
+
+    d : Length
+        Section depth relative to the bending axis
+
+    t : Length
+        Section width relative to the bending axis
+
+    F_y : Stress
+        Steel yield stress
+
+    E : Stress
+        Steel elastic modulus
+
+    S_x : Section modulus
+        Major axis elastic section modulus"""
+    M_ltb = (C_b*(1.52-0.274*(L_b*d*F_y)/(E*t**2))*F_y*S_x).to("kipft")
+    return templates.eq_F11_3.fill(locals(), M_ltb, **display_options)
+
+def eq_F11_4(F_cr: Stress, S_x: SectionModulus, **display_options) -> Result[Moment]:
+    """AISC 360-22 Equation F11-4
+
+    Parameters
+    ==========
+
+    F_cr : Stress
+        Critical stress for elastic lateral-torsional buckling
+
+    S_x : SectionModulus
+        Major axis elastic section modulus"""
+    M_ltb = (F_cr*S_x).to("kipft")
+    return templates.eq_F11_4.fill(locals(), M_ltb, **display_options)
+
+def eq_F11_5(E: Stress, C_b: float, L_b: Length, d: Length, t: Length,
+        **display_options) -> Result[Stress]:
+    """AISC 360-22 Equation F11-5
+
+    Parameters
+    ==========
+
+    E : Stress
+        Steel elastic modulus
+
+    C_b : float
+        Lateral-torsional buckling modification factor
+
+    L_b : Length
+        Compression side unbraced length
+
+    d : Length
+        Section depth
+
+    t : Length
+        Section width"""
+    F_cr = (1.9*E*C_b)/(L_b*d/t**2)
+    return templates.eq_F11_5.fill(locals(), F_cr, **display_options)
+
+def sec_F11_1(shape, **display_options) -> Result[Moment]:
+    """Calculate the plastic moment capacity of a rectangular bar according to
+    AISC 360-22 Section F11.1
+
+    Parameters
+    ==========
+
+    shape : aisc.Plate
+        Shape to calculate the plastic moment capacity of"""
+    display = display_options.pop("display", False)
+
+    M_p = eq_F11_1(shape.F_y, shape.Z_x, shape.S_x, **display_options)
+    return templates.sec_F11_1_rect.fill(locals(), M_p, display=display, **display_options)
+
+def sec_F11_2(shape, L_b: Length, M_p: Moment, C_b: float, **display_options) -> Result[Moment]:
+    """Calculate the major axis nominal moment capacity of a rectangular bar
+    base on the limit of lateral-torsional buckling according to
+    AISC 360-22 Section F11.2.
+
+    Parameters
+    ==========
+
+    shape : aisc.Plate
+        Shape to calculate the lateral-torsional buckling moment of
+
+    L_b : Length
+        Copression side unbraced length
+
+    M_p : Moment
+        Major axis plastic moment capacity of the section
+
+    C_b : float
+        Lateral-torsional buckling modification factor"""
+    display = display_options.pop("display", False)
+
+    E = shape.E
+    F_y = shape.F_y
+    d = shape.d
+    t = shape.t
+
+    lamb_p = 0.08*E/F_y
+    lamb_r = 1.9*E/F_y
+    lamb = L_b*d/t**2
+    if lamb <= lamb_p:
+        M_ltb = M_p
+        template = templates.sec_F11_2_plastic
+    elif lamb <= lamb_r:
+        M_ltb = eq_F11_3(C_b, L_b, d, t, F_y, E, shape.S_x, **display_options)
+        template = templates.sec_F11_2_inelastic
+    else:
+        F_cr = eq_F11_5(E, C_b, L_b, d, t, **display_options)
+        M_ltb = eq_F11_4(F_cr, shape.S_x, **display_options)
+        template = templates.sec_F11_2_elastic
+    return template.fill(locals(), M_ltb, display=display, **display_options)
+
+def sec_F11(shape, L_b: Length, C_b: float, **display_options) -> Result[Moment]:
+    """Calculate the moment capacity of a rectangular bar according to
+    AISC 360-22 Section F11
+
+    Parameters
+    ==========
+
+    shape : aisc.Plate
+        Shape to calculate the nominal moment capacity of
+
+    L_b : Length
+        Compression side unbraced length
+
+    C_b : float
+        Lateral-torsional buckling modification factor"""
+    display = display_options.pop("display", False)
+
+    M_p = sec_F11_1(shape, **display_options)
+    M_ltb = sec_F11_2(shape, L_b, M_p, C_b, **display_options)
+    M_n = min(M_p, M_ltb)
+    return templates.sec_F11.fill(locals(), M_n, display=display, **display_options)
+

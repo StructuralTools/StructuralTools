@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-from structuraltools import MarkdownTemplate
+from structuraltools.template import Template
 
 
-calc_wind_server_inputs = MarkdownTemplate(r"""$header Ground Elevation Factor
+calc_wind_server_inputs = Template("Markdown", r"""$header Ground Elevation Factor
 $$$$ \begin{aligned}
     $K_e_str
 \end{aligned} $$$$
@@ -51,7 +51,7 @@ $$$$ \begin{aligned}
     $G_y_str
 \end{aligned} $$$$""")
 
-calc_wind_server_inputs_with_parapet = MarkdownTemplate(r"""$header Ground Elevation Factor
+calc_wind_server_inputs_with_parapet = Template("Markdown", r"""$header Ground Elevation Factor
 $$$$ \begin{aligned}
     $K_e_str
 \end{aligned} $$$$

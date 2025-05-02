@@ -13,14 +13,16 @@
 # limitations under the License.
 
 
+import importlib.resources
 import json
+from math import e
 
-from numpy import e, sqrt
-
-from structuraltools import resources, unit
-from structuraltools import Length, Pressure, Velocity
 from structuraltools.asce import _chapter_26_templates as templates
-from structuraltools.utils import fill_template, read_data_table
+from structuraltools.unit import unit, Length, Pressure, Velocity
+from structuraltools.utils import read_data_table, sqrt
+
+
+resources = importlib.resources.files("structuraltools.resources")
 
 
 table_26_11_1 = read_data_table(resources.joinpath("ASCE_Table_26-11-1.csv"))
@@ -70,7 +72,7 @@ def fig_26_8_1(feature: str, H: Length, L_h: Length, x: Length, z: Length,
     K_2 = (1-abs(x)/(mu*L_h_bounded)).to("dimensionless").magnitude
     K_3 = e**(-gamma*z/L_h_bounded)
     K_zt = (1+K_1*K_2*K_3)**2
-    return fill_template(templates.fig_26_8_1, locals(), K_zt, **display_options)
+    return templates.fig_26_8_1.fill(locals(), K_zt, **display_options)
 
 def table_26_9_1(z_e: Length, **display_options) -> float | tuple[str, float]:
     """Calculate the ground elevation factor ($K_e$) according to
@@ -83,7 +85,7 @@ def table_26_9_1(z_e: Length, **display_options) -> float | tuple[str, float]:
         Ground elevation above sea level"""
     z_e = z_e.to("ft")
     K_e = e**(-0.0000362*z_e.magnitude)
-    return fill_template(templates.table_26_9_1, locals(), K_e, **display_options)
+    return templates.table_26_9_1.fill(locals(), K_e, **display_options)
 
 def table_26_10_1(z: Length, z_g: Length, alpha: float, elevation: str = "z",
         **display_options) -> float | tuple[str, float]:
@@ -108,7 +110,7 @@ def table_26_10_1(z: Length, z_g: Length, alpha: float, elevation: str = "z",
     if z < 0*unit.ft or 3280*unit.ft < z:
         raise ValueError("z is outside of the bounds supported by ASCE 7-22")
     K_z = (2.41*(min(max(15*unit.ft, z), z_g)/z_g)**(2/alpha)).to("dimensionless").magnitude
-    return fill_template(templates.table_26_10_1, locals(), K_z, **display_options)
+    return templates.table_26_10_1.fill(locals(), K_z, **display_options)
 
 def eq_26_10_1(K_z: float, K_zt: float, K_e: float, V: Velocity,
         elevation: str = "z", **display_options) -> Pressure | tuple[str, Pressure]:
@@ -134,7 +136,7 @@ def eq_26_10_1(K_z: float, K_zt: float, K_e: float, V: Velocity,
         defaults to "z" """
     V = V.to("mph")
     q_z = 0.00256*K_z*K_zt*K_e*((V.magnitude)**2)*unit.psf
-    return fill_template(templates.eq_26_10_1, locals(), q_z, **display_options)
+    return templates.eq_26_10_1.fill(locals(), q_z, **display_options)
 
 def eq_26_11_6(I_bar_z: float, Q: float, axis: str = "", g_Q: float = 3.4, g_v:
         float = 3.4, **display_options) -> float | tuple[str, float]:
@@ -160,7 +162,7 @@ def eq_26_11_6(I_bar_z: float, Q: float, axis: str = "", g_Q: float = 3.4, g_v:
         Factor defined in ASCE 7-22 Section 26.22.4. This can always be left as
         the default value."""
     G = 0.925*(1+1.7*g_Q*I_bar_z*Q)/(1+1.7*g_v*I_bar_z)
-    return fill_template(templates.eq_26_11_6, locals(), G, **display_options)
+    return templates.eq_26_11_6.fill(locals(), G, **display_options)
 
 def eq_26_11_7(c: float, bar_z: Length, **display_options) -> float | tuple[str, float]:
     """ASCE 7-22 Equation 26.11-7
@@ -177,7 +179,7 @@ def eq_26_11_7(c: float, bar_z: Length, **display_options) -> float | tuple[str,
 
     bar_z = bar_z.to("ft")
     I_bar_z = c*(33/bar_z.magnitude)**(1/6)
-    return fill_template(templates.eq_26_11_7, locals(), I_bar_z, **display_options)
+    return templates.eq_26_11_7.fill(locals(), I_bar_z, **display_options)
 
 def eq_26_11_8(L: Length, h: Length, L_bar_z: Length, axis_1: str = "",
         axis_2: str = "", **display_options) -> float | tuple[str, float]:
@@ -202,7 +204,7 @@ def eq_26_11_8(L: Length, h: Length, L_bar_z: Length, axis_1: str = "",
         Subscript to indicate the axis perpendicular to the axis the gust effect
         factor is calculated for"""
     Q = sqrt(1/(1+0.63*((L+h)/L_bar_z)**0.63)).to("dimensionless").magnitude
-    return fill_template(templates.eq_26_11_8, locals(), Q, **display_options)
+    return templates.eq_26_11_8.fill(locals(), Q, **display_options)
 
 def eq_26_11_9(L: Length, bar_z: Length, bar_epsilon: float, **display_options
                ) -> Length | tuple[str, Length]:
@@ -222,4 +224,4 @@ def eq_26_11_9(L: Length, bar_z: Length, bar_epsilon: float, **display_options
         Terrain exposure constant $\bar{\epsilon}$ for ASCE 7-22 Table 26.11-1"""
     bar_z = bar_z.to("ft")
     L_bar_z = L*(bar_z.magnitude/33)**bar_epsilon
-    return fill_template(templates.eq_26_11_9, locals(), L_bar_z, **display_options)
+    return templates.eq_26_11_9.fill(locals(), L_bar_z, **display_options)

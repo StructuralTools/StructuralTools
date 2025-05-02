@@ -128,3 +128,50 @@ $header Nominal Moment Capacity
 $$$$ \begin{aligned}
     M_n &= \operatorname{min}\left(M_{ltb},\ M_{flb}\right) = \operatorname{min} \left($M_ltb,\ $M_flb\right) &= $M_n
 \end{aligned} $$$$""")
+
+eq_F11_1 = Template("Math", r"M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left($F_y \cdot $Z_x,\ 1.5 \cdot $F_y \cdot $S_x\right) &= $M_p")
+
+eq_F11_3 = Template("Math", r"""M_{ltb} &= C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{L_b \cdot d}{t^2}\right) \cdot \frac{F_y}{E}\right) \cdot F_y \cdot S_x
+    \\
+    &= $C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{$L_b \cdot $d}{\left($t\right)^2}\right) \cdot \frac{$F_y}{$E}\right) \cdot $F_y \cdot $S_x
+    \\
+    &= $M_ltb""")
+
+eq_F11_4 = Template("Math", r"M_{ltb} &= F_{cr} \cdot S_x = $F_cr \cdot $S_x &= $M_ltb")
+
+eq_F11_5 = Template("Math", r"F_{cr} &= \frac{1.9 \cdot E \cdot C_b}{\frac{L_b \cdot d}{t^2}} = \frac{1.9 \cdot $E \cdot $C_b}{\frac{$L_b \cdot $d}{\left($t\right)^2}} &= $F_cr")
+
+sec_F11_1_rect = Template("Latex", r"""\begin{aligned}
+    $M_p_str
+\end{aligned}""")
+
+sec_F11_2_plastic = Template("Latex", r"""\begin{aligned}
+    \text{Since, } & \left(\frac{L_b \cdot d}{t^2} \leq \frac{0.08 \cdot E}{F_y} \Leftarrow \frac{$L_b \cdot $d}{\left($t\right)^2} \leq \frac{0.08 \cdot $E}{$F_y}\right):
+        \\[10pt]
+        M_{ltb} &= M_p = $M_p &= $M_ltb
+\end{aligned}""")
+
+sec_F11_2_inelastic = Template("Latex", r"""\begin{aligned}
+    \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot $E}{$F_y} < \frac{$L_b \cdot $d}{\left($t\right)^2} \leq \frac{1.9 \cdot $E}{$F_y}\right):
+        \\[10pt]
+        $M_ltb_str
+\end{aligned}""")
+
+sec_F11_2_elastic = Template("Latex", r"""\begin{aligned}
+    \text{Since, } & \left(\frac{L_b \cdot d}{t^2} > \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{$L_b \cdot $d}{\left($t\right)^2} > \frac{1.9 \cdot $E}{$F_y}\right):
+        \\[10pt]
+        $F_cr_str
+        \\[10pt]
+        $M_ltb_str
+\end{aligned}""")
+
+sec_F11 = Template("Markdown", r"""$header Plastic Moment Capacity
+$$$$ $M_p_str $$$$
+<br/>
+$header Lateral-Torsional Buckling Moment Capacity
+$$$$ $M_ltb_str $$$$
+<br/>
+$header Nominal Moment Capacity
+$$$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left($M_p,\ $M_ltb\right) &= $M_n
+\end{aligned} $$$$""")

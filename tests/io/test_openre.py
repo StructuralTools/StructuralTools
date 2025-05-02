@@ -13,7 +13,8 @@
 # limitations under the License.
 
 
-from structuraltools import io, unit
+from structuraltools import io
+from structuraltools.unit import unit
 
 
 def test_model_init():

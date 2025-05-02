@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-from numpy import isclose
-
-from structuraltools import asce, unit
+from structuraltools import asce
+from structuraltools.unit import unit
+from structuraltools.utils import isclose
 
 
 def test_calc_wind_server_inputs():
-    string, inputs = asce.wind_loading.calc_wind_server_inputs(
+    inputs = asce.wind_loading.calc_wind_server_inputs(
         V=110*unit.mph,
         exposure="B",
         building_type="low-rise",
@@ -38,7 +38,7 @@ def test_calc_wind_server_inputs():
     assert isclose(inputs["G_x"], 0.840652037, atol=1e-9)
     assert isclose(inputs["G_y"], 0.8068246373, atol=1e-10)
     assert isclose(inputs["a"], 7.85*unit.ft)
-    assert string == r"""#### Ground Elevation Factor
+    assert inputs.string == r"""#### Ground Elevation Factor
 $$ \begin{aligned}
     K_e &= e^{-0.0000362 \cdot z_e} = e^{-0.0000362 \cdot 520\ \mathrm{ft}} &= 0.981
 \end{aligned} $$
