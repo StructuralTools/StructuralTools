@@ -13,7 +13,14 @@
 # limitations under the License.
 
 
-from structuraltools import MarkdownTemplate
+from structuraltools.template import Template
 
 
-WideFlange_moment_capacity = MarkdownTemplate(r"""$M_n_str""")
+Plate_moment_capacity_x = Template("Markdown", r"""$M_n_string""")
+
+Plate_moment_capacity_y = Template("Markdown", r"""$header Nominal Moment Capacity
+$$$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(F_y \cdot Z_y,\ 1.5 \cdot F_y \cdot S_y\right) = \operatorname{min}\left($F_y \cdot $Z_y,\ 1.5 \cdot $F_y \cdot $S_y\right) &= $M_n
+\end{aligned} $$$$""")
+
+WideFlange_moment_capacity = Template("Markdown", r"""$M_n_string""")

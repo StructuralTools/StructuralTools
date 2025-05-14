@@ -19,8 +19,7 @@ from pint import Quantity
 from sympy import lambdify, Piecewise, Rational, symbols
 from sympy.physics.continuum_mechanics.beam import Beam
 
-from structuraltools import unit
-from structuraltools import Length, MomentOfInertia, Stress
+from structuraltools.unit import unit, Length, MomentOfInertia, Stress
 
 
 class ContinuumBeam:

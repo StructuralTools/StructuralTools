@@ -13,9 +13,10 @@
 # limitations under the License.
 
 
-from numpy import isclose
+from structuraltools.unit import unit
+from structuraltools.utils import isclose
 
-from structuraltools import materials, unit
+from structuraltools import materials
 
 
 def test_Concrete_init_ultra_lightweight():

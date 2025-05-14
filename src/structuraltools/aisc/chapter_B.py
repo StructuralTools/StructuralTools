@@ -13,15 +13,13 @@
 # limitations under the License.
 
 
-from numpy import sqrt
-
-from structuraltools import Stress
 from structuraltools.aisc import _chapter_B_templates as templates
-from structuraltools.utils import fill_template
+from structuraltools.template import Result
+from structuraltools.unit import Stress
+from structuraltools.utils import sqrt
 
 
-def table_B4_1b_10_lamb_p(E: Stress, F_y: Stress, **display_options
-                          ) -> float | tuple[str, float]:
+def table_B4_1b_10_lamb_p(E: Stress, F_y: Stress, **display_options) -> Result[float]:
     """Calculate the case 10 compact/non-compact limiting width-to-thickness
     ratio from AISC 360-22 Table B4.1b
 
@@ -34,10 +32,9 @@ def table_B4_1b_10_lamb_p(E: Stress, F_y: Stress, **display_options
     F_y : Stress
         Steel yield stress"""
     lamb_pf = 0.38*sqrt(E/F_y).to("dimensionless").magnitude
-    return fill_template(templates.table_B4_1b_10_lamb_p, locals(), lamb_pf, **display_options)
+    return templates.table_B4_1b_10_lamb_p.fill(locals(), lamb_pf, **display_options)
 
-def table_B4_1b_10_lamb_r(E: Stress, F_y: Stress, **display_options
-                          ) -> float | tuple[str, float]:
+def table_B4_1b_10_lamb_r(E: Stress, F_y: Stress, **display_options) -> Result[float]:
     """Calculate the case 10 non-compact/slender limiting width-to-thickness
     ratio from AISC 360-22 Table B4.1b
 
@@ -50,10 +47,9 @@ def table_B4_1b_10_lamb_r(E: Stress, F_y: Stress, **display_options
     F_y : Stress
         Steel yield stress"""
     lamb_rf = sqrt(E/F_y).to("dimensionless").magnitude
-    return fill_template(templates.table_B4_1b_10_lamb_r, locals(), lamb_rf, **display_options)
+    return templates.table_B4_1b_10_lamb_r.fill(locals(), lamb_rf, **display_options)
 
-def table_B4_1b_15_lamb_p(E: Stress, F_y: Stress, **display_options
-                          ) -> float | tuple[str, float]:
+def table_B4_1b_15_lamb_p(E: Stress, F_y: Stress, **display_options) -> Result[float]:
     """Calculate the case 15 compact/non-compact limiting width-to-thickness
     ratio from AISC 360-22 Table B4.1b
 
@@ -66,10 +62,9 @@ def table_B4_1b_15_lamb_p(E: Stress, F_y: Stress, **display_options
     F_y : Stress
         Steel yield stress"""
     lamb_pw = 3.76*sqrt(E/F_y).to("dimensionless").magnitude
-    return fill_template(templates.table_B4_1b_15_lamb_p, locals(), lamb_pw, **display_options)
+    return templates.table_B4_1b_15_lamb_p.fill(locals(), lamb_pw, **display_options)
 
-def table_B4_1b_15_lamb_r(E: Stress, F_y: Stress, **display_options
-                          ) -> float | tuple[str, float]:
+def table_B4_1b_15_lamb_r(E: Stress, F_y: Stress, **display_options) -> Result[float]:
     """Calculate the case 15 non-compact/slender limiting width-to-thickness
     ratio from AISC 360-22 Table B4.1b
 
@@ -82,4 +77,4 @@ def table_B4_1b_15_lamb_r(E: Stress, F_y: Stress, **display_options
     F_y : Stress
         Steel yield stress"""
     lamb_rw = 5.7*sqrt(E/F_y).to("dimensionless").magnitude
-    return fill_template(templates.table_B4_1b_15_lamb_r, locals(), lamb_rw, **display_options)
+    return templates.table_B4_1b_15_lamb_r.fill(locals(), lamb_rw, **display_options)
