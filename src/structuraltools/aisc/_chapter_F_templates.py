@@ -43,11 +43,11 @@ eq_F2_6 = Template("Math", r"""L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot
 eq_F2_8b = Template("Math", r"c &= \frac{h_o}{2} \cdot \sqrt{\frac{I_y}{C_w}} = \frac{$h_o}{2} \cdot \sqrt{\frac{$I_y}{$C_w}} &= $c")
 
 sec_F2_1 = Template("Latex", r"""\begin{aligned}
-    $M_p_str
+    $M_p_string
 \end{aligned}""")
 
 sec_F2_2_plastic = Template("Latex", r"""\begin{aligned}
-    $L_p_str
+    $L_p_string
     \\[10pt]
     \text{Since, } & \left(L_b \leq L_p \Leftarrow $L_b \leq $L_p\right):
         \\[10pt]
@@ -55,30 +55,30 @@ sec_F2_2_plastic = Template("Latex", r"""\begin{aligned}
 \end{aligned}""")
 
 sec_F2_2_inelastic = Template("Latex", r"""\begin{aligned}
-    $L_p_str
+    $L_p_string
     \\[10pt]
-    $L_r_str
+    $L_r_string
     \\[10pt]
     \text{Since, } & \left(L_p < L_b \leq L_r \Leftarrow $L_p < $L_b \leq $L_r\right):
         \\[10pt]
-        $M_ltb_str
+        $M_ltb_string
 \end{aligned}""")
 
 sec_F2_2_elastic = Template("Latex", r"""\begin{aligned}
-    $L_r_str
+    $L_r_string
     \\[10pt]
     \text{Since, } & \left(L_b > L_r \Leftarrow $L_b > $L_r\right):
         \\[10pt]
-        $F_cr_str
+        $F_cr_string
         \\[10pt]
-        $M_ltb_str
+        $M_ltb_string
 \end{aligned}""")
 
 sec_F2 = Template("Markdown", r"""$header Plastic Moment Capacity
-$$$$ $M_p_str $$$$
+$$$$ $M_p_string $$$$
 <br/>
 $header Lateral-Torsional Buckling Moment Capacity
-$$$$ $M_ltb_str $$$$
+$$$$ $M_ltb_string $$$$
 <br/>
 $header Nominal Moment Capacity
 $$$$ \begin{aligned}
@@ -96,33 +96,33 @@ eq_F3_2 = Template("Math", r"M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\
 eq_F3_2a = Template("Math", r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{$lamb_w}}\right),\ 0.76\right) &= $k_c")
 
 sec_F3_2_noncompact = Template("Latex", r"""\begin{aligned}
-    $lamb_pf_str
+    $lamb_pf_string
     \\[10pt]
-    $lamb_rf_str
+    $lamb_rf_string
     \\[10pt]
     \text{Since, } & \left(\lambda_{pf} \leq \lambda_f < \lambda_{rf} \Leftarrow $lamb_pf \leq $lamb_f < $lamb_rf\right):
         \\[10pt]
-        $M_flb_str
+        $M_flb_string
 \end{aligned}""")
 
 sec_F3_2_slender = Template("Latex", r"""\begin{aligned}
-    $lamb_rf_str
+    $lamb_rf_string
     \\[10pt]
     \text{Since, } & \left(\lambda_f \geq \lambda_{rf} \Leftarrow $lamb_f \geq $lamb_rf\right):
         \\[10pt]
-        $k_c_str
+        $k_c_string
         \\[10pt]
-        $M_flb_str
+        $M_flb_string
 \end{aligned}""")
 
 sec_F3 = Template("Markdown", r"""$header Plastic Moment
-$$$$ $M_p_str $$$$
+$$$$ $M_p_string $$$$
 <br/>
 $header Lateral-Torsional Buckling Moment Capacity
-$$$$ $M_ltb_str $$$$
+$$$$ $M_ltb_string $$$$
 <br/>
 $header Compression Flange Local Buckling Moment Capacity
-$$$$ $M_flb_str $$$$
+$$$$ $M_flb_string $$$$
 <br/>
 $header Nominal Moment Capacity
 $$$$ \begin{aligned}
@@ -142,7 +142,7 @@ eq_F11_4 = Template("Math", r"M_{ltb} &= F_{cr} \cdot S_x = $F_cr \cdot $S_x &= 
 eq_F11_5 = Template("Math", r"F_{cr} &= \frac{1.9 \cdot E \cdot C_b}{\frac{L_b \cdot d}{t^2}} = \frac{1.9 \cdot $E \cdot $C_b}{\frac{$L_b \cdot $d}{\left($t\right)^2}} &= $F_cr")
 
 sec_F11_1_rect = Template("Latex", r"""\begin{aligned}
-    $M_p_str
+    $M_p_string
 \end{aligned}""")
 
 sec_F11_2_plastic = Template("Latex", r"""\begin{aligned}
@@ -154,22 +154,22 @@ sec_F11_2_plastic = Template("Latex", r"""\begin{aligned}
 sec_F11_2_inelastic = Template("Latex", r"""\begin{aligned}
     \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot $E}{$F_y} < \frac{$L_b \cdot $d}{\left($t\right)^2} \leq \frac{1.9 \cdot $E}{$F_y}\right):
         \\[10pt]
-        $M_ltb_str
+        $M_ltb_string
 \end{aligned}""")
 
 sec_F11_2_elastic = Template("Latex", r"""\begin{aligned}
     \text{Since, } & \left(\frac{L_b \cdot d}{t^2} > \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{$L_b \cdot $d}{\left($t\right)^2} > \frac{1.9 \cdot $E}{$F_y}\right):
         \\[10pt]
-        $F_cr_str
+        $F_cr_string
         \\[10pt]
-        $M_ltb_str
+        $M_ltb_string
 \end{aligned}""")
 
 sec_F11 = Template("Markdown", r"""$header Plastic Moment Capacity
-$$$$ $M_p_str $$$$
+$$$$ $M_p_string $$$$
 <br/>
 $header Lateral-Torsional Buckling Moment Capacity
-$$$$ $M_ltb_str $$$$
+$$$$ $M_ltb_string $$$$
 <br/>
 $header Nominal Moment Capacity
 $$$$ \begin{aligned}

@@ -386,7 +386,7 @@ class Template:
         rounded_variables = {"header": "#"*header_level}
         for key, value in variables.items():
             if isinstance(value, Result):
-                rounded_variables.update({key+"_str": value.string})
+                rounded_variables.update({key+"_string": value.string})
                 value = value.value
             if isinstance(value, Quantity | float):
                 rounded_variables.update({key: round(value, decimal_points)})

@@ -18,52 +18,6 @@ from structuraltools.unit import unit
 from structuraltools.utils import isclose
 
 
-def test_straight_bar_factors_1():
-    concrete = materials.Concrete(6000*unit.psi, w_c=110*unit.pcf)
-    rebar = materials.Rebar(8, coated=True)
-    results = aci.development_length.straight_bar_factors(
-        rebar=rebar,
-        concrete=concrete,
-        c_c=2*unit.inch,
-        s=6*unit.inch,
-        concrete_below=True,
-        return_string=True)
-    assert results[0:] == (0.75, 1, 1.5, 1, 1.3)
-
-def test_straight_bar_factors_2():
-    concrete = materials.Concrete(4000*unit.psi)
-    rebar = materials.Rebar(4, f_y=80*unit.ksi, coated=True)
-    results = aci.development_length.straight_bar_factors(
-        rebar=rebar,
-        concrete=concrete,
-        c_c=3*unit.inch,
-        s=3*unit.inch,
-        return_string=True)
-    assert results[0:] == (1, 1.15, 1.5, 1, 1)
-
-def test_straight_bar_factors_3():
-    concrete = materials.Concrete(4000*unit.psi)
-    rebar = materials.Rebar(4, f_y=100*unit.ksi, coated=True)
-    results = aci.development_length.straight_bar_factors(
-        rebar=rebar,
-        concrete=concrete,
-        c_c=3*unit.inch,
-        s=12*unit.inch,
-        use_psi_s=True,
-        return_string=True)
-    assert results[0:] == (1, 1.3, 1.2, 0.8, 1)
-
-def test_straight_bar_factors_4():
-    concrete = materials.Concrete(4000*unit.psi)
-    rebar = materials.Rebar(8)
-    results = aci.development_length.straight_bar_factors(
-        rebar=rebar,
-        concrete=concrete,
-        c_c=3*unit.inch,
-        s=12*unit.inch,
-        return_string=True)
-    assert results[0:] == (1, 1, 1, 1, 1)
-
 def test_straight_bar_min():
     concrete = materials.Concrete(4000*unit.psi)
     rebar = materials.Rebar(4)

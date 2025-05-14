@@ -36,7 +36,7 @@ class TestResult:
 
 
 def test_Template():
-    template = Template("Markdown", "$header $test_string $length $length_str")
+    template = Template("Markdown", "$header $test_string $length $length_string")
     test_string = "Hello World!"
     length = Result("length", 3.66667*unit.ft)
     options = {"return_string": True, "decimal_points": 2, "header_level": 2}
