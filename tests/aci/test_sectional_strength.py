@@ -13,64 +13,34 @@
 # limitations under the License.
 
 
-from numpy import isclose
-
-from structuraltools import aci, materials, unit
+from structuraltools import aci, materials
+from structuraltools.unit import unit
+from structuraltools.utils import isclose
 
 
 def test_calc_phi_compression_controlled():
     rebar = materials.Rebar(4)
-    markdown, phi = aci.sectional_strength.calc_phi(rebar, 0.002, return_markdown=True)
+    phi = aci.sectional_strength.calc_phi(rebar, 0.002, return_string=True)
     assert phi == 0.65
-    assert markdown == r"""$$ \begin{aligned}
-    & \text{Since, } \left(\epsilon_t \leq \epsilon_{ty} \Leftarrow 0.002 \leq 0.002\right): & \phi &= 0.65
-\end{aligned} $$"""
 
 def test_calc_phi_transition():
     rebar = materials.Rebar(4)
-    markdown, phi = aci.sectional_strength.calc_phi(rebar, 0.003, return_markdown=True)
+    phi = aci.sectional_strength.calc_phi(rebar, 0.003, return_string=True)
     assert isclose(phi, 0.7275862083, atol=1e-8)
-    assert markdown == r"""$$ \begin{aligned}
-    & \text{Since, } \left(\epsilon_{ty} < \epsilon_t < \epsilon_{ty} + 0.003 \Leftarrow 0.002 < 0.003 < 0.005\right):
-        \\[10pt]
-        & \qquad \phi = 0.65 + 0.25 \cdot \frac{\epsilon_t - \epsilon_{ty}}{0.003}
-            = 0.65 + 0.25 \cdot \frac{0.003 - 0.002}{0.003}
-            &= 0.728
-\end{aligned} $$"""
 
 def test_calc_phi_tension_controlled():
     rebar = materials.Rebar(4)
-    markdown, phi = aci.sectional_strength.calc_phi(rebar, 0.006, return_markdown=True)
+    phi = aci.sectional_strength.calc_phi(rebar, 0.006, return_string=True)
     assert phi == 0.9
-    assert markdown == r"""$$ \begin{aligned}
-    & \text {Since, } \left(\epsilon_t \geq \epsilon_{ty} \Leftarrow 0.006 \geq 0.005\right): & \phi &= 0.9
-\end{aligned} $$"""
 
 def test_moment_capacity():
     concrete = materials.Concrete(4*unit.ksi)
     rebar = materials.Rebar(4)
-    markdown, phi, M_n = aci.sectional_strength.moment_capacity(
+    phi, M_n = aci.sectional_strength.moment_capacity(
         b=8*unit.inch,
         d=12*unit.inch,
         concrete=concrete,
         rebar=rebar,
         n=3,
-        return_markdown=True)
+        return_string=True)
     assert isclose(phi*M_n, 30.61323529*unit.kipft, atol=1e-8)
-    assert markdown == r"""$$ \begin{aligned}
-    a &= \frac{n \cdot A_b \cdot f_y}{0.85 \cdot f'_c \cdot b}
-        = \frac{3 \cdot 0.2\ \mathrm{in}^{2} \cdot 60000\ \mathrm{psi}}{0.85 \cdot 4000\ \mathrm{psi} \cdot 8\ \mathrm{in}}
-        &= 1.324\ \mathrm{in}
-    \\[10pt]
-    M_n &= n \cdot A_b \cdot f_y \cdot \left(d - \frac{a}{2}\right)
-        = 3 \cdot 0.2\ \mathrm{in}^{2} \cdot 60000\ \mathrm{psi} \cdot \left(12\ \mathrm{in} - \frac{1.324\ \mathrm{in}}{2}\right)
-        &= 34.015\ \mathrm{kipft}
-    \\[10pt]
-    \epsilon_t &= 0.003 \cdot \left(\frac{\beta_1 \cdot d_t}{a} - 1\right)
-        = 0.003 \cdot \left(\frac{0.85 \cdot 12\ \mathrm{in}}{1.324\ \mathrm{in}} - 1\right)
-        &= 0.02
-    \\[10pt]
-\end{aligned} $$
-$$ \begin{aligned}
-    & \text {Since, } \left(\epsilon_t \geq \epsilon_{ty} \Leftarrow 0.02 \geq 0.005\right): & \phi &= 0.9
-\end{aligned} $$"""

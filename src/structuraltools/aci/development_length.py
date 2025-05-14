@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-from numpy import sqrt
-
-from structuraltools import decimal_points, materials, unit, utils
-from structuraltools import Area, Length
+from structuraltools import materials
 from structuraltools.aci import _development_length_markdown as templates
+from structuraltools.template import Result
+from structuraltools.unit import unit, Area, Length
+from structuraltools.utils import sqrt
 
 
 def straight_bar_factors(
@@ -27,7 +27,7 @@ def straight_bar_factors(
         s: Length,
         concrete_below: bool = False,
         use_psi_s: bool = False,
-        **markdown_options) -> tuple[float] | tuple[str, float, ...]:
+        **display_options) -> Result[tuple[float]]:
     """Returns the modification factors for straight bar development
     length from ACI 318-19 Table 25.4.2.5
 
@@ -55,6 +55,7 @@ def straight_bar_factors(
         ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
         default because research indicates that using this factor is
         unconservative."""
+    display = display_options.pop("display", False)
     c_c = c_c.to("inch")
     s = s.to("inch")
 
@@ -118,8 +119,8 @@ def straight_bar_factors(
         psi_t = 1
         psi_t_template = templates.straight_psi_t_false
 
-    return utils.fill_templates(templates.straight_bar_factors, locals(),
-                                lamb, psi_g, psi_e, psi_s, psi_t)
+    return templates.straight_bar_factors.fill(locals(), lamb, psi_g, psi_e,
+        psi_s, psi_t, display=display, **display_options)
 
 def straight_bar(
         rebar: materials.Rebar,
@@ -130,7 +131,7 @@ def straight_bar(
         A_tr: Area = 0*unit.inch**2,
         concrete_below: bool = False,
         use_psi_s: bool = False,
-        **markdown_options) -> Length | tuple[str, Length]:
+        **display_options) -> Result[Length]:
     """Calculate the development length of deformed bars in tension according
     to ACI 318-19 Section 25.4.2
 
@@ -167,12 +168,12 @@ def straight_bar(
         ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
         default because reseach indicates that using this factor is
         unconservative."""
+    display = display_options.pop("display", False)
     c_c = c_c.to("inch")
     s = s.to("inch")
 
-    factors_markdown, lamb, psi_g, psi_e, psi_s, psi_t = straight_bar_factors(
-        rebar, concrete, c_c, s, concrete_below, use_psi_s, return_markdown=True,
-        decimal_points=markdown_options.get("decimal_points", decimal_points))
+    lamb, psi_g, psi_e, psi_s, psi_t = straight_bar_factors(
+        rebar, concrete, c_c, s, concrete_below, use_psi_s, **display_options)
 
     A_tr = A_tr.to("inch**2")
     K_tr = ((40*A_tr)/(s*n)).to("inch")
@@ -181,7 +182,8 @@ def straight_bar(
                  (40*lamb*sqrt(concrete.f_prime_c*unit.psi)*(c_b+K_tr))).to("inch")
     l_d_limit = 12*unit.inch
     l_d = max(l_prime_d, l_d_limit)
-    return utils.fill_templates(templates.straight_bar, locals(), l_d)
+    #return templates.straight_bar.fill(locals(), l_d, display=display, **display_options)
+    return l_d
 
 def standard_hook_factors(
     rebar: materials.Rebar,
@@ -191,7 +193,7 @@ def standard_hook_factors(
     n: int = 1,
     A_th: Area = 0*unit.inch**2,
     in_column: bool = False,
-    **markdown_options) -> tuple[float] | tuple[str, float, ...]:
+    **display_options) -> Result[tuple[float]]:
     """Returns the modification factors for standard hook development length
     from ACI 318-19 Table 25.4.3.2
 
@@ -219,6 +221,7 @@ def standard_hook_factors(
 
     in_column : bool, optional
         Boolean indicating if the hooked bar terminates inside a column core"""
+    display = display_options.pop("display", False)
     c_c_side = c_c_side.to("inch")
     s = s.to("inch")
     A_th = A_th.to("inch**2")
@@ -277,8 +280,8 @@ def standard_hook_factors(
     psi_c = min(concrete.f_prime_c.magnitude/15000+0.6, 1)
     psi_c_template = templates.hook_psi_c
 
-    return utils.fill_templates(templates.standard_hook_factors, locals(),
-        lamb, psi_e, psi_r, psi_o, psi_c)
+    return templates.standard_hook_factors.fill(locals(), lamb, psi_e, psi_r,
+        psi_o, psi_c, display=display, **display_options)
 
 def standard_hook(
     rebar: materials.Rebar,
@@ -288,7 +291,7 @@ def standard_hook(
     n: int = 1,
     A_th: Area = 0*unit.inch**2,
     in_column: bool = False,
-    **markdown_options) -> Length | tuple[str, Length]:
+    **display_options) -> Result[Length]:
     """Calculate the development length ($l_{dh}$) for a deformed bar in tension
     terminating in a standard hook according to ACI 318-19 Section 25.4.3
 
@@ -316,17 +319,18 @@ def standard_hook(
 
     in_column : bool
         Boolean indicating if the hooked bar terminates inside a column core"""
+    display = display_options.pop("display", False)
     c_c_side = c_c_side.to("inch")
     s = s.to("inch")
     A_th = A_th.to("inch**2")
 
-    factors_markdown, lamb, psi_e, psi_r, psi_o, psi_c = standard_hook_factors(
-        rebar, concrete, c_c_side, s, n, A_th, in_column, return_markdown=True,
-        decimal_points=markdown_options.get("decimal_points", decimal_points))
+    lamb, psi_e, psi_r, psi_o, psi_c = standard_hook_factors(
+        rebar, concrete, c_c_side, s, n, A_th, in_column, **display_options)
 
     l_prime_dh = (((rebar.f_y*psi_e*psi_r*psi_o*psi_c)/ \
         (55*lamb*sqrt(concrete.f_prime_c*unit.pli)))*rebar.d_b**1.5).to("inch")
     d_b8 = 8*rebar.d_b
     l_dh_limit = 6*unit.inch
     l_dh = max(l_prime_dh, d_b8, l_dh_limit)
-    return utils.fill_templates(templates.standard_hook, locals(), l_dh)
+    #return templates.standard_hook.fill(locals(), l_dh, display=display, **display_options)
+    return l_dh

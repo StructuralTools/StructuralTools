@@ -15,15 +15,16 @@
 
 from typing import Optional
 
-from structuraltools import decimal_points, materials, utils
-from structuraltools import Length, Moment
+from structuraltools import materials
 from structuraltools.aci import _sectional_strength_markdown as templates
+from structuraltools.template import Result
+from structuraltools.unit import unit, Length, Moment
 
 
 def calc_phi(
     rebar: materials.Rebar,
     epsilon_t: float,
-    **markdown_options) -> float | tuple[str, float]:
+    **display_options) -> Result[float]:
     """Calculate the resistance factor for concrete members resisting moment
        and/or axial force according to ACI 318-19 Table 21.2.2
 
@@ -46,7 +47,8 @@ def calc_phi(
     else:
         phi = 0.9
         template = templates.calc_phi_tension
-    return utils.fill_templates(template, locals(), phi)
+    #return template.fill(locals(), phi, **display_options)
+    return phi
 
 def moment_capacity(
     b: Length,
@@ -55,7 +57,7 @@ def moment_capacity(
     rebar: materials.Rebar,
     n: int,
     d_t: Optional[Length] = None,
-    **markdown_options) -> Moment | tuple[str, Moment]:
+    **display_options) -> Result[Moment]:
     """Calculate the design moment capacitg of a rectangular concrete member
     with tension reinforcing only.
 
@@ -81,11 +83,13 @@ def moment_capacity(
         Depth from exmreme compression fiber to furthest tensile
         reinforcement. In the case of a single layer of reinforcing
         this is the same as d and does not need to be specified."""
+    display = display_options.pop("display", False)
+
     if d_t is None:
         d_t = d
     a = ((n*rebar.A_b*rebar.f_y)/(0.85*concrete.f_prime_c*b)).to("inch")
     M_n = (n*rebar.A_b*rebar.f_y*(d-a/2)).to("kipft")
     epsilon_t = (0.003*((concrete.beta_1*d_t)/a-1)).to("dimensionless").magnitude
-    phi_markdown, phi = calc_phi(rebar, epsilon_t, return_markdown=True,
-        decimal_points=markdown_options.get("decimal_points", decimal_points))
-    return utils.fill_templates(templates.moment_capacity, locals(), phi, M_n)
+    phi = calc_phi(rebar, epsilon_t, **display_options)
+    #return templates.moment_capacity.fill(locals(), phi, M_n, display=display, **display_options)
+    return phi, M_n

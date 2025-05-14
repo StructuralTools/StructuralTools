@@ -17,7 +17,7 @@ from xml.etree import ElementTree
 
 import pandas as pd
 
-from structuraltools import unit
+from structuraltools.unit import unit
 
 
 class Model:

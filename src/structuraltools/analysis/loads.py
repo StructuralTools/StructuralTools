@@ -19,7 +19,7 @@ from itertools import product, starmap
 from numpy import maximum, minimum, sign
 import pandas as pd
 
-from structuraltools import Numeric, NumericArray
+from structuraltools.unit import Numeric, NumericArray
 
 
 pd.options.mode.copy_on_write = True

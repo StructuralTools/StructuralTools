@@ -13,15 +13,16 @@
 # limitations under the License.
 
 
+import importlib.resources
+
 from numpy import isclose, sqrt
 
-from structuraltools import resources, unit, utils
-from structuraltools import Length, Stress, UnitWeight
-from structuraltools import _materials_markdown as templates
+from structuraltools import utils
+from structuraltools.unit import unit, Length, Stress, UnitWeight
+from structuraltools import _materials_templates as templates
 
 
-rebar_database = utils.read_data_table(resources.joinpath("ACI_rebar_sizes.csv"))
-steel_database = utils.read_data_table(resources.joinpath("AISC_steel_materials.csv"))
+resources = importlib.resources.files("structuraltools.resources")
 
 
 class Concrete:
@@ -53,7 +54,6 @@ class Concrete:
             Poisson's ration of the concrete"""
         self.max_agg = max_agg.to("inch")
         self.v = v
-        self.unpack_for_templates = True
 
         if isclose(f_prime_c.to("psi"), round(f_prime_c.to("psi"))):
             f_prime_c = round(f_prime_c.to("psi").magnitude)*unit.psi
@@ -69,12 +69,11 @@ class Concrete:
         self.f_r = 7.5*self.lamb*sqrt(self.f_prime_c*unit.psi)
         self.beta_1 = min(max(0.65, 0.85-0.05*(self.f_prime_c.magnitude-4000)/1000), 0.85)
 
-        markdown_options.update({"return_markdown": True})
-        self.markdown = utils.fill_templates(templates.Concrete, locals())
-
 
 class Rebar:
     """Class to store data for rebar"""
+    database = utils.read_data_table(resources.joinpath("ACI_rebar_sizes.csv"))
+
     def __init__(
         self,
         size: int,
@@ -100,7 +99,6 @@ class Rebar:
             Modulus of elasticity to use for the rebar. Defaults to 29000 ksi"""
         self.size = size
         self.coated = coated
-        self.unpack_for_templates = True
 
         if isclose(f_y.to("psi"), round(f_y.to("psi"))):
             self.f_y = round(f_y.to("psi").magnitude)*unit.psi
@@ -112,13 +110,15 @@ class Rebar:
         else:
             self.E_s = E_s.to("psi")
 
-        dimensions = rebar_database.loc[size, :].to_dict()
+        dimensions = self.database.loc[size, :].to_dict()
         for attribute, value in dimensions.items():
             setattr(self, attribute, value)
 
 
 class Steel:
     """Class to store data for steel materials"""
+    database = utils.read_data_table(resources.joinpath("AISC_steel_materials.csv"))
+
     def __init__(self, name: str):
         """Initialize a steel from the structuraltools steel database. Custom steel
         types are not currently supported.
@@ -130,7 +130,6 @@ class Steel:
             Name of the steel. Must match a name in the structuraltools steel
             database."""
         self.name = name
-        self.unpack_for_templates = True
-        properties = steel_database.loc[name, :].to_dict()
+        properties = self.database.loc[name, :].to_dict()
         for attribute, value in properties.items():
             setattr(self, attribute, value)

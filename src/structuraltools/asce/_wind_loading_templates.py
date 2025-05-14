@@ -13,82 +13,82 @@
 # limitations under the License.
 
 
-from structuraltools import MarkdownTemplate
+from structuraltools.template import Template
 
 
-calc_wind_server_inputs = MarkdownTemplate(r"""$header Ground Elevation Factor
+calc_wind_server_inputs = Template("Markdown", r"""$header Ground Elevation Factor
 $$$$ \begin{aligned}
-    $K_e_str
+    $K_e_string
 \end{aligned} $$$$
 <br/>
 $header Roof Velocity Pressure
 $$$$ \begin{aligned}
-    $K_h_str
+    $K_h_string
     \\[10pt]
-    $q_h_str
+    $q_h_string
 \end{aligned} $$$$
 <br/>
 $header Gust Effect Factor
 $$$$ \begin{aligned}
     \bar{z} &= \operatorname{max}\left(0.6 \cdot h,\ z_{min}\right) = \operatorname{max}\left(0.6 \cdot $h,\ $z_min\right) &= $bar_z
     \\[10pt]
-    $I_bar_z_str
+    $I_bar_z_string
     \\[10pt]
-    $L_bar_z_str
+    $L_bar_z_string
 \end{aligned} $$$$
 
 $header# X-Axis
 $$$$ \begin{aligned}
-    $Q_x_str
+    $Q_x_string
     \\[10pt]
-    $G_x_str
+    $G_x_string
 \end{aligned} $$$$
 
 $header# Y-Axis
 $$$$ \begin{aligned}
-    $Q_y_str
+    $Q_y_string
     \\[10pt]
-    $G_y_str
+    $G_y_string
 \end{aligned} $$$$""")
 
-calc_wind_server_inputs_with_parapet = MarkdownTemplate(r"""$header Ground Elevation Factor
+calc_wind_server_inputs_with_parapet = Template("Markdown", r"""$header Ground Elevation Factor
 $$$$ \begin{aligned}
-    $K_e_str
+    $K_e_string
 \end{aligned} $$$$
 <br/>
 $header Roof Velocity Pressure
 $$$$ \begin{aligned}
-    $K_h_str
+    $K_h_string
     \\[10pt]
-    $q_h_str
+    $q_h_string
 \end{aligned} $$$$
 <br/>
 $header Parapet Velocity Pressure
 $$$$ \begin{aligned}
-    $K_p_str
+    $K_p_string
     \\[10pt]
-    $q_p_str
+    $q_p_string
 \end {aligned} $$$$
 <br/>
 $header Gust Effect Factor
 $$$$ \begin{aligned}
     \bar{z} &= \operatorname{max}\left(0.6 \cdot h,\ z_{min}\right) = \operatorname{max}\left(0.6 \cdot $h,\ $z_min\right) &= $bar_z
     \\[10pt]
-    $I_bar_z_str
+    $I_bar_z_string
     \\[10pt]
-    $L_bar_z_str
+    $L_bar_z_string
 \end{aligned} $$$$
 
 $header# X-Axis
 $$$$ \begin{aligned}
-    $Q_x_str
+    $Q_x_string
     \\[10pt]
-    $G_x_str
+    $G_x_string
 \end{aligned} $$$$
 
 $header# Y-Axis
 $$$$ \begin{aligned}
-    $Q_y_str
+    $Q_y_string
     \\[10pt]
-    $G_y_str
+    $G_y_string
 \end{aligned} $$$$""")

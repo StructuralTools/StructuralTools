@@ -13,26 +13,26 @@
 # limitations under the License.
 
 
-from string import Template
+from structuraltools.template import Template
 
 
-calc_phi_compression = Template(r"""$$$$ \begin{aligned}
+calc_phi_compression = Template("Latex", r"""\begin{aligned}
     & \text{Since, } \left(\epsilon_t \leq \epsilon_{ty} \Leftarrow $epsilon_t \leq $epsilon_ty\right): & \phi &= $phi
-\end{aligned} $$$$""")
+\end{aligned}""")
 
-calc_phi_transition = Template(r"""$$$$ \begin{aligned}
+calc_phi_transition = Template("Latex", r"""\begin{aligned}
     & \text{Since, } \left(\epsilon_{ty} < \epsilon_t < \epsilon_{ty} + 0.003 \Leftarrow $epsilon_ty < $epsilon_t < $epsilon_ty003\right):
         \\[10pt]
         & \qquad \phi = 0.65 + 0.25 \cdot \frac{\epsilon_t - \epsilon_{ty}}{0.003}
             = 0.65 + 0.25 \cdot \frac{$epsilon_t - $epsilon_ty}{0.003}
             &= $phi
-\end{aligned} $$$$""")
+\end{aligned}""")
 
-calc_phi_tension = Template(r"""$$$$ \begin{aligned}
+calc_phi_tension = Template("Latex", r"""\begin{aligned}
     & \text {Since, } \left(\epsilon_t \geq \epsilon_{ty} \Leftarrow $epsilon_t \geq $epsilon_ty003\right): & \phi &= $phi
-\end{aligned} $$$$""")
+\end{aligned}""")
 
-moment_capacity = Template(r"""$$$$ \begin{aligned}
+moment_capacity = Template("Markdown", r"""$$$$ \begin{aligned}
     a &= \frac{n \cdot A_b \cdot f_y}{0.85 \cdot f'_c \cdot b}
         = \frac{$n \cdot $A_b \cdot $f_y}{0.85 \cdot $f_prime_c \cdot $b}
         &= $a

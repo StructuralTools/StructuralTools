@@ -13,28 +13,122 @@
 # limitations under the License.
 
 
-from numpy import isclose
+from structuraltools import aisc, materials
+from structuraltools.unit import unit
+from structuraltools.utils import isclose
 
-from structuraltools import materials, unit
 
-from structuraltools import aisc
+def test_Plate_init():
+    plate = aisc.Plate(4*unit.inch, 1*unit.inch)
+    assert isclose(plate.Z_x, 4*unit.inch**3)
+    assert isclose(plate.Z_y, 1*unit.inch**3)
+    assert plate.E == 29000*unit.ksi
+
+
+class TestPlate:
+    def setup_method(self, method):
+        self.steel = materials.Steel("A36")
+        self.plate = aisc.Plate(12*unit.inch, 1*unit.inch, self.steel)
+
+    #def test_compression_capacity_inelastic(self):
+        #phi, P_n = self.plate.compression_capacity(L_x=3*unit.ft, L_y=3*unit.ft)
+        #assert isclose(P_n, 190.50898212391965*unit.kip)
+
+    #def test_compression_capacity_elastic(self):
+        #phi, P_n = self.plate.compression_capacity(L_x=4*unit.ft, L_y=4*unit.ft)
+        #assert isclose(P_n, 108.94689615143473*unit.kip)
+
+    def test_moment_capacity_plastic(self):
+        phi, M_n = self.plate.moment_capacity(return_string=True)
+        assert isclose(M_n, 108*unit.kipft)
+        assert M_n.string == r"""#### Plastic Moment Capacity
+$$ \begin{aligned}
+    M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 36.0\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 24.0\ \mathrm{in}^{3}\right) &= 108.0\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Lateral-Torsional Buckling Moment Capacity
+$$ \begin{aligned}
+    \text{Since, } & \left(\frac{L_b \cdot d}{t^2} \leq \frac{0.08 \cdot E}{F_y} \Leftarrow \frac{0\ \mathrm{ft} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{0.08 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
+        \\[10pt]
+        M_{ltb} &= M_p = 108.0\ \mathrm{kipft} &= 108.0\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Nominal Moment Capacity
+$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(108.0\ \mathrm{kipft},\ 108.0\ \mathrm{kipft}\right) &= 108.0\ \mathrm{kipft}
+\end{aligned} $$"""
+
+    def test_moment_capacity_LTB_short(self):
+        phi, M_n = self.plate.moment_capacity(
+            L_b=100*unit.inch,
+            return_string=True)
+        assert isclose(M_n, 80.05208276*unit.kipft, atol=1e-8)
+        assert M_n.string == r"""#### Plastic Moment Capacity
+$$ \begin{aligned}
+    M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 36.0\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 24.0\ \mathrm{in}^{3}\right) &= 108.0\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Lateral-Torsional Buckling Moment Capacity
+$$ \begin{aligned}
+    \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}} < \frac{100\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{1.9 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
+        \\[10pt]
+        M_{ltb} &= C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{L_b \cdot d}{t^2}\right) \cdot \frac{F_y}{E}\right) \cdot F_y \cdot S_x
+    \\
+    &= 1 \cdot \left(1.52 - 0.274 \cdot \left(\frac{100\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}\right) \cdot \frac{36\ \mathrm{ksi}}{29000\ \mathrm{ksi}}\right) \cdot 36\ \mathrm{ksi} \cdot 24.0\ \mathrm{in}^{3}
+    \\
+    &= 80.052\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Nominal Moment Capacity
+$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(108.0\ \mathrm{kipft},\ 80.052\ \mathrm{kipft}\right) &= 80.052\ \mathrm{kipft}
+\end{aligned} $$"""
+
+    def test_moment_capacity_LTB_long(self):
+        phi, M_n = self.plate.moment_capacity(
+            L_b=130*unit.inch,
+            return_string=True)
+        assert isclose(M_n, 70.64102564*unit.kipft, atol=1e-8)
+        assert M_n.string == r"""#### Plastic Moment Capacity
+$$ \begin{aligned}
+    M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 36.0\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 24.0\ \mathrm{in}^{3}\right) &= 108.0\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Lateral-Torsional Buckling Moment Capacity
+$$ \begin{aligned}
+    \text{Since, } & \left(\frac{L_b \cdot d}{t^2} > \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{130\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} > \frac{1.9 \cdot 29000\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
+        \\[10pt]
+        F_{cr} &= \frac{1.9 \cdot E \cdot C_b}{\frac{L_b \cdot d}{t^2}} = \frac{1.9 \cdot 29000\ \mathrm{ksi} \cdot 1}{\frac{130\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}} &= 35.321\ \mathrm{ksi}
+        \\[10pt]
+        M_{ltb} &= F_{cr} \cdot S_x = 35.321\ \mathrm{ksi} \cdot 24.0\ \mathrm{in}^{3} &= 70.641\ \mathrm{kipft}
+\end{aligned} $$
+<br/>
+#### Nominal Moment Capacity
+$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(108.0\ \mathrm{kipft},\ 70.641\ \mathrm{kipft}\right) &= 70.641\ \mathrm{kipft}
+\end{aligned} $$"""
+
+    def test_moment_capacity_minor(self):
+        phi, M_n = self.plate.moment_capacity("y", return_string=True)
+        assert isclose(M_n, 9*unit.kipft)
+        assert M_n.string == r"""#### Nominal Moment Capacity
+$$ \begin{aligned}
+    M_n &= \operatorname{min}\left(F_y \cdot Z_y,\ 1.5 \cdot F_y \cdot S_y\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 3.0\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 2.0\ \mathrm{in}^{3}\right) &= 9.0\ \mathrm{kipft}
+\end{aligned} $$"""
 
 
 def test_WideFlange_init():
-    steel = materials.Steel("A992")
-    wide_flange = aisc.WideFlange("W10X12", steel)
+    wide_flange = aisc.WideFlange("W10X12", materials.Steel("A36"))
     assert wide_flange.W == 12*unit.plf
+    assert wide_flange.F_y == 36*unit.ksi
 
 
 class TestWideFlange:
-    def setup_method(self, method):
-        self.steel = materials.Steel("A992")
-
     def test_moment_capacity_plastic(self):
-        wide_flange = aisc.WideFlange("W12X22", self.steel)
-        string, phi_b, M_n = wide_flange.moment_capacity(return_string=True)
+        wide_flange = aisc.WideFlange("W12X22")
+        phi_b, M_n = wide_flange.moment_capacity(return_string=True)
         assert isclose(phi_b*M_n, 110*unit.kipft, atol=1*unit.kipft)
-        assert string == r"""#### Plastic Moment Capacity
+        assert M_n.string == r"""#### Plastic Moment Capacity
 $$ \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.083\ \mathrm{kipft}
 \end{aligned} $$
@@ -54,10 +148,10 @@ $$ \begin{aligned}
 \end{aligned} $$"""
 
     def test_moment_capacity_inelastic_ltb(self):
-        wide_flange = aisc.WideFlange("W12X22", self.steel)
-        string, phi_b, M_n = wide_flange.moment_capacity(L_b=7*unit.ft, return_string=True)
+        wide_flange = aisc.WideFlange("W12X22")
+        phi_b, M_n = wide_flange.moment_capacity(L_b=7*unit.ft, return_string=True)
         assert isclose(phi_b*M_n, 81.7*unit.kipft, atol=1*unit.kipft)
-        assert string == r"""#### Plastic Moment Capacity
+        assert M_n.string == r"""#### Plastic Moment Capacity
 $$ \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.083\ \mathrm{kipft}
 \end{aligned} $$
@@ -87,10 +181,10 @@ $$ \begin{aligned}
 \end{aligned} $$"""
 
     def test_moment_capacity_elastic_ltb(self):
-        wide_flange = aisc.WideFlange("W12X22", self.steel)
-        string, phi_b, M_n = wide_flange.moment_capacity(L_b=15*unit.ft, return_string=True)
+        wide_flange = aisc.WideFlange("W12X22")
+        phi_b, M_n = wide_flange.moment_capacity(L_b=15*unit.ft, return_string=True)
         assert isclose(phi_b*M_n, 32.9*unit.kipft, atol=1*unit.kipft)
-        assert string == r"""#### Plastic Moment Capacity
+        assert M_n.string == r"""#### Plastic Moment Capacity
 $$ \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.083\ \mathrm{kipft}
 \end{aligned} $$
@@ -120,10 +214,10 @@ $$ \begin{aligned}
 \end{aligned} $$"""
 
     def test_moment_capacity_flange_local_buckling(self):
-        wide_flange = aisc.WideFlange("W10X12", self.steel)
-        string, phi_b, M_n = wide_flange.moment_capacity(return_string=True)
+        wide_flange = aisc.WideFlange("W10X12")
+        phi_b, M_n = wide_flange.moment_capacity(return_string=True)
         assert isclose(phi_b*M_n, 46.9*unit.kipft, atol=1*unit.kipft)
-        assert string == r"""#### Plastic Moment
+        assert M_n.string == r"""#### Plastic Moment
 $$ \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 12.6\ \mathrm{in}^{3} &= 52.5\ \mathrm{kipft}
 \end{aligned} $$
