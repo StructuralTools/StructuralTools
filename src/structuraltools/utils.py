@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+from copy import copy
 import csv
 import warnings
 
@@ -212,3 +212,17 @@ def read_data_table(filepath: str) -> pd.DataFrame:
     data_table = data_table.map(convert_to_unit)
     data_table = data_table.set_index(data_table.columns[0], drop=True)
     return data_table
+
+def set_sub_display(display_options: dict) -> dict:
+    """Returns the display options to use for sub-function calls
+
+    Parameters
+    ==========
+
+    display_options : dict
+        Display options dictionary for the main function"""
+    sub_options = copy(display_options)
+    display = sub_options.pop("display", False)
+    if display:
+        sub_options.update({"return_string": True})
+    return sub_options

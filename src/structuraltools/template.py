@@ -15,7 +15,7 @@
 
 from string import Template as PyTemplate
 
-from IPython.display import display, Latex, Markdown
+from IPython.display import display_latex, display_markdown
 from numpy import ceil, floor, trunc
 from pint import Quantity
 
@@ -339,11 +339,11 @@ class Template:
         string : str
             String to display"""
         if self.kind == "Math":
-            display(Latex(rf"\begin{{aligned}} {string} \end{{aligned}}"))
+            display_latex(rf"\begin{{aligned}} {string} \end{{aligned}}", raw=True)
         elif self.kind == "Markdown":
-            display(Markdown(string))
+            display_markdown(string, raw=True)
         else:
-            display(Latex(string))
+            display_latex(string, raw=True)
 
     def fill(
             self,
