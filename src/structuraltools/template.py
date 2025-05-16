@@ -70,7 +70,7 @@ class Result[value_type]:
         return str(self.value)
 
     def __format__(self, format_spec):
-        return format(self.value)
+        return format(self.value, format_spec)
 
     def __lt__(self, other):
         if isinstance(other, Result):
