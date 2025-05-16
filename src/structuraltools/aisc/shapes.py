@@ -23,7 +23,7 @@ from structuraltools.aisc import chapter_B, chapter_F
 from structuraltools.aisc import _shapes_templates as templates
 from structuraltools.template import Result
 from structuraltools.unit import unit, Force, Length, Moment
-from structuraltools.utils import sqrt
+from structuraltools.utils import set_sub_display, sqrt
 
 
 resources = importlib.resources.files("structuraltools.resources")
@@ -80,7 +80,7 @@ class Plate(sections.Rectangle):
         Parameters
         ==========
 
-        b : pint length quantity
+        d : pint length quantity
             Plate width. This is specified at instance initialization to
             make this act more like other shapes.
 
@@ -119,10 +119,12 @@ class Plate(sections.Rectangle):
 
         C_b : float
             Lateral-torsional buckling modification factor"""
-        display = display_options.pop("display", False)
+        sub_options = set_sub_display(display_options)
+
         phi_b = 0.9
+
         if axis == "x":
-            M_n = chapter_F.sec_F11(self, L_b, C_b, **display_options)
+            M_n = chapter_F.sec_F11(self, L_b, C_b, **sub_options)
             template = templates.Plate_moment_capacity_x
         elif axis == "y":
             F_y = self.F_y
@@ -132,7 +134,7 @@ class Plate(sections.Rectangle):
             template = templates.Plate_moment_capacity_y
         else:
             raise ValueError(f"Unsupported axis: {axis}")
-        return template.fill(locals(), phi_b, M_n, display=display, **display_options)
+        return template.fill(locals(), phi_b, M_n, **display_options)
 
 
 class RectHSS(Shape):
@@ -192,15 +194,14 @@ class WideFlange(Shape):
 
         C_b : float
             Lateral-torsional buckling modification factor"""
-        display = display_options.pop("display", False)
+        sub_options = set_sub_display(display_options)
 
         phi_b = 0.9
 
         if self.lamb_w >= chapter_B.table_B4_1b_15_lamb_p(self.E, self.F_y):
             raise ValueError("Only sections with compact webs are supported")
         elif self.lamb_f >= chapter_B.table_B4_1b_10_lamb_p(self.E, self.F_y):
-            M_n = chapter_F.sec_F3(self, L_b, C_b, **display_options)
+            M_n = chapter_F.sec_F3(self, L_b, C_b, **sub_options)
         else:
-            M_n = chapter_F.sec_F2(self, L_b, C_b, **display_options)
-        return templates.WideFlange_moment_capacity.fill(locals(), phi_b, M_n,
-            display=display, **display_options)
+            M_n = chapter_F.sec_F2(self, L_b, C_b, **sub_options)
+        return templates.WideFlange_moment_capacity.fill(locals(), phi_b, M_n, **display_options)
