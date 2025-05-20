@@ -168,7 +168,6 @@ def straight_bar(
         ACI 318-19 Table 25.4.2.5 should be used. This is not applied by
         default because reseach indicates that using this factor is
         unconservative."""
-    display = display_options.pop("display", False)
     c_c = c_c.to("inch")
     s = s.to("inch")
 
@@ -319,7 +318,6 @@ def standard_hook(
 
     in_column : bool
         Boolean indicating if the hooked bar terminates inside a column core"""
-    display = display_options.pop("display", False)
     c_c_side = c_c_side.to("inch")
     s = s.to("inch")
     A_th = A_th.to("inch**2")
