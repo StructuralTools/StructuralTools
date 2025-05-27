@@ -30,6 +30,35 @@ class TestModel:
     def setup_method(self):
         self.model = io.openre.Model("./tests/io/test.oex.xml")
 
+    def test_add_distributed_load(self):
+        self.model.add_distributed_load(
+            member=2,
+            load_case="DL",
+            direction="Y",
+            initial=1000*unit.plf,
+            final=2000*unit.plf,
+            start=3*unit.inch,
+            end="75%")
+        load = self.model.xml.find("Data/Loads/MemberDistributed[@ID='2']")
+        assert load.attrib["LoadCaseID"] == "DL"
+        assert load.find("Member").attrib["ID"] == "2"
+        assert load.find("Value").attrib == {"Start": "0.25", "End": "75%"}
+        assert load.find("Value/Initial").text == "1.0"
+        assert load.find("Value/Final").text == "2.0"
+
+    def test_add_load_case(self):
+        self.model.add_load_case("test", "name", "WIND")
+        load_case = self.model.xml.find("Data/LoadConditions/LoadCase[@ID='test']")
+        assert load_case.attrib == {"ID": "test", "Name": "name", "Category": "WIND"}
+
+    def test_add_nodal_load(self):
+        self.model.add_nodal_load(1, "DL", FX=1000*unit.lb, MX=2000*unit.lbft)
+        load = self.model.xml.find("Data/Loads/Nodal[@ID='2']")
+        assert load.attrib["LoadCaseID"] == "DL"
+        assert load.find("Node").attrib["ID"] == "1"
+        assert load.find("Values/FX").text == "1.0"
+        assert load.find("Values/MX").text == "2.0"
+
     def test_get_node_location(self):
         location = self.model.get_node_location(3)
         expected_location = {
@@ -64,3 +93,7 @@ class TestModel:
         end_forces = self.model.get_member_end_forces(3, 3, "design_combs")
         assert end_forces.at["D1", "Axial"] == -0.035*unit.kip
         assert end_forces.at["D2", "M33"] == 0.117095369920119*unit.kipft
+
+    def test_get_member_end_nodes(self):
+        end_nodes = self.model.get_member_end_nodes(1)
+        assert end_nodes == {"start": "1", "end": "4"}
