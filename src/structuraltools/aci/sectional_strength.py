@@ -16,9 +16,8 @@
 from typing import Optional
 
 from structuraltools import materials
-from structuraltools.aci import _sectional_strength_markdown as templates
 from structuraltools.template import Result
-from structuraltools.unit import unit, Length, Moment
+from structuraltools.unit import Length, Moment
 
 
 def calc_phi(
@@ -40,13 +39,13 @@ def calc_phi(
     epsilon_ty003 = epsilon_ty+0.003
     if epsilon_t <= epsilon_ty:
         phi = 0.65
-        template = templates.calc_phi_compression
-    elif epsilon_t < epsilon_ty+0.003:
+        #template = templates.calc_phi_compression
+    elif epsilon_t < epsilon_ty003:
         phi = 0.65+0.25*(epsilon_t-epsilon_ty)/0.003
-        template = templates.calc_phi_transition
+        #template = templates.calc_phi_transition
     else:
         phi = 0.9
-        template = templates.calc_phi_tension
+        #template = templates.calc_phi_tension
     #return template.fill(locals(), phi, **display_options)
     return phi
 
@@ -83,8 +82,6 @@ def moment_capacity(
         Depth from exmreme compression fiber to furthest tensile
         reinforcement. In the case of a single layer of reinforcing
         this is the same as d and does not need to be specified."""
-    display = display_options.pop("display", False)
-
     if d_t is None:
         d_t = d
     a = ((n*rebar.A_b*rebar.f_y)/(0.85*concrete.f_prime_c*b)).to("inch")

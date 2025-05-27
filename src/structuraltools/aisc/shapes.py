@@ -13,17 +13,15 @@
 # limitations under the License.
 
 
-from copy import copy
 import importlib.resources
-from math import pi
 from typing import Optional
 
 from structuraltools import materials, sections, utils
 from structuraltools.aisc import chapter_B, chapter_F
 from structuraltools.aisc import _shapes_templates as templates
 from structuraltools.template import Result
-from structuraltools.unit import unit, Force, Length, Moment
-from structuraltools.utils import set_sub_display, sqrt
+from structuraltools.unit import unit, Length, Moment
+from structuraltools.utils import set_sub_display
 
 
 resources = importlib.resources.files("structuraltools.resources")

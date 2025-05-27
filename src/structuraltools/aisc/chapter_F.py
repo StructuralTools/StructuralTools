@@ -13,7 +13,6 @@
 # limitations under the License.
 
 
-import copy
 from math import pi
 
 from structuraltools.aisc import chapter_B

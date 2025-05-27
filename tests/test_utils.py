@@ -14,7 +14,6 @@
 
 
 import importlib.resources
-from string import Template
 
 import pytest
 
