@@ -13,7 +13,6 @@
 # limitations under the License.
 
 
-import copy
 import importlib.resources
 import json
 from typing import Optional

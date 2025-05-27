@@ -19,7 +19,6 @@ from numpy import isclose, sqrt
 
 from structuraltools import utils
 from structuraltools.unit import unit, Length, Stress, UnitWeight
-from structuraltools import _materials_templates as templates
 
 
 resources = importlib.resources.files("structuraltools.resources")

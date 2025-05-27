@@ -13,7 +13,9 @@
 # limitations under the License.
 
 from copy import copy
-import csv
+import json
+from string import Template
+from typing import NamedTuple
 import warnings
 
 import numpy as np
@@ -21,26 +23,119 @@ import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
 
-from structuraltools.template import Result
+from structuraltools import template
 from structuraltools.unit import unit, Numeric
 
 
+class Result[ValueType](NamedTuple):
+    string: str
+    value: ValueType
+
+
+def fill_template(
+        value: any,
+        template: str,
+        variables: dict[str: any],
+        fill: bool = True,
+        precision: int = 4,
+        general_format: str = "g",
+        quantity_format: str = "~L",
+        header_level: int = 4) -> Result[any]:
+    """Pass the return value through and fill the representation string if
+    desired. This is designed to be used in the return statement of a function.
+
+    Parameters
+    ==========
+
+    value : any
+        Value to return as the result value
+
+    template : str
+        String to use as the template for the result string
+
+    variables : dict[str: any]
+        Values to use when filling out the template
+
+    fill : bool
+        Whether to fill the provided template or return an empty string
+
+    precision : int
+        Precision value to use when filling the template
+
+    general_format : str
+        Format code to use when filling the template
+
+    quantity_format : str
+        Additional format code to use for quantities when filling the template
+
+    header_level : int
+        Header level to use when filling in markdown templates"""
+    if fill:
+        string = template.format(
+            _header_="#"*header_level,
+            _precision_=precision,
+            _gformat_=general_format,
+            _qformat_=quantity_format,
+            **variables)
+    else:
+        string = ""
+    return Result(string, value)
+
+def add_template(filepath: str, name: str, variables: dict[str: str], string: str) -> None:
+    """Convenience function for adding or editing templates
+
+    Parameters
+    ==========
+
+    filepath : str
+        Path to json template file
+
+    name : str
+        Name of template to add or modify
+
+    variables : dict[str: str]
+        Dictionary mapping variables to the appropriate kinds for format codes.
+            "int" for ints or floats
+            "str" for strings
+            "quantity" for Quantities
+
+    string : str
+        Base string to use for the template. Should be formatted for use in a Template"""
+    with open(filepath) as file:
+        templates = json.load(file)
+
+    string = string.replace("{", "{{").replace("}", "}}")
+    mapping = {}
+    for variable, kind in variables.items():
+        if kind == "str":
+            mapping.update({variable: f"{{{variable}}}"})
+        elif kind == "int":
+            mapping.update({variable: f"{{{variable}:.{{_precision_}}{{_gformat_}}}}"})
+        elif kind == "quantity":
+            mapping.update({variable: f"{{{variable}:{{_qformat_}}.{{_precision_}}{{_gformat_}}}}"})
+        else:
+            raise ValueError(f"Unrecognized kind code: {kind}")
+    templates.update({name: Template(string).substitute(mapping)})
+
+    with open(filepath, mode="w", encoding="utf-8") as file:
+        json.dump(templates, file, indent=4)
+
 def sqrt(value: Numeric) -> Numeric:
     """Square root function compatible with pint Quantities and structuraltools
-    Results
+    template.Results
 
     Parameters
     ==========
 
     value : Numeric
         Value to take the square root of"""
-    if isinstance(value, Result):
+    if isinstance(value, template.Result):
         value = value.value
     return np.sqrt(value)
 
 def sign(value: Numeric, *args, **kwargs) -> int:
     """Wrapper around np.sign to provide compatibility with structuraltools
-    Result instances
+    template.Result instances
 
     Parameters
     ==========
@@ -53,7 +148,7 @@ def sign(value: Numeric, *args, **kwargs) -> int:
 
     **kwargs
         Refer to the numpy.sign documentation"""
-    if isinstance(value, Result):
+    if isinstance(value, template.Result):
         value = value.value
     return np.sign(value)
 
@@ -64,7 +159,7 @@ def isclose(
         atol: Numeric = 1e-8,
         equal_nan: bool = False) -> bool:
     """Wrapper around np.isclose to provide compatibility with structuraltools
-    Result instances
+    template.Result instances
 
     Parameters
     ==========
@@ -85,7 +180,7 @@ def isclose(
         Whether to compare NaNs as equal"""
     args = []
     for value in [value_1, value_2, rtol, atol]:
-        if isinstance(value, Result):
+        if isinstance(value, template.Result):
             args.append(value.value)
         else:
             args.append(value)
