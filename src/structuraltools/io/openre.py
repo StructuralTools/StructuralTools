@@ -107,7 +107,8 @@ class Model:
 
         direction : str
             String indicating which axis the load acts along.
-            One of: "X", "Y", or "Z"
+            One of: "X", "Y", or "Z" for global axis or
+            one of: "1", "2", or "3" for local axis
 
         initial : LineLoad
             Load magnitude at the start of the load length
@@ -130,10 +131,10 @@ class Model:
             One of "Overall" or "OverProjection". Defaults to "Overall"."""
         lineload_unit = f"{self.force_unit:D}/{self.length_unit:D}"
         initial = str(initial.to(lineload_unit).magnitude)
-        if final:
-            final = str(final.to(lineload_unit).magnitude)
-        else:
+        if final is None:
             final = initial
+        else:
+            final = str(final.to(lineload_unit).magnitude)
 
         if not isinstance(start, str):
             start = str(start.to(f"{self.length_unit:D}").magnitude)
@@ -313,3 +314,17 @@ class Model:
             ID of the member"""
         member = self.xml.find(f"Data/Members/Member[@ID='{str(member)}']").attrib
         return {"start": member["StartNodeID"], "end": member["EndNodeID"]}
+
+    def write(self, filename: str, space: str = "    ") -> None:
+        """Write the model to the specified file
+
+        Parameters
+        ==========
+
+        filename : str
+            File to write the model to
+
+        space : str
+            Space to use when formatting the xml"""
+        ET.indent(self.xml, space)
+        self.xml.write(filename)
