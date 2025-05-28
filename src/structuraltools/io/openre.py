@@ -313,3 +313,17 @@ class Model:
             ID of the member"""
         member = self.xml.find(f"Data/Members/Member[@ID='{str(member)}']").attrib
         return {"start": member["StartNodeID"], "end": member["EndNodeID"]}
+
+    def write(self, filename: str, space: str = "    ") -> None:
+        """Write the model to the specified file
+
+        Parameters
+        ==========
+
+        filename : str
+            File to write the model to
+
+        space : str
+            Space to use when formatting the xml"""
+        ET.indent(self.xml, space)
+        self.xml.write(filename)
