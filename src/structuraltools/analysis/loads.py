@@ -25,41 +25,48 @@ from structuraltools.unit import Numeric, NumericArray
 pd.options.mode.copy_on_write = True
 
 
-def reduce_combs(cases: pd.DataFrame) -> pd.DataFrame:
-    """Takes a DataFrame of load cases and returns a DataFrame containing only
-    the load combinations that may control.
+def _does_not_control(testing: pd.Series, other: pd.Series) -> bool:
+    """Check if all testing load combination might be the controlling load
+    combination if the other load combination is also checked
 
     Parameters
     ==========
 
-    cases : pd.DataFrame
-        DataFrame with load directions in columns and load cases in rows"""
-    def may_control(case: pd.Series) -> bool:
-        """Returns a boolean indicating if the load case currently being
-        checked may control.
+    testing : pd.Series
+        Load combination that is currently being checked
 
-        Parameters
-        ==========
+    other : pd.Series
+        Load combination that is beign checked against"""
+    less_equal = all(testing.abs() <= other.abs())
+    same_signs = all(sign(testing) == sign(other))
+    return less_equal and same_signs
 
-        case : pd.Series
-            Load case currently being checked"""
-        def does_not_control(comparison_case: pd.Series) -> bool:
-            """Returns a boolean indicating if the current load case controls
-            over the comparison load case. The current load case is considered
-            to control over the comparison load case if it is of a greater
-            magnitude and the same direction for every direction considered.
+def reduce_combs(combs: pd.DataFrame) -> pd.DataFrame:
+    """Reduces the provided set of load combinations to only the set of load
+    combinations that may control the design
 
-            Parameters
-            ==========
+    Parameters
+    ==========
 
-            comparison_case : pd.Series
-                Load case that is being compared against"""
-            lower_magnitudes = all(case.abs().lt(comparison_case.abs()))
-            same_signs = all(sign(case).eq(sign(comparison_case)))
-            return lower_magnitudes and same_signs
-        return not any(cases.apply(does_not_control, axis=1))
-    return cases.apply(lambda case: case if may_control(case) else None,
-                       axis=1, result_type="broadcast").dropna()
+    combs : pd.DataFrame
+        Set of load combinations to reduce"""
+    reduced_combs = pd.DataFrame(columns=combs.columns)
+    for current_name in tuple(combs.index):
+        current = combs.loc[current_name, :]
+        combs = combs.drop(current_name)
+        add_to_reduced = True
+        for _, other in reduced_combs.iterrows():
+            if _does_not_control(current, other):
+                add_to_reduced = False
+                break
+        if add_to_reduced:
+            for _, other in combs.iterrows():
+                if _does_not_control(current, other):
+                    add_to_reduced = False
+                    break
+        if add_to_reduced:
+            reduced_combs.loc[current_name, :] = current
+    return reduced_combs
 
 
 class LoadCollector:
