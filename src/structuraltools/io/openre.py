@@ -268,7 +268,7 @@ class Model:
             ID number of the node
 
         cases : str
-            One of: "load_cases", "design_combinations", or "service_combinations"
+            One of: "load_cases", "design_combs", or "service_combs"
             indicating which load cases/combinations to return the reactions for."""
         # Determine if the start or the end of the member was requested
         node = str(node)
