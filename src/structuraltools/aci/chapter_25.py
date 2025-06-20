@@ -13,11 +13,13 @@
 # limitations under the License.
 
 
+from numpy import sqrt
+
 from structuraltools import materials
 from structuraltools.aci import _chapter_25_templates as templates
 from structuraltools.template import Result
 from structuraltools.unit import unit, Area, Length, Stress, UnitWeight
-from structuraltools.utils import sqrt
+from structuraltools.utils import Result
 
 
 def eq_25_4_2_4a(f_y: Stress, psi_t: float, psi_e: float, psi_s: float,
@@ -64,7 +66,19 @@ def eq_25_4_2_4a(f_y: Stress, psi_t: float, psi_e: float, psi_s: float,
     return templates.eq_25_4_2_4a.fill(locals(), l_prime_d, **display_options)
 
 def eq_25_4_2_4b(A_tr: Area, s: Length, n: int, **display_options) -> Result[Length]:
-    """ACI 318-19 Equation 25.4.2.4b"""
+    """ACI 318-19 Equation 25.4.2.4b
+
+    Parameters
+    ==========
+
+    A_tr : Area
+        Add description
+
+    s : Length
+        Add description
+
+    n : int
+        Add description"""
     K_tr = ((40*A_tr)/(s*n)).to("inch")
     return templates.eq_25_4_2_4b.fill(locals(), K_tr, **display_options)
 
@@ -220,3 +234,7 @@ def table_25_4_2_5(rebar: materials.Rebar, concrete: materials.Concrete,
     psi_t = table_25_4_2_5_psi_t(concrete_below, **display_options)
     return templates.table_25_4_2_5.fill(locals(), lamb, psi_g, psi_e, psi_s,
         psi_t, display=display, **display_options)
+
+def eq_25_4_3_1a(f_y: Stress, psi_e: float, psi_r: float, psi_o: float,
+        psi_c: float, lamb: float, f_prime_c: Stress, **display_options) -> Result[Length]:
+    pass

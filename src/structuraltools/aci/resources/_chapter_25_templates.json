@@ -1,0 +1,70 @@
+{
+    "eq_25_4_2_4a": {
+        "types": {"f_y": "quantity", "psi_t": "float", "psi_e": "float", "psi_s": "float", "psi_g": "float", "lamb": "float", "f_prime_c": "quantity", "c_b": "quantity", "K_tr": "quantity", "d_b": "quantity", "l_prime_d": "quantity"},
+        "string": "l'_d &= \\left(\\frac{3 \\cdot f_y \\cdot \\operatorname{min}\\left(\\psi_t \\cdot \\psi_e ,\\ 1.7\\right) \\cdot \\psi_s \\cdot \\psi_g}{40 \\cdot \\lambda \\cdot \\sqrt{f'_c} \\cdot \\left(\\frac{c_b + K_{tr}}{d_b}\\right)}\\right) \\cdot d_b\n    \\\\\n    &= \\left(\\frac{3 \\cdot $f_y \\cdot \\operatorname{min}\\left($psi_t \\cdot $psi_e ,\\ 1.7\\right) \\cdot $psi_s \\cdot $psi_g}{40 \\cdot $lamb \\cdot \\sqrt{$f_prime_c} \\cdot \\left(\\frac{$c_b + $K_tr}{$d_b}\\right)}\\right) \\cdot $d_b\n    \\\\\n    &= $l_prime_d"
+    },
+    "eq_25_4_2_4b": {
+        "types": {"A_tr": "quantity", "s": "quantity", "n": "int", "K_tr": "quantity"},
+        "string": "K_{tr} &= \\frac{40 \\cdot A_{tr}}{s \\cdot n} = \\frac{40 \\cdot $A_tr}{$s \\cdot $n} &= $K_tr"
+    },
+    "table_25_4_2_5_lamb_light": {
+        "types": {"w_c": "quantity", "normal_weight": "quantity", "lamb": "float"},
+        "string": "\\text{Since, } & \\left(w_c < $normal_weight \\Leftarrow $w_c < $normal_weight\\right): & \\lambda &= $lamb"
+    },
+    "table_25_4_2_5_lamb_normal": {
+        "types": {"w_c": "quantity", "normal_weight": "quantity", "lamb": "float"},
+        "string": "\\text{Since, } & \\left(w_c \\geq $normal_weight \\Leftarrow $w_c \\geq $normal_weight\\right): & \\lambda &= $lamb"
+    },
+    "table_25_4_2_5_psi_g_low": {
+        "types": {"f_y": "quantity", "low_limit": "quantity", "psi_g": "float"},
+        "string": "\\text{Since, } & \\left(f_y \\leq $low_limit \\Leftarrow $f_y \\leq $low_limit\\right): & \\psi_g &= $psi_g"
+    },
+    "table_25_4_2_5_psi_g_mid": {
+        "types": {"f_y": "quantity", "low_limit": "quantity", "high_limit": "quantity", "psi_g": "float"},
+        "string": "\\text{Since, } & \\left($low_limit < f_y \\leq $high_limit \\Leftarrow $low_limit < $f_y \\leq $high_limit\\right): & \\psi_g &= $psi_g"
+    },
+    "table_25_4_2_5_psi_g_high": {
+        "types": {"f_y": "quantity", "high_limit": "quantity", "psi_g": "float"},
+        "string": "\\text{Since, } & \\left(f_y > $high_limit \\Leftarrow $f_y > $high_limit\\right): & \\psi_g &= $psi_g"
+    },
+    "table_25_4_2_5_psi_e_c_c": {
+        "types": {"c_c": "quantity", "d_b3": "quantity", "psi_e": "float", },
+        "string": "\\text{Since, } & \\left(\\mathrm{coated} = \\mathrm{True}\\right) \\text{ and } \\left(c_c < 3 \\cdot d_b \\Leftarrow $c_c < $d_b3\\right): & \\psi_e &= $psi_e"
+    },
+    "table_25_4_2_5_psi_e_s": {
+        "types": {"s": "quantity", "d_b7": "quantity", "psi_e": "float", },
+        "string": "\\text{Since, } & \\left(\\mathrm{coated} = \\mathrm{True}\\right) \\text{ and } \\left(s < 7 \\cdot d_b \\Leftarrow $s < $d_b7\\right): & \\psi_e &= $psi_e"
+    },
+    "table_25_4_2_5_psi_e_true": {
+        "types": {"psi_e": "float"},
+        "string": "\\text{Since, } & \\left(\\mathrm{coated} = \\mathrm{True}\\right): & \\psi_e &= $psi_e"
+    },
+    "table_25_4_2_5_psi_e_false": {
+        "types": {"psi_e": "float"},
+        "string": "\\text{Since, } & \\left(\\mathrm{coated} = \\mathrm{False}\\right): & \\psi_e &= $psi_e"
+    },
+    "table_25_4_2_5_psi_s_big": {
+        "types": {"psi_s": "float"},
+        "string": "\\text{Since, } & \\left(\\text{Rebar size} \\geq 7\\right): & \\psi_s &= $psi_s"
+    },
+    "table_25_4_2_5_psi_s_small": {
+        "types": {"psi_s": "float"},
+        "string": "\\text{Since, } & \\left(\\psi_s \\text{ not applied}\\right): & \\psi_s &= $psi_s"
+    },
+    "table_25_4_2_5_psi_s_used": {
+        "types": {"psi_s": "float"},
+        "string": "\\text{Since, } & \\left(\\text{Rebar size} \\leq 6\\right): & \\psi_s &= $psi_s"
+    },
+    "table_25_4_2_5_psi_t_true": {
+        "types": {"limit": "quantity", "psi_t": "float"},
+        "string": "\\text{Since, } & \\left(\\text{Concrete below} > $limit\\right): & \\psi_t &= $psi_t"
+    },
+    "table_25_4_2_5_psi_t_false": {
+        "types": {"limit": "quantity", "psi_t": "float"},
+        "string": "\\text{Since, } & \\left(\\text{Concrete below} \\leq $limit\\right): & \\psi_t &= $psi_t"
+    },
+    "table_25_4_2_5": {
+        "types": {"lamb_str": "str", "psi_g_str": "str", "psi_e_str": "str", "psi_s_str": "str", "psi_t_str": "str"},
+        "string": "\\begin{aligned}\n    $lamb_str\n    \\\\[10pt]\n    $psi_g_str\n    \\\\[10pt]\n    $psi_e_str\n    \\\\[10pt]\n    $psi_s_str\n    \\\\[10pt]\n    $psi_t_str\n\\end{aligned}"
+    }
+}
