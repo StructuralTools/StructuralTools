@@ -5,7 +5,7 @@
     },
     "eq_F2_2": {
         "types": {"C_b": "float", "M_p": "unit", "F_y": "unit", "S_x": "unit", "L_b": "unit", "L_p": "unit", "L_r": "unit", "M_ltb": "unit"},
-        "string": "M_{{{{ltb}}}} &= C_b \\cdot \\left(M_p - \\left(M_p - 0.7 \\cdot F_y \\cdot S_x\\right) \\cdot \\left(\\frac{{{{L_b - L_p}}}}{{{{L_r - L_p}}}}\\right)\\right)\n    \\\\\n    &= {C_b} \\cdot \\left({M_p} - \\left({M_p} - 0.7 \\cdot {F_y} \\cdot {S_x}\\right) \\cdot \\left(\\frac{{{L_b} - {L_p}}}}}{{{{{L_r} - {L_p}}}}}\\right)\\right)\n    \\\\\n    &= {M_ltb}"
+        "string": "M_{{{{ltb}}}} &= C_b \\cdot \\left(M_p - \\left(M_p - 0.7 \\cdot F_y \\cdot S_x\\right) \\cdot \\left(\\frac{{{{L_b - L_p}}}}{{{{L_r - L_p}}}}\\right)\\right)\n\\\\\n&= {C_b} \\cdot \\left({M_p} - \\left({M_p} - 0.7 \\cdot {F_y} \\cdot {S_x}\\right) \\cdot \\left(\\frac{{{L_b} - {L_p}}}}}{{{{{L_r} - {L_p}}}}}\\right)\\right)\n\\\\\n&= {M_ltb}"
     },
     "eq_F2_3": {
         "types": {"F_cr": "unit", "S_x": "unit", "M_ltb": "unit"},
@@ -13,7 +13,7 @@
     },
     "eq_F2_4": {
         "types": {"C_b": "float", "E": "unit", "L_b": "unit", "r_ts": "unit", "J": "unit", "c": "float", "S_x": "unit", "h_o": "unit", "L_b": "unit", "F_cr": "unit"},
-        "string": "F_{{{{cr}}}} &= \\frac{{{{C_b \\cdot \\pi^2 \\cdot E}}}}{{{{\\left(\\frac{{{{L_b}}}}{{{{r_{{{{ts}}}}}}}}\\right)^2}}}} \\cdot \\sqrt{{{{1 + 0.078 \\cdot \\frac{{{{J \\cdot c}}}}{{{{S_x \\cdot h_o}}}} \\cdot \\left(\\frac{{{{L_b}}}}{{{{r_{{{{ts}}}}}}}}\\right)^2}}}}\n    \\\\\n    &= \\frac{{{{{C_b} \\cdot \\pi^2 \\cdot {E}}}}}{{{{\\left(\\frac{{{{{L_b}}}}}{{{{{r_ts}}}}}\\right)^2}}}} \\cdot \\sqrt{{{{1 + 0.078 \\cdot \\frac{{{{{J} \\cdot {c}}}}}{{{{{S_x} \\cdot {h_o}}}}} \\cdot \\left(\\frac{{{{{L_b}}}}}{{{{{r_ts}}}}}\\right^2}}}}\n    \\\\\n    &= {F_cr}"
+        "string": "F_{{{{cr}}}} &= \\frac{{{{C_b \\cdot \\pi^2 \\cdot E}}}}{{{{\\left(\\frac{{{{L_b}}}}{{{{r_{{{{ts}}}}}}}}\\right)^2}}}} \\cdot \\sqrt{{{{1 + 0.078 \\cdot \\frac{{{{J \\cdot c}}}}{{{{S_x \\cdot h_o}}}} \\cdot \\left(\\frac{{{{L_b}}}}{{{{r_{{{{ts}}}}}}}}\\right)^2}}}}\n\\\\\n&= \\frac{{{{{C_b} \\cdot \\pi^2 \\cdot {E}}}}}{{{{\\left(\\frac{{{{{L_b}}}}}{{{{{r_ts}}}}}\\right)^2}}}} \\cdot \\sqrt{{{{1 + 0.078 \\cdot \\frac{{{{{J} \\cdot {c}}}}}{{{{{S_x} \\cdot {h_o}}}}} \\cdot \\left(\\frac{{{{{L_b}}}}}{{{{{r_ts}}}}}\\right^2}}}}\n\\\\\n&= {F_cr}"
     },
     "eq_F2_5": {
         "types": {"r_y": "unit", "E": "unit", "F_y": "unit", "L_p": "unit"},
@@ -21,7 +21,7 @@
     },
     "eq_F2_6": {
         "types": {"r_ts": "unit", "E": "unit", "F_y": "unit", "J": "unit", "c": "float", "S_x": "unit", "h_o": "unit", "L_r": "unit"},
-        "string": "L_r &= 1.95 \\cdot r_{{{{ts}}}} \\cdot \\frac{{{{E}}}}{{{{0.7 \\cdot F_y}}}} \\cdot \\sqrt{{{{\\frac{{{{J \\cdot c}}}}{{{{S_x \\cdot h_o}}}} + \\sqrt{{{{\\left(\\frac{{{{J \\cdot c}}}}{{{{S_x \\cdot h_o}}}}\\right)^2 + 6.76 \\cdot \\left(\\frac{{{{0.7 \\cdot F_y}}}}{{{{E}}}}\\right)^2}}}}}}}}\n    \\\\\n    &= 1.95 \\cdot {r_ts} \\frac{{{{{E}}}}}{{{{0.7 \\cdot {F_y}}}}} \\cdot \\sqrt{{{{\\frac{{{{{J} \\cdot {c}}}}}{{{{{S_x} \\@dot {h_o}}}}} + \\sqrt{{{{\\left(\\frac{{{{{J} \\cdot {c}}}}}{{{{{S_x} \\cdot {h_o}}}}}\\right)^2 +6.76 \\cdot \\left(\\frac{{{{0.7 \\cdot {F_y}}}}}{{{{{E}}}}}\\right)^2}}}}}}}}\n    \\\\\n    &= {L_r}"
+        "string": "L_r &= 1.95 \\cdot r_{{{{ts}}}} \\cdot \\frac{{{{E}}}}{{{{0.7 \\cdot F_y}}}} \\cdot \\sqrt{{{{\\frac{{{{J \\cdot c}}}}{{{{S_x \\cdot h_o}}}} + \\sqrt{{{{\\left(\\frac{{{{J \\cdot c}}}}{{{{S_x \\cdot h_o}}}}\\right)^2 + 6.76 \\cdot \\left(\\frac{{{{0.7 \\cdot F_y}}}}{{{{E}}}}\\right)^2}}}}}}}}\n\\\\\n&= 1.95 \\cdot {r_ts} \\frac{{{{{E}}}}}{{{{0.7 \\cdot {F_y}}}}} \\cdot \\sqrt{{{{\\frac{{{{{J} \\cdot {c}}}}}{{{{{S_x} \\@dot {h_o}}}}} + \\sqrt{{{{\\left(\\frac{{{{{J} \\cdot {c}}}}}{{{{{S_x} \\cdot {h_o}}}}}\\right)^2 +6.76 \\cdot \\left(\\frac{{{{0.7 \\cdot {F_y}}}}}{{{{{E}}}}}\\right)^2}}}}}}}}\n\\\\\n&= {L_r}"
     },
     "eq_F2_8b": {
         "types": {"h_o": "unit", "I_y": "unit", "C_w": "unit", "c": "float"},
@@ -44,12 +44,12 @@
         "string": "\\begin{{{{aligned}}}}\n    {L_r_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(L_b > L_r \\Leftarrow {L_b} > {L_r}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
     },
     "sec_F2": {
-        "types": {"header": "str", "h_start": "str", "h_end": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
-        "string": "{header}{h_start}Plastic Moment Capacity{h_end}\n$${M_p_str}$$\n<br/>\n{header}{h_start}Lateral-Torsional Buckling Moment Capacity{h_end}\n$${M_ltb_str}$$\n<br/>\n{header}{h_start}Nominal Moment Capacity{h_end}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
+        "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
+        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n$${M_p_str}$$\n<br/>\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n$${M_ltb_str}$$\n<br/>\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
     },
     "eq_F3_1": {
         "types": {"M_p": "unit", "F_y": "unit", "S_x": "unit", "lamb_f": "float", "lamb_pf": "float", "lamb_rf": "float", "M_flb": "unit"},
-        "string": "M_{{{{flb}}}} &= M_p - \\left(MT_p - 0.7 \\cdot F_y \\cdot S_x\\right) \\cdot \\left(\\frac{{{{\\lambda_f - \\lambda_{{{{pf}}}}}}}}{{{{\\lambda_{{{{rf}}}} - \\lambda_{{{{pf}}}}}}}}\\right)\n    \\\\\n    &= {M_p} - \\left({M_p} -0.7 \\cdot {F_y} \\cdot {S_x}\\right) \\cdot \\left(\\frac{{{{{lamb_f} - {lamb_pf}}}}}{{{{{lamb_rf} - {lamb_pf}}}}}\\right)\n    \\\\\n    &= {M_flb}"
+        "string": "M_{{{{flb}}}} &= M_p - \\left(MT_p - 0.7 \\cdot F_y \\cdot S_x\\right) \\cdot \\left(\\frac{{{{\\lambda_f - \\lambda_{{{{pf}}}}}}}}{{{{\\lambda_{{{{rf}}}} - \\lambda_{{{{pf}}}}}}}}\\right)\n\\\\\n&= {M_p} - \\left({M_p} -0.7 \\cdot {F_y} \\cdot {S_x}\\right) \\cdot \\left(\\frac{{{{{lamb_f} - {lamb_pf}}}}}{{{{{lamb_rf} - {lamb_pf}}}}}\\right)\n\\\\\n&= {M_flb}"
     },
     "eq_F3_2": {
         "types": {"E": "unit", "k_c": "float", "S_x": "unit", "lamb_f": "float", "M_flb": "unit"},
@@ -68,8 +68,8 @@
         "string": "\\begin{{{{aligned}}}}\n    {lamb_rf_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\lambda_f \\geq \\lambda_{{{{rf}}}} \\Leftarrow {lamb_f} \\geq {lamb_rf}\\right):\n        \\\\[10pt]\n        {k_c_str}\n        \\\\[10pt]\n        {M_flb_str}\n\\end{{{{aligned}}}}"
     },
     "sec_F3": {
-        "types": {"header": "str", "h_start": "str", "h_end": "str", "M_p_str": "str", "M_ltb_str": "str", "M_flb_str": "str", "M_ltb": "unit", "M_flb": "unit", "M_n": "unit"},
-        "string": "{header}{h_start}Plastic Moment{h_end}\n$${M_p_str}$$\n<br/>\n{header}{h_start}Lateral-Torsional Buckling Moment Capacity{h_end}\n$${M_ltb_str}$$\n<br/>\n{header}{h_start}Compression Flange Local Buckling Moment Capacity{h_end}\n$${M_flb_str}$$\n<br/>\n{header}{h_start}Nominal Moment Capacity{h_end}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_{{{{ltb}}}},\\ M_{{{{flb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_ltb},\\ {M_flb}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
+        "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_flb_str": "str", "M_ltb": "unit", "M_flb": "unit", "M_n": "unit"},
+        "string": "{_header_}{_h_start_}Plastic Moment{_h_end_}\n$${M_p_str}$$\n<br/>\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n$${M_ltb_str}$$\n<br/>\n{_header_}{_h_start_}Compression Flange Local Buckling Moment Capacity{_h_end_}\n$${M_flb_str}$$\n<br/>\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_{{{{ltb}}}},\\ M_{{{{flb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_ltb},\\ {M_flb}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
     },
     "eq_F11_1": {
         "types": {"F_y": "unit", "Z_x": "unit", "S_x": "unit", "M_p": "unit"},
@@ -77,7 +77,7 @@
     },
     "eq_F11_3": {
         "types": {"C_b": "float", "L_b": "unit", "d": "unit", "t": "unit", "F_y": "unit", "E": "unit", "S_x": "unit", "M_ltb": "unit"},
-        "string": "M_{{{{ltb}}}} &= C_b \\cdot \\left(1.52 - 0.274 \\cdot \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}}\\right) \\cdot \\frac{{{{F_y}}}}{{{{E}}}}\\right) \\cdot F_y \\cdot S_x\n    \\\\\n    &= {C_b} \\cdot \\left(1.52 - 0.274 \\cdot \\left(\\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}}\\right) \\cdot \\frac{{{{{F_y}}}}}{{{{{E}}}}}\\right) \\cdot {F_y} \\cdot {S_x}\n    \\\\\n    &= {M_ltb}"
+        "string": "M_{{{{ltb}}}} &= C_b \\cdot \\left(1.52 - 0.274 \\cdot \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}}\\right) \\cdot \\frac{{{{F_y}}}}{{{{E}}}}\\right) \\cdot F_y \\cdot S_x\n\\\\\n&= {C_b} \\cdot \\left(1.52 - 0.274 \\cdot \\left(\\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}}\\right) \\cdot \\frac{{{{{F_y}}}}}{{{{{E}}}}}\\right) \\cdot {F_y} \\cdot {S_x}\n\\\\\n&= {M_ltb}"
     },
     "eq_F11_4": {
         "types": {"F_cr": "unit", "S_x": "unit", "M_ltb": "unit"},
@@ -104,7 +104,7 @@
         "string": "\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} &= \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} > \\frac{{{{1.9 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right}^2}}}} > \\frac{{{{1.9 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
     },
     "sec_F11": {
-        "types": {"header": "str", "h_start": "str", "h_end": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
-        "string": "{header}{h_start}Plastic Moment Capacity{h_end}\n$${M_p_str}$$\n<br/>\n{header}{h_start}Lateral-Torsional Buckling Moment Capacity{h_end}\n$${M_ltb_str}$$\n<br/>\n{header}{h_start}{h_end}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}"
+        "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
+        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n$${M_p_str}$$\n<br/>\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n$${M_ltb_str}$$\n<br/>\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}"
     }
 }

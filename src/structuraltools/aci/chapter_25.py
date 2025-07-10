@@ -15,7 +15,7 @@
 
 from numpy import sqrt
 
-from structuraltools import materials
+from structuraltools.aci import materials
 from structuraltools.aci import _chapter_25_templates as templates
 from structuraltools.template import Result
 from structuraltools.unit import unit, Area, Length, Stress, UnitWeight

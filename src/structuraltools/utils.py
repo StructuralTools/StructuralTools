@@ -14,7 +14,6 @@
 
 from copy import copy
 import json
-from string import Template
 from typing import NamedTuple
 import warnings
 
@@ -23,7 +22,6 @@ import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError
 
-from structuraltools import template
 from structuraltools.unit import unit, Numeric
 
 
@@ -36,11 +34,12 @@ def fill_template(
         value: any,
         template: str,
         variables: dict[str: any],
-        fill: bool = True,
+        return_string: bool = True,
         precision: int = 4,
+        header_level: int = 4,
+        header_type: str = "markdown",
         general_format: str = "g",
-        quantity_format: str = "~L",
-        header_level: int = 4) -> Result[any]:
+        quantity_format: str = "~L") -> Result[any]:
     """Pass the return value through and fill the representation string if
     desired. This is designed to be used in the return statement of a function.
 
@@ -56,29 +55,42 @@ def fill_template(
     variables : dict[str: any]
         Values to use when filling out the template
 
-    fill : bool
+    return_string : bool
         Whether to fill the provided template or return an empty string
 
     precision : int
         Precision value to use when filling the template
 
+    header_level : int
+        Header level to use when filling in templates
+
+    header_type : str
+        Type of headers to use. One of: "markdown" or "html"
+
     general_format : str
         Format code to use when filling the template
 
     quantity_format : str
-        Additional format code to use for quantities when filling the template
+        Additional format code to use for quantities when filling the template"""
+    if not return_string:
+        return Result("", value)
 
-    header_level : int
-        Header level to use when filling in markdown templates"""
-    if fill:
-        string = template.format(
-            _header_="#"*header_level,
-            _precision_=precision,
-            _gformat_=general_format,
-            _qformat_=quantity_format,
-            **variables)
+    if header_type == "markdown":
+        headers = {"_header_": "#"*header_level, "_h_start_": "", "_h_end_": ""}
+    elif header_type == "html":
+        headers = {
+            "_header_": "",
+            "_h_start_": f"<h{header_level}>",
+            "_h_end_": f"/h{header_level}>"
+        }
     else:
-        string = ""
+        raise ValueError(f"Unrecognized header type: {header_type}")
+    string = template.format(
+        _precision_=precision,
+        _gformat_=general_format,
+        _qformat_=quantity_format,
+        **headers,
+        **variables)
     return Result(string, value)
 
 def add_template(filepath: str, name: str, variables: dict[str: str], string: str) -> None:
@@ -110,81 +122,15 @@ def add_template(filepath: str, name: str, variables: dict[str: str], string: st
         if kind == "str":
             mapping.update({variable: f"{{{variable}}}"})
         elif kind == "int":
-            mapping.update({variable: f"{{{variable}:.{{_precision_}}{{_gformat_}}}}"})
+            mapping.update({variable: f"{{{variable}:.{{precision}}{{gformat}}}}"})
         elif kind == "quantity":
-            mapping.update({variable: f"{{{variable}:{{_qformat_}}.{{_precision_}}{{_gformat_}}}}"})
+            mapping.update({variable: f"{{{variable}:{{qformat}}.{{precision}}{{gformat}}}}"})
         else:
             raise ValueError(f"Unrecognized kind code: {kind}")
     templates.update({name: Template(string).substitute(mapping)})
 
     with open(filepath, mode="w", encoding="utf-8") as file:
         json.dump(templates, file, indent=4)
-
-def sqrt(value: Numeric) -> Numeric:
-    """Square root function compatible with pint Quantities and structuraltools
-    template.Results
-
-    Parameters
-    ==========
-
-    value : Numeric
-        Value to take the square root of"""
-    if isinstance(value, template.Result):
-        value = value.value
-    return np.sqrt(value)
-
-def sign(value: Numeric, *args, **kwargs) -> int:
-    """Wrapper around np.sign to provide compatibility with structuraltools
-    template.Result instances
-
-    Parameters
-    ==========
-
-    value : Numeric
-        Value to check the sign for
-
-    *args
-        Refer to the numpy.sign documentation
-
-    **kwargs
-        Refer to the numpy.sign documentation"""
-    if isinstance(value, template.Result):
-        value = value.value
-    return np.sign(value)
-
-def isclose(
-        value_1: Numeric,
-        value_2: Numeric,
-        rtol: Numeric = 1e-5,
-        atol: Numeric = 1e-8,
-        equal_nan: bool = False) -> bool:
-    """Wrapper around np.isclose to provide compatibility with structuraltools
-    template.Result instances
-
-    Parameters
-    ==========
-
-    value_1 : Numeric
-        First value to compare
-
-    value_2 : Numeric
-        Second value to compare
-
-    rtol : Numeric
-        Relative tolerance for returning True
-
-    atol : Numeric
-        Absolute tolerance for returning True
-
-    equal_nan : bool
-        Whether to compare NaNs as equal"""
-    args = []
-    for value in [value_1, value_2, rtol, atol]:
-        if isinstance(value, template.Result):
-            args.append(value.value)
-        else:
-            args.append(value)
-    return np.isclose(*args, equal_nan)
 
 def linterp(
         x_1: Numeric,
@@ -307,17 +253,3 @@ def read_data_table(filepath: str) -> pd.DataFrame:
     data_table = data_table.map(convert_to_unit)
     data_table = data_table.set_index(data_table.columns[0], drop=True)
     return data_table
-
-def set_sub_display(display_options: dict) -> dict:
-    """Returns the display options to use for sub-function calls
-
-    Parameters
-    ==========
-
-    display_options : dict
-        Display options dictionary for the main function"""
-    sub_options = copy(display_options)
-    display = sub_options.pop("display", False)
-    if display:
-        sub_options.update({"return_string": True})
-    return sub_options

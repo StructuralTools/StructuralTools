@@ -13,10 +13,16 @@
 # limitations under the License.
 
 
-from structuraltools.aisc import _chapter_B_templates as templates
-from structuraltools.template import Result
+import importlib.resources
+import json
+
 from structuraltools.unit import Stress
-from structuraltools.utils import sqrt
+from structuraltools.utils import Result
+
+
+resources = importlib.resources.files("structuraltools.aisc.resources")
+
+# Read chapter B templates into the templates dictionary
 
 
 def table_B4_1b_10_lamb_p(E: Stress, F_y: Stress, **display_options) -> Result[float]:
