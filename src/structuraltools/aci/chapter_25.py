@@ -13,13 +13,19 @@
 # limitations under the License.
 
 
+import importlib.resources
+import json
+
 from numpy import sqrt
 
 from structuraltools.aci import materials
-from structuraltools.aci import _chapter_25_templates as templates
-from structuraltools.template import Result
 from structuraltools.unit import unit, Area, Length, Stress, UnitWeight
 from structuraltools.utils import Result
+
+
+resources = importlib.resources.files("structuraltools.aci.resources")
+with open(resources.joinpath("chapter_25_templates_processed.json")) as file:
+    templates = json.load(file)
 
 
 def eq_25_4_2_4a(f_y: Stress, psi_t: float, psi_e: float, psi_s: float,

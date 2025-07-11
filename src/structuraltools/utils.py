@@ -18,7 +18,7 @@ import json
 from typing import NamedTuple
 import warnings
 
-import numpy as np
+from numpy import sign
 import pandas as pd
 from pint import Quantity
 from pint.errors import UndefinedUnitError

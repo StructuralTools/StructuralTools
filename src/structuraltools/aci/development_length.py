@@ -13,11 +13,19 @@
 # limitations under the License.
 
 
-from structuraltools import materials
-from structuraltools.aci import _development_length_markdown as templates
-from structuraltools.template import Result
+import importlib.resources
+import json
+
+from numpy import sqrt
+
+from structuraltools.aci import materials
 from structuraltools.unit import unit, Area, Length
-from structuraltools.utils import sqrt
+from structuraltools.utils import Result
+
+
+resources = importlib.resources.files("structuraltools.aci.resources")
+with open(resources.joinpath("development_length_templates_processed.json")) as file:
+    templates = json.load(file)
 
 
 def straight_bar_factors(

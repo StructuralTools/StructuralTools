@@ -13,17 +13,24 @@
 # limitations under the License.
 
 
+import importlib.resources
+import json
 from typing import Optional
 
-from structuraltools import materials
-from structuraltools.template import Result
+from structuraltools.aci import materials
 from structuraltools.unit import Length, Moment
+from structuraltools.utils import Result
+
+
+resources = importlib.resources.files("structuraltools.aci.resources")
+with open(resources.joinpath("sectional_strength_templates_processed.json")) as file:
+    templates = json.load(file)
 
 
 def calc_phi(
     rebar: materials.Rebar,
     epsilon_t: float,
-    **display_options) -> Result[float]:
+    **string_options) -> Result[float]:
     """Calculate the resistance factor for concrete members resisting moment
        and/or axial force according to ACI 318-19 Table 21.2.2
 
@@ -46,7 +53,7 @@ def calc_phi(
     else:
         phi = 0.9
         #template = templates.calc_phi_tension
-    #return template.fill(locals(), phi, **display_options)
+    #return template.fill(locals(), phi, **string_options)
     return phi
 
 def moment_capacity(
@@ -56,7 +63,7 @@ def moment_capacity(
     rebar: materials.Rebar,
     n: int,
     d_t: Optional[Length] = None,
-    **display_options) -> Result[Moment]:
+    **string_options) -> Result[Moment]:
     """Calculate the design moment capacitg of a rectangular concrete member
     with tension reinforcing only.
 
@@ -87,6 +94,6 @@ def moment_capacity(
     a = ((n*rebar.A_b*rebar.f_y)/(0.85*concrete.f_prime_c*b)).to("inch")
     M_n = (n*rebar.A_b*rebar.f_y*(d-a/2)).to("kipft")
     epsilon_t = (0.003*((concrete.beta_1*d_t)/a-1)).to("dimensionless").magnitude
-    phi = calc_phi(rebar, epsilon_t, **display_options)
-    #return templates.moment_capacity.fill(locals(), phi, M_n, display=display, **display_options)
+    phi = calc_phi(rebar, epsilon_t, **string_options)
+    #return templates.moment_capacity.fill(locals(), phi, M_n, display=display, **string_options)
     return phi, M_n
