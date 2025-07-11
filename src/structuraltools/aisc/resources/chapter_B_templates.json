@@ -8,11 +8,11 @@
         "string": "\\lambda_{{{{r_f}}}} &= \\sqrt{{{{\\frac{{{{E}}}}{{{{F_y}}}}}}}} = \\sqrt{{{{\\frac{{{{{E}}}}}{{{{{F_y}}}}}}}}} &= {lamb_rf}"
     },
     "table_B4_1b_15_lamb_p": {
-        "types": {"E": "unit", "F_y": "unit", "lamb_pf": "float"},
-        "string": "\\lambda_{{{{p_f}}}} &= 3.76 \\cdot \\sqrt{{{{\\frac{{{{E}}}}{{{{F_y}}}}}}}} = 3.76 \\cdot \\sqrt{{{{\\frac{{{{{E}}}}}{{{{{F_y}}}}}}}}} &= {lamb_pf}"
+        "types": {"E": "unit", "F_y": "unit", "lamb_pw": "float"},
+        "string": "\\lambda_{{{{p_w}}}} &= 3.76 \\cdot \\sqrt{{{{\\frac{{{{E}}}}{{{{F_y}}}}}}}} = 3.76 \\cdot \\sqrt{{{{\\frac{{{{{E}}}}}{{{{{F_y}}}}}}}}} &= {lamb_pw}"
     },
     "table_B4_1b_15_lamb_r": {
-        "types": {"E": "unit", "F_y": "unit", "lamb_rf": "float"},
-        "string": "\\lambda_{{{{r_f}}}} &= 5.7 \\cdot \\sqrt{{{{\\frac{{{{E}}}}{{{{F_y}}}}}}}} = 5.7 \\cdot \\sqrt{{{{\\frac{{{{{E}}}}}{{{{{F_y}}}}}}}}} &= {lamb_rf}"
-    },
+        "types": {"E": "unit", "F_y": "unit", "lamb_rw": "float"},
+        "string": "\\lambda_{{{{r_w}}}} &= 5.7 \\cdot \\sqrt{{{{\\frac{{{{E}}}}{{{{F_y}}}}}}}} = 5.7 \\cdot \\sqrt{{{{\\frac{{{{{E}}}}}{{{{{F_y}}}}}}}}} &= {lamb_rw}"
+    }
 }

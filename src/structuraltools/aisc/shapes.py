@@ -17,16 +17,17 @@ import importlib.resources
 import json
 from typing import Optional
 
+from numpy import sqrt
+
 from structuraltools.aisc import chapter_B, chapter_F
 from structuraltools.unit import unit, Length, Moment
 from structuraltools.utils import fill_template, read_data_table, Result
 
 
 resources = importlib.resources.files("structuraltools.aisc.resources")
-
-# Read shapes templates into the templates dictionary
-
 materials = read_data_table(resources.joinpath("steel_materials.csv"))
+with open(resources.joinpath("shapes_templates_processed.json")) as file:
+    templates = json.load(file)
 
 
 class Shape:
@@ -46,8 +47,8 @@ class Shape:
         properties = self.database.loc[size, :].to_dict()
         if not material:
             material = self.default_material
+        self.material = material
         material = materials.loc[material, :].to_dict()
-        self.material = material.pop("name")
         properties.update(material)
         for attribute, value in properties.items():
             setattr(self, attribute, value)
@@ -71,11 +72,7 @@ class Plate(Shape):
     represents the strong axis for bending."""
     default_material = "A572Gr50"
 
-    def __init__(
-        self,
-        d: Length,
-        t: Length,
-        material: str = "A572Gr50"):
+    def __init__(self, d: Length, t: Length, material: str = "A572Gr50"):
         """Create a new steel plate. Major axis bending has d perpendicular to
         the bending axis.
 
@@ -91,23 +88,25 @@ class Plate(Shape):
         material : str
             Material to use for the member"""
         self.size = f"Plate {d}X{t}"
-        self.A = (self.d*self.b).to("inch**2")
-        self.S_x = (self.b*self.d**2/6).to("inch**3")
-        self.I_x = (self.b*self.d**3/12).to("inch**4")
+        self.d = d.to("inch")
+        self.t = t.to("inch")
+        self.A = (self.d*self.t).to("inch**2")
+        self.S_x = (self.t*self.d**2/6).to("inch**3")
+        self.I_x = (self.t*self.d**3/12).to("inch**4")
         self.r_x = (sqrt(self.I_x/self.A)).to("inch")
         self.Z_x = (self.t*self.d**2/4).to("inch**3")
-        self.S_y = (self.d*self.b**2/6).to("inch**3")
-        self.I_y = (self.d*self.b**3/12).to("inch**4")
+        self.S_y = (self.d*self.t**2/6).to("inch**3")
+        self.I_y = (self.d*self.t**3/12).to("inch**4")
         self.r_y = (sqrt(self.I_y/self.A)).to("inch")
         self.Z_y = (self.d*self.t**2/4).to("inch**3")
 
+        self.material = material
         material = materials.loc[material, :].to_dict()
-        self.material = material.pop("name")
         for attribute, value in material.items():
             setattr(self, attribute, value)
 
     def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
-            C_b: float = 1, **display_options) -> Result[Moment]:
+            C_b: float = 1, **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity of a plate according to
         AISC 360-22 Section F11.
 
@@ -122,22 +121,20 @@ class Plate(Shape):
 
         C_b : float
             Lateral-torsional buckling modification factor"""
-        sub_options = set_sub_display(display_options)
-
         phi_b = 0.9
 
         if axis == "x":
-            M_n = chapter_F.sec_F11(self, L_b, C_b, **sub_options)
-            template = templates.Plate_moment_capacity_x
+            M_n_str, M_n = chapter_F.sec_F11(self, L_b, C_b, **string_options)
+            template = templates["Plate_moment_capacity_x"]
         elif axis == "y":
             F_y = self.F_y
             Z_y = self.Z_y
             S_y = self.S_y
             M_n = min(F_y*Z_y, 1.5*F_y*S_y).to("kipft")
-            template = templates.Plate_moment_capacity_y
+            template = templates["Plate_moment_capacity_y"]
         else:
             raise ValueError(f"Unsupported axis: {axis}")
-        return template.fill(locals(), phi_b, M_n, **display_options)
+        return fill_template((phi_b, M_n), template, locals(), **string_options)
 
 
 class RectHSS(Shape):
@@ -170,8 +167,8 @@ class RoundHSS(Shape):
                 material = self.RoundHSS_default_material
             else:
                 material = self.Pipe_default_material
+        self.material = material
         material = materials.loc[material, :].to_dict()
-        self.material = material.pop("name")
         properties.update(material)
         for attribute, value in properties.items():
             setattr(self, attribute, value)
@@ -183,7 +180,7 @@ class WideFlange(Shape):
     default_material = "A992"
 
     def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
-            C_b: float = 1, **display_options) -> Result[Moment]:
+            C_b: float = 1, **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity of an I shape with a compact
         web according to AISC 360-22 Sections F2 and F3.
 
@@ -198,14 +195,15 @@ class WideFlange(Shape):
 
         C_b : float
             Lateral-torsional buckling modification factor"""
-        sub_options = set_sub_display(display_options)
-
         phi_b = 0.9
+        _, lamb_pw = chapter_B.table_B4_1b_15_lamb_p(self.E, self.F_y, return_string=False)
+        _, lamb_pf = chapter_B.table_B4_1b_10_lamb_p(self.E, self.F_y, return_string=False)
 
-        if self.lamb_w >= chapter_B.table_B4_1b_15_lamb_p(self.E, self.F_y):
+        if self.lamb_w >= lamb_pw:
             raise ValueError("Only sections with compact webs are supported")
-        elif self.lamb_f >= chapter_B.table_B4_1b_10_lamb_p(self.E, self.F_y):
-            M_n = chapter_F.sec_F3(self, L_b, C_b, **sub_options)
+        elif self.lamb_f >= lamb_pf:
+            M_n_str, M_n = chapter_F.sec_F3(self, L_b, C_b, **string_options)
         else:
-            M_n = chapter_F.sec_F2(self, L_b, C_b, **sub_options)
-        return templates.WideFlange_moment_capacity.fill(locals(), phi_b, M_n, **display_options)
+            M_n_str, M_n = chapter_F.sec_F2(self, L_b, C_b, **string_options)
+        template = templates["WideFlange_moment_capacity_x"]
+        return fill_template((phi_b, M_n), template, locals(), **string_options)

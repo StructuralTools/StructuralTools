@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from copy import copy
+import importlib.resources
 import json
 from typing import NamedTuple
 import warnings
@@ -76,7 +77,7 @@ def fill_template(
         return Result("", value)
 
     if header_type == "markdown":
-        headers = {"_header_": "#"*header_level, "_h_start_": "", "_h_end_": ""}
+        headers = {"_header_": f"{"#"*header_level} ", "_h_start_": "", "_h_end_": ""}
     elif header_type == "html":
         headers = {
             "_header_": "",
@@ -85,6 +86,7 @@ def fill_template(
         }
     else:
         raise ValueError(f"Unrecognized header type: {header_type}")
+
     string = template.format(
         _precision_=precision,
         _gformat_=general_format,
@@ -93,44 +95,41 @@ def fill_template(
         **variables)
     return Result(string, value)
 
-def add_template(filepath: str, name: str, variables: dict[str: str], string: str) -> None:
-    """Convenience function for adding or editing templates
+def process_templates( module: str, filename: str) -> None:
+    """Function to process template files into the form used by python functions
 
     Parameters
     ==========
 
-    filepath : str
-        Path to json template file
+    module : str
+        Module the template file is in
 
-    name : str
-        Name of template to add or modify
-
-    variables : dict[str: str]
-        Dictionary mapping variables to the appropriate kinds for format codes.
-            "int" for ints or floats
-            "str" for strings
-            "quantity" for Quantities
-
-    string : str
-        Base string to use for the template. Should be formatted for use in a Template"""
-    with open(filepath) as file:
+    filename : str
+        Template file name"""
+    directory = importlib.resources.files(module)
+    with open(directory.joinpath(filename)) as file:
         templates = json.load(file)
 
-    string = string.replace("{", "{{").replace("}", "}}")
-    mapping = {}
-    for variable, kind in variables.items():
-        if kind == "str":
-            mapping.update({variable: f"{{{variable}}}"})
-        elif kind == "int":
-            mapping.update({variable: f"{{{variable}:.{{precision}}{{gformat}}}}"})
-        elif kind == "quantity":
-            mapping.update({variable: f"{{{variable}:{{qformat}}.{{precision}}{{gformat}}}}"})
-        else:
-            raise ValueError(f"Unrecognized kind code: {kind}")
-    templates.update({name: Template(string).substitute(mapping)})
+    processed_templates = {}
+    for name, data in templates.items():
+        print(f"processing {name}")
+        mapping = {}
+        for variable, kind in data["types"].items():
+            if kind == "str":
+                mapping.update({variable: f"{{{variable}}}"})
+            elif kind == "int" or kind == "float":
+                mapping.update({variable: f"{{{variable}:.{{_precision_}}{{_gformat_}}}}"})
+            elif kind == "unit":
+                mapping.update({
+                    variable: f"{{{variable}:{{_qformat_}}.{{_precision_}}{{_gformat_}}}}"
+                })
+            else:
+                raise ValueError(f"Unrecognized type code: {kind}")
+        processed_templates.update({name: data["string"].format(**mapping)})
 
-    with open(filepath, mode="w", encoding="utf-8") as file:
-        json.dump(templates, file, indent=4)
+    out_file = f"{filename.split(".")[0]}_processed.json"
+    with open(directory.joinpath(out_file), mode="w", encoding="utf-8") as file:
+        json.dump(processed_templates, file, indent=4)
 
 def linterp(
         x_1: Numeric,

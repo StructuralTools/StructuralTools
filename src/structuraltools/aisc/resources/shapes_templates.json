@@ -4,7 +4,7 @@
         "string": "{M_n_str}"
     },
     "Plate_moment_capacity_y": {
-        "types": {"header": "str", "h_start": "str", "h_end": "str", "F_y": "unit", "Z_y": "unit", "S_y": "unit", "M_n": "unit"},
+        "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "F_y": "unit", "Z_y": "unit", "S_y": "unit", "M_n": "unit"},
         "string": "{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(F_y \\cdot Z_y,\\ 1.5 \\cdot F_y \\cdot S_y\\right) = \\operatorname{{{{min}}}}\\left({F_y} \\cdot {Z_y},\\ 1.5 \\cdot {F_y} \\cdot {S_y}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
     },
     "WideFlange_moment_capacity_x": {
