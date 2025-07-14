@@ -101,7 +101,7 @@
     },
     "sec_F11_2_elastic": {
         "types": {"L_b": "unit", "d": "unit", "t": "unit", "E": "unit", "F_y": "unit", "F_cr_str": "str", "M_ltb_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} &= \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} > \\frac{{{{1.9 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} > \\frac{{{{1.9 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
+        "string": "\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} > \\frac{{{{1.9 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} > \\frac{{{{1.9 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
     },
     "sec_F11": {
         "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},

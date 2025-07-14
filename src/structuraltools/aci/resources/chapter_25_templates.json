@@ -1,7 +1,7 @@
 {
     "eq_25_4_2_4a": {
         "types": {"f_y": "unit", "psi_t": "float", "psi_e": "float", "psi_s": "float", "psi_g": "float", "lamb": "float", "f_prime_c": "unit", "c_b": "unit", "K_tr": "unit", "d_b": "unit", "l_prime_d": "unit"},
-        "string": "l'_d &= \\left(\\frac{{{{3 \\cdot f_y \\cdot \\operatorname{{{{min}}}}\\left(\\psi_t \\cdot \\psi_e,\\ 1.7\\right) \\cdot \\psi_s \\cdot \\psi_g}}}}{{{{40 \\cdot \\lambda \\cdot \\sqrt{{{{f'_c}}}} \\cdot \\left(\\frac{{{{c_b + K_{{{{tr}}}}}}}}{{{{d_b}}}}\\right)}}}}\\right) \\cdot d_b\n\\\\\n&= \\left(\\frac{{{{3 \\cdot {f_y} \\cdot \\operatorname{{{{min}}}}\\left({psi_t} \\cdot {psi_e},\\ 1.7\\right) \\cdot {psi_s} \\cdot {psi_g}}}{{{{40 \\cdot {lamb} \\cdot \\sqrt{{{{{f_prime_c}}}}} \\cdot \\left(\\frac{{{{{c_b} + {K_tr}}}}}{{{{{d_b}}}}}\\right)}}\\right) \\cdot {d_b}\n\\\\\n&= {l_prime_d}"
+        "string": "l'_d &= \\left(\\frac{{{{3 \\cdot f_y \\cdot \\operatorname{{{{min}}}}\\left(\\psi_t \\cdot \\psi_e,\\ 1.7\\right) \\cdot \\psi_s \\cdot \\psi_g}}}}{{{{40 \\cdot \\lambda \\cdot \\sqrt{{{{f'_c}}}} \\cdot \\left(\\frac{{{{c_b + K_{{{{tr}}}}}}}}{{{{d_b}}}}\\right)}}}}\\right) \\cdot d_b = \\left(\\frac{{{{3 \\cdot {f_y} \\cdot \\operatorname{{{{min}}}}\\left({psi_t} \\cdot {psi_e},\\ 1.7\\right) \\cdot {psi_s} \\cdot {psi_g}}}}}{{{{40 \\cdot {lamb} \\cdot \\sqrt{{{{{f_prime_c}}}}} \\cdot \\left(\\frac{{{{{c_b} + {K_tr}}}}}{{{{{d_b}}}}}\\right)}}}}\\right) \\cdot {d_b} &= {l_prime_d}"
     },
     "eq_25_4_2_4b": {
         "types": {"A_tr": "unit", "s": "unit", "n": "int", "K_tr": "unit"},
@@ -28,11 +28,11 @@
         "string": "\\text{{{{Since, }}}} & \\left(f_y > {high_limit} \\Leftarrow {f_y} > {high_limit}\\right): & \\psi_g &= {psi_g}"
     },
     "table_25_4_2_5_psi_e_c_c": {
-        "types": {"c_c": "unit", "d_b3": "unit", "psi_e": "float", },
+        "types": {"c_c": "unit", "d_b3": "unit", "psi_e": "float"},
         "string": "\\text{{{{Since, }}}} & \\left(\\mathrm{{{{coated}}}} = \\mathrm{{{{True}}}}\\right) \\text{{{{ and }}}} \\left(c_c < 3 \\cdot d_b \\Leftarrow {c_c} < {d_b3}\\right): & \\psi_e &= {psi_e}"
     },
     "table_25_4_2_5_psi_e_s": {
-        "types": {"s": "unit", "d_b7": "unit", "psi_e": "float", },
+        "types": {"s": "unit", "d_b7": "unit", "psi_e": "float"},
         "string": "\\text{{{{Since, }}}} & \\left(\\mathrm{{{{coated}}}} = \\mathrm{{{{True}}}}\\right) \\text{{{{ and }}}} \\left(s < 7 \\cdot d_b \\Leftarrow {s} < {d_b7}\\right): & \\psi_e &= {psi_e}"
     },
     "table_25_4_2_5_psi_e_true": {
@@ -69,13 +69,13 @@
     },
     "eq_25_4_3_1a": {
         "types": {"f_y": "unit", "psi_e": "float", "psi_r": "float", "psi_o": "float", "psi_c": "float", "lamb": "float", "f_prime_c": "unit", "d_b": "unit", "l_prime_dh": "unit"},
-        "string": "l'_{{{{dh}}}} &= \\left(\\frac{{{{f_y \\cdot \\psi_e \\cdot \\psi_r \\cdot \\psi_o \\cdot \\psi_c}}}}{{{{55 \\cdot \\lambda \\cdot \\sqrt{{{{f'_c}}}}}}}}\\right) \\cdot d_b^{{{{1.5}}}}\n\\\\\n&= \\left(\\frac{{{{{f_y} \\cdot {psi_e} \\cdot {psi_r} \\cdot {psi_o} \\cdot {psi_c}}}}}{{{{55 \\cdot {lamb} \\cdot \\sqrt{{{{{f_prime_c}}}}}\\right) \\cdot \\left({d_b}\\right)^{{{{1.5}}}}\n\\\\\n&= {l_prime_dh}"
+        "string": "l'_{{{{dh}}}} &= \\left(\\frac{{{{f_y \\cdot \\psi_e \\cdot \\psi_r \\cdot \\psi_o \\cdot \\psi_c}}}}{{{{55 \\cdot \\lambda \\cdot \\sqrt{{{{f'_c}}}}}}}}\\right) \\cdot d_b^{{{{1.5}}}} = \\left(\\frac{{{{{f_y} \\cdot {psi_e} \\cdot {psi_r} \\cdot {psi_o} \\cdot {psi_c}}}}}{{{{55 \\cdot {lamb} \\cdot \\sqrt{{{{{f_prime_c}}}}}}}}}\\right) \\cdot \\left({d_b}\\right)^{{{{1.5}}}} &= {l_prime_dh}"
     },
-    "table_25_4_3_2_lamb_low": {
+    "table_25_4_3_2_lamb_light": {
         "types": {"normal_weight": "unit", "w_c": "unit", "lamb": "float"},
         "string": "& \\text{{{{Since, }}}} \\left(w_c < {normal_weight} \\Leftarrow {w_c} < {normal_weight}\\right): & \\lambda &= {lamb}"
     },
-    "table_25_4_3_2_lamb_high": {
+    "table_25_4_3_2_lamb_normal": {
         "types": {"normal_weight": "unit", "w_c": "unit", "lamb": "float"},
         "string": "& \\text{{{{Since, }}}} \\left(w_c \\geq {normal_weight} \\Leftarrow {w_c} \\geq {normal_weight}\\right): & \\lambda &= {lamb}"
     },
@@ -105,7 +105,7 @@
     },
     "table_25_4_3_2_psi_o_d_b": {
         "types": {"c_c_side": "unit", "d_b6": "unit", "psi_o": "float"},
-        "string": "& \\text{{{{Since, }}}} \\left(c_{{{{c_{{{{side}}}}}}}} \\geq 6 \\cdot d_b \\Leftarrow {c_c_side} \\geq {d_b6}\\right): & \\pse_o &= {psi_o}"
+        "string": "& \\text{{{{Since, }}}} \\left(c_{{{{c_{{{{side}}}}}}}} \\geq 6 \\cdot d_b \\Leftarrow {c_c_side} \\geq {d_b6}\\right): & \\psi_o &= {psi_o}"
     },
     "table_25_4_3_2_psi_o_column": {
         "types": {"min_c_c_side": "unit", "c_c_side": "unit", "psi_o": "float"},
@@ -124,7 +124,7 @@
         "string": "\\psi_c &= \\operatorname{{{{min}}}}\\left(\\frac{{{{f'_c}}}}{{{{15000\\ \\mathrm{{{{psi}}}}}}}} + 0.6,\\ 1\\right) = \\operatorname{{{{min}}}}\\left(\\frac{{{{{f_prime_c}}}}}{{{{15000\\ \\mathrm{{{{psi}}}}}}}} + 0.6,\\ 1\\right) &= {psi_c}"
     },
     "table_25_4_3_2": {
-        "types": {"lamb_str": "str", "psi_e_str": "str", "psi_r_str": "str", "psi_o": "str", "psi_c_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {lamb_str}\n    \\\\[10pt]\n    {psi_e_str}\n    \\\\[10pt]\n    {psi_r_str}\n    \\\\[10pt]\n    {psi_o_str}\n\\end{{{{aligned}}}}\n\\begin{{{{aligned}}}}\n    {psi_c_str}\n\\end{{{{aligned}}}}"
+        "types": {"lamb_str": "str", "psi_e_str": "str", "psi_r_str": "str", "psi_o_str": "str", "psi_c_str": "str"},
+        "string": "$$\\begin{{{{aligned}}}}\n    {lamb_str}\n    \\\\[10pt]\n    {psi_e_str}\n    \\\\[10pt]\n    {psi_r_str}\n    \\\\[10pt]\n    {psi_o_str}\n\\end{{{{aligned}}}}$$\n$$\\begin{{{{aligned}}}}\n    {psi_c_str}\n\\end{{{{aligned}}}}$$"
     }
 }

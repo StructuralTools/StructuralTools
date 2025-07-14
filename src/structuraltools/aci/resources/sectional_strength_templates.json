@@ -1,0 +1,18 @@
+{
+    "calc_a": {
+        "types": {"A_st": "unit", "f_y": "unit", "f_prime_c": "unit", "b": "unit", "a": "unit"},
+        "string": "a &= \\frac{{{{A_{{{{st}}}} \\cdot f_y}}}}{{{{0.85 \\cdot f'_c \\cdot b}}}} = \\frac{{{{{A_st} \\cdot {f_y}}}}}{{{{0.85 \\cdot {f_prime_c} \\cdot {b}}}}} &= {a}"
+    },
+    "calc_M_n": {
+        "types": {"A_st": "unit", "f_y": "unit", "d": "unit", "a": "unit", "M_n": "unit"},
+        "string": "M_n &= A_{{{{st}}}} \\cdot f_y \\cdot \\left(d - \\frac{{{{a}}}}{{{{2}}}}\\right) = {A_st} \\cdot {f_y} \\cdot \\left({d} - \\frac{{{{{a}}}}}{{{{2}}}}\\right) &= {M_n}"
+    },
+    "calc_epsilon_t": {
+        "types": {"beta_1": "float", "d_t": "unit", "a": "unit", "epsilon_t": "float"},
+        "string": "\\epsilon_t &= 0.003 \\cdot \\left(\\frac{{{{\\beta_1 \\cdot d_t}}}}{{{{a}}}} - 1\\right) = 0.003 \\cdot \\left(\\frac{{{{{beta_1} \\cdot {d_t}}}}}{{{{{a}}}}} - 1\\right) &= {epsilon_t}"
+    },
+    "moment_capacity": {
+        "types": {"a_str": "str", "M_n_str": "str", "epsilon_t_str": "str", "phi_str": "str"},
+        "string": "$$\\begin{{{{aligned}}}}\n    {a_str}\n    \\\\[10pt]\n    {M_n_str}\n    \\\\[10pt]\n    {epsilon_t_str}\n\\end{{{{aligned}}}}$$\n{phi_str}"
+    }
+}
