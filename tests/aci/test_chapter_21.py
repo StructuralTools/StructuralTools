@@ -16,7 +16,6 @@
 from numpy import isclose
 
 from structuraltools.aci import chapter_21, materials
-from structuraltools.unit import unit
 
 
 def test_calc_phi_compression_controlled():

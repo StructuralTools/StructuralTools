@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from copy import copy
 import importlib.resources
 import json
 from typing import NamedTuple

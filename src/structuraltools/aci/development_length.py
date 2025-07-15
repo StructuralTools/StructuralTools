@@ -16,8 +16,6 @@
 import importlib.resources
 import json
 
-from numpy import sqrt
-
 from structuraltools.aci import chapter_25, materials
 from structuraltools.unit import unit, Area, Length
 from structuraltools.utils import fill_template, Result
