@@ -1,0 +1,5 @@
+{
+    "table_21_2_2_compression": "\\begin{{aligned}}\n    & \\text{{Since, }} \\left(\\epsilon_t \\leq \\epsilon_{{ty}} \\Leftarrow {epsilon_t:.{_precision_}{_gformat_}} \\leq {epsilon_ty:.{_precision_}{_gformat_}}\\right): & \\phi &= {phi:.{_precision_}{_gformat_}}\n\\end{{aligned}}",
+    "table_21_2_2_transition": "\\begin{{aligned}}\n    & \\text{{Since, }} \\left(\\epsilon_{{ty}} < \\epsilon_t < \\epsilon_{{ty}} + 0.003 \\Leftarrow {epsilon_ty:.{_precision_}{_gformat_}} < {epsilon_t:.{_precision_}{_gformat_}} < {epsilon_ty003:.{_precision_}{_gformat_}}\\right):\n        \\\\[10pt]\n        & \\qquad \\phi = 0.65 + 0.25 \\cdot \\frac{{\\epsilon_t - \\epsilon_{{ty}}}}{{0.003}} = 0.65 + 0.25 \\cdot \\frac{{{epsilon_t:.{_precision_}{_gformat_}} - {epsilon_ty:.{_precision_}{_gformat_}}}}{{0.003}} &= {phi:.{_precision_}{_gformat_}}\n\\end{{aligned}}",
+    "table_21_2_2_tension": "\\begin{{aligned}}\n    & \\text{{Since, }} \\left(\\epsilon_t \\geq \\epsilon_{{ty}} +0.003 \\Leftarrow {epsilon_t:.{_precision_}{_gformat_}} \\geq {epsilon_ty003:.{_precision_}{_gformat_}}\\right): & \\phi &= {phi:.{_precision_}{_gformat_}}\n\\end{{aligned}}"
+}

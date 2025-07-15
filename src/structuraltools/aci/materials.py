@@ -17,11 +17,11 @@ import importlib.resources
 
 from numpy import isclose, sqrt
 
-from structuraltools import utils
 from structuraltools.unit import unit, Length, Stress, UnitWeight
+from structuraltools.utils import read_data_table
 
 
-resources = importlib.resources.files("structuraltools.resources")
+resources = importlib.resources.files("structuraltools.aci.resources")
 
 
 class Concrete:
@@ -71,7 +71,7 @@ class Concrete:
 
 class Rebar:
     """Class to store data for rebar"""
-    database = utils.read_data_table(resources.joinpath("ACI_rebar_sizes.csv"))
+    database = read_data_table(resources.joinpath("rebar_dimensions.csv"))
 
     def __init__(
         self,
@@ -111,24 +111,4 @@ class Rebar:
 
         dimensions = self.database.loc[size, :].to_dict()
         for attribute, value in dimensions.items():
-            setattr(self, attribute, value)
-
-
-class Steel:
-    """Class to store data for steel materials"""
-    database = utils.read_data_table(resources.joinpath("AISC_steel_materials.csv"))
-
-    def __init__(self, name: str):
-        """Initialize a steel from the structuraltools steel database. Custom steel
-        types are not currently supported.
-
-        Parameters
-        ==========
-
-        name : str
-            Name of the steel. Must match a name in the structuraltools steel
-            database."""
-        self.name = name
-        properties = self.database.loc[name, :].to_dict()
-        for attribute, value in properties.items():
             setattr(self, attribute, value)

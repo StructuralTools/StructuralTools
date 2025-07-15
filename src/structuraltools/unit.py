@@ -19,18 +19,15 @@ from typing import Annotated, Union
 from numpy import ndarray
 import pint
 
-from structuraltools.template import Result
-
 
 resources = importlib.resources.files("structuraltools.resources")
 
-pint.compat.upcast_type_map.update({"structuraltools.template.Result": None})
 unit = pint.UnitRegistry(resources.joinpath("units"))
-unit.formatter.default_format = "~L"
+unit.formatter.default_format = "~"
 
 
-type Numeric = Union[int, float, Annotated[pint.Quantity, float], Result]
-type NumericArray = Union[ndarray, Annotated[pint.Quantity, ndarray], Result]
+type Numeric = Union[int, float, Annotated[pint.Quantity, float]]
+type NumericArray = Union[ndarray, Annotated[pint.Quantity, ndarray]]
 
 type Area = Annotated[pint.Quantity, float, "[length]**2]"]
 type Force = Annotated[pint.Quantity, float, "[force]"]

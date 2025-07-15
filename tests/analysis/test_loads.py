@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-from numpy import array
+from numpy import array, isclose
 
 from structuraltools import analysis
 from structuraltools.unit import unit
-from structuraltools.utils import isclose, read_data_table
+from structuraltools.utils import read_data_table
 
 
 def test_reduce_combs():

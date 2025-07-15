@@ -19,15 +19,61 @@ from typing import Optional
 
 from numpy import log10, sign
 
-from structuraltools import utils
 from structuraltools.asce import chapter_26
-from structuraltools.asce import _wind_loading_templates as templates
-from structuraltools.asce.chapter_26 import fig_26_8_1 as calc_K_zt
 from structuraltools.unit import unit, Area, Length, Pressure, Velocity
+from structuraltools.utils import convert_to_unit, fill_template, linterp_dicts, Result
 
 
-resources = importlib.resources.files("structuraltools.resources")
+resources = importlib.resources.files("structuraltools.asce.resources")
+with open(resources.joinpath("wind_loading_templates_processed.json")) as file:
+    templates = json.load(file)
 
+
+def calc_K_zt(feature: str, H: Length, L_h: Length, x: Length, z: Length,
+        exposure: str, location: str = "downwind", **string_options
+        ) -> Result[float]:
+    """Calculate the topographic factor ($K_zt$) according to
+    ASCE 7-22 Figure 26.8-1
+
+    Parameters
+    ==========
+
+    feature : str
+        Topographic feature causing wind speed-up.
+        One of: "ridge", "escarpment", or "hill"
+
+    H : Length
+        Height of feature relative to the upwind terrain
+
+    L_h : Length
+        Distance upwind of crest to where the difference in ground elevation is
+        half of the height of the feature
+
+    x : Length
+        Distance (upwind or downwind) from the crest to the site of
+        the structure
+
+    z : Length
+        Height of the structure above the ground surface at the site
+
+    exposure : str, optional
+        Exposure catagory. One of: "B", "C", or "D"
+
+    location : str, optional
+        On of: "upwind" or "downwind", indicating the location of the structure
+        relative to the feature. Conservatively defaults to "downwind"."""
+    with open(resources.joinpath("topo_coefficients.json"), "r") as file:
+        topo_coefs = json.load(file)[feature]
+
+    L_prime_h = max(L_h, 2*H)
+    K_1_str, K_1 = chapter_26.fig_26_8_1_K_1(topo_coefs["K_1/(H/L_h)"][exposure],
+        H, L_prime_h, **string_options)
+    K_2_str, K_2 = chapter_26.fig_26_8_1_K_2(x, topo_coefs["mu"][location],
+        L_prime_h, **string_options)
+    K_3_str, K_3 = chapter_26.fig_26_8_1_K_3(topo_coefs["gamma"], z, L_prime_h,
+        **string_options)
+    K_zt_str, K_zt = chapter_26.fig_26_8_1_K_zt(K_1, K_2, K_3, **string_options)
+    return fill_template(K_zt, templates["calc_K_zt"], locals(), **string_options)
 
 def calc_wind_server_inputs(
     V: Velocity,
@@ -46,7 +92,7 @@ def calc_wind_server_inputs(
     h_p: Optional[Length] = None,
     h_e: Optional[Length] = None,
     h_c: Optional[Length] = None,
-    **display_options) -> dict[str, any] | tuple[str, dict[str, any]]:
+    **string_options) -> Result[dict[str, any]]:
     """Performs calculations from ASCE 7-22 Chapter 26 and returns a dictionary
     of results that can be used as input for a MainWindServer or a CandCServer.
 
@@ -123,24 +169,24 @@ def calc_wind_server_inputs(
         Canopy height. Should be set if wind loads on canopies are needed.
         Note: This can also be set when initializing a CandCServer if multiple
         canopy heights are needed."""
-    display = display_options.pop("display", False)
-
     values = chapter_26.table_26_11_1.loc[exposure, :].to_dict()
 
     # Calculate K_e according to ASCE 7-22 Table 26.9-1 footnotes 1 and 2
-    K_e = chapter_26.table_26_9_1(z_e, **display_options)
+    K_e_str, K_e = chapter_26.table_26_9_1(z_e, **string_options)
 
     # Calculate velocity pressure at the roof height and the parapet height,
     # if applicable, according to ASCE 7-22 Table 26.10-1 footnote 1 and
     # ASCE 7-22 Equation 26.10-1
-    K_h = chapter_26.table_26_10_1(h, values["z_g"], values["alpha"], "h", **display_options)
-    q_h = chapter_26.eq_26_10_1(K_h, K_zt, K_e, V, "h", **display_options)
+    K_h_str, K_h = chapter_26.table_26_10_1(h, values["z_g"], values["alpha"],
+        "h", **string_options)
+    q_h_str, q_h = chapter_26.eq_26_10_1(K_h, K_zt, K_e, V, "h", **string_options)
     if h_p:
-        K_p = chapter_26.table_26_10_1(h_p, values["z_g"], values["alpha"], "p", **display_options)
-        q_p = chapter_26.eq_26_10_1(K_p, K_zt, K_e, V, "p", **display_options)
-        template = templates.calc_wind_server_inputs_with_parapet
+        K_p_str, K_p = chapter_26.table_26_10_1(h_p, values["z_g"],
+            values["alpha"], "p", **string_options)
+        q_p_str, q_p = chapter_26.eq_26_10_1(K_p, K_zt, K_e, V, "p", **string_options)
+        template = templates["calc_wind_server_inputs_with_parapet"]
     else:
-        template = templates.calc_wind_server_inputs
+        template = templates["calc_wind_server_inputs"]
         q_p = None
 
 
@@ -148,14 +194,15 @@ def calc_wind_server_inputs(
     # ASCE 7-22 Section 26.11.4
     z_min = values["z_min"]
     bar_z = max(0.6*h, z_min).to("ft")
-    I_bar_z = chapter_26.eq_26_11_7(values["c"], bar_z, **display_options)
-    L_bar_z = chapter_26.eq_26_11_9(values["l"], bar_z, values["bar_epsilon"], **display_options)
+    I_bar_z_str, I_bar_z = chapter_26.eq_26_11_7(values["c"], bar_z, **string_options)
+    L_bar_z_str, L_bar_z = chapter_26.eq_26_11_9(values["l"], bar_z,
+        values["bar_epsilon"], **string_options)
 
-    Q_x = chapter_26.eq_26_11_8(L_y, h, L_bar_z, "x", "y", **display_options)
-    G_x = chapter_26.eq_26_11_6(I_bar_z, Q_x, "x", **display_options)
+    Q_x_str, Q_x = chapter_26.eq_26_11_8(L_y, h, L_bar_z, "x", "y", **string_options)
+    G_x_str, G_x = chapter_26.eq_26_11_6(I_bar_z, Q_x, "x", **string_options)
 
-    Q_y = chapter_26.eq_26_11_8(L_x, h, L_bar_z, "y", "x", **display_options)
-    G_y = chapter_26.eq_26_11_6(I_bar_z, Q_y, "y", **display_options)
+    Q_y_str, Q_y = chapter_26.eq_26_11_8(L_x, h, L_bar_z, "y", "x", **string_options)
+    G_y_str, G_y = chapter_26.eq_26_11_6(I_bar_z, Q_y, "y", **string_options)
 
 
     # Calculate length a for C&C wind loads
@@ -185,7 +232,7 @@ def calc_wind_server_inputs(
         "G_y": G_y,
         "a": a
     }
-    return template.fill(locals(), return_values, **display_options)
+    return fill_template(return_values, template, locals(), **string_options)
 
 
 class MainWindServer:
@@ -256,7 +303,7 @@ class MainWindServer:
         if filepath:
             with open(filepath, "r") as file:
                 raw = json.load(file)
-            file_vals = {key: utils.convert_to_unit(value) for key, value in raw.items()}
+            file_vals = {key: convert_to_unit(value) for key, value in raw.items()}
         else:
             file_vals = {}
 
@@ -269,7 +316,7 @@ class MainWindServer:
         self.GC_pi = abs(self.GC_pi)
 
         # Generate C_p lookup dictionary
-        with open(resources.joinpath("ASCE_MainWindCoefficients.json")) as file:
+        with open(resources.joinpath("MWFRS_coefficients.json")) as file:
             type_coefs = json.load(file)[self.building_type]
 
         if self.building_type in ("low-rise", "mid-rise"):
@@ -284,12 +331,12 @@ class MainWindServer:
                 if x_3 <= 1:
                     self.coefs[axis].update({"wall": type_coefs["wall"]["L/B=1"]})
                 elif x_3 <= 2:
-                    self.coefs[axis].update({"wall": utils.linterp_dicts(
+                    self.coefs[axis].update({"wall": linterp_dicts(
                         1, type_coefs["wall"]["L/B=1"],
                         2, type_coefs["wall"]["L/B=2"],
                         x_3)})
                 elif x_3 <= 4:
-                    self.coefs[axis].update({"wall": utils.linterp_dicts(
+                    self.coefs[axis].update({"wall": linterp_dicts(
                         2, type_coefs["wall"]["L/B=2"],
                         4, type_coefs["wall"]["L/B=4"],
                         x_3)})
@@ -304,7 +351,7 @@ class MainWindServer:
                         self.coefs[axis].update({
                             "roof": type_coefs["roof_parallel"]["h/L=0.5"]})
                     elif x_3 <= 1:
-                        self.coefs[axis].update({"roof": utils.linterp_dicts(
+                        self.coefs[axis].update({"roof": linterp_dicts(
                             0.5, type_coefs["roof_parallel"]["h/L=0.5"],
                             1, type_coefs["roof_parallel"]["h/L=1"],
                             x_3)})
@@ -318,7 +365,7 @@ class MainWindServer:
                     angles = (roof_angles[angle_index-1], roof_angles[angle_index])
                     dicts = {}
                     for ratio in ("h/L=0.25", "h/L=0.5", "h/L=1"):
-                        dicts.update({ratio: utils.linterp_dicts(
+                        dicts.update({ratio: linterp_dicts(
                             angles[0], type_coefs["roof_normal"][ratio][str(angles[0])],
                             angles[1], type_coefs["roof_normal"][ratio][str(angles[1])],
                             self.roof_angle)})
@@ -326,10 +373,10 @@ class MainWindServer:
                     if x_3 <= 0.25:
                         self.coefs[axis].update({"roof": dicts["h/L=0.25"]})
                     elif x_3 <= 0.5:
-                        self.coefs[axis].update({"roof": utils.linterp_dicts(
+                        self.coefs[axis].update({"roof": linterp_dicts(
                             0.25, dicts["h/L=0.25"], 0.5, dicts["h/L=0.5"], x_3)})
                     elif x_3 <= 1:
-                        self.coefs[axis].update({"roof": utils.linterp_dicts(
+                        self.coefs[axis].update({"roof": linterp_dicts(
                             0.5, dicts["h/L=0.5"], 1, dicts["h/L=1"], x_3)})
                     else:
                         self.coefs[axis].update({"roof": dicts["h/L=1"]})
@@ -388,8 +435,8 @@ class MainWindServer:
             case "q_h":
                 q_z = self.q_h
             case "q_z":
-                K_z = chapter_26.table_26_10_1(d, self.z_g, self.alpha)
-                q_z = chapter_26.eq_26_10_1(K_z, self.K_zt, self.K_e, self.V)
+                K_z_str, K_z = chapter_26.table_26_10_1(d, self.z_g, self.alpha)
+                q_z_str, q_z = chapter_26.eq_26_10_1(K_z, self.K_zt, self.K_e, self.V)
             case "q_p":
                 q_z = self.q_p
 
@@ -458,7 +505,7 @@ class CandCServer:
         if filepath:
             with open(filepath, "r") as file:
                 raw = json.load(file)
-            file_vals = {key: utils.convert_to_unit(value) for key, value in raw.items()}
+            file_vals = {key: convert_to_unit(value) for key, value in raw.items()}
         else:
             file_vals = {}
 
@@ -470,7 +517,7 @@ class CandCServer:
         self.GC_pi = abs(self.GC_pi)
 
         # Generate C_p lookup dictionary
-        with open(resources.joinpath("ASCE_CandCCoefficients.json")) as coefficients_file:
+        with open(resources.joinpath("CandC_coefficients.json")) as coefficients_file:
             type_coefs = json.load(coefficients_file)[self.building_type]
 
         match self.building_type:
@@ -512,7 +559,7 @@ class CandCServer:
                     slopes = (30, 45)
                 else:
                     raise ValueError("Roof slope is greater than 45 degrees")
-                self.coefs = utils.linterp_dicts(
+                self.coefs = linterp_dicts(
                     slopes[0],
                     type_coefs[self.roof_type+"_"+str(slopes[0])],
                     slopes[1],

@@ -1,0 +1,14 @@
+{
+    "table_21_2_2_compression": {
+        "types": {"epsilon_t": "float", "epsilon_ty": "float", "phi": "float"},
+        "string": "$$\\begin{{{{aligned}}}}\n    & \\text{{{{Since, }}}} \\left(\\epsilon_t \\leq \\epsilon_{{{{ty}}}} \\Leftarrow {epsilon_t} \\leq {epsilon_ty}\\right): & \\phi &= {phi}\n\\end{{{{aligned}}}}$$"
+    },
+    "table_21_2_2_transition": {
+        "types": {"epsilon_t": "float", "epsilon_ty": "float", "epsilon_ty003": "float", "phi": "float"},
+        "string": "$$\\begin{{{{aligned}}}}\n    & \\text{{{{Since, }}}} \\left(\\epsilon_{{{{ty}}}} < \\epsilon_t < \\epsilon_{{{{ty}}}} + 0.003 \\Leftarrow {epsilon_ty} < {epsilon_t} < {epsilon_ty003}\\right):\n        \\\\[10pt]\n        & \\qquad \\phi = 0.65 + 0.25 \\cdot \\frac{{{{\\epsilon_t - \\epsilon_{{{{ty}}}}}}}}{{{{0.003}}}} = 0.65 + 0.25 \\cdot \\frac{{{{{epsilon_t} - {epsilon_ty}}}}}{{{{0.003}}}} &= {phi}\n\\end{{{{aligned}}}}$$"
+    },
+    "table_21_2_2_tension": {
+        "types": {"epsilon_t": "float", "epsilon_ty003": "float", "phi": "float"},
+        "string": "$$\\begin{{{{aligned}}}}\n    & \\text{{{{Since, }}}} \\left(\\epsilon_t \\geq \\epsilon_{{{{ty}}}} +0.003 \\Leftarrow {epsilon_t} \\geq {epsilon_ty003}\\right): & \\phi &= {phi}\n\\end{{{{aligned}}}}$$"
+    }
+}

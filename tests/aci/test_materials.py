@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-from structuraltools.unit import unit
-from structuraltools.utils import isclose
+from numpy import isclose
 
-from structuraltools import materials
+from structuraltools.aci import materials
+from structuraltools.unit import unit
 
 
 def test_Concrete_init_ultra_lightweight():
@@ -65,13 +65,3 @@ def test_Rebar_init():
     assert rebar.G.units == "inch"
     assert rebar.J.magnitude == 4
     assert rebar.J.units == "inch"
-
-def test_Steel_init():
-    steel = materials.Steel("A36")
-    assert steel.name == "A36"
-    assert steel.F_y == 36*unit.ksi
-    assert steel.F_u == 58*unit.ksi
-    assert steel.E == 29000*unit.ksi
-    assert steel.G == 11200*unit.ksi
-    assert steel.v == 0.3
-    assert steel.w_s == 490*unit.pcf

@@ -15,20 +15,12 @@
 
 import importlib.resources
 
+from numpy import isclose
 import pytest
 
-from structuraltools.template import Result
 from structuraltools.unit import unit
 from structuraltools import utils
 
-
-resources = importlib.resources.files("structuraltools.resources")
-
-
-def test_isclose():
-    result = Result("", 15.01*unit.ft)
-    assert utils.isclose(result, 15*unit.ft, atol=0.1*unit.ft)
-    assert not utils.isclose(result, 15*unit.ft)
 
 def test_linterp():
     assert utils.linterp(1, 1, 3, 3, 2) == 2
@@ -46,7 +38,7 @@ def test_round_to_float():
     assert utils.round_to(3.5, 5) == 5
 
 def test_round_to_Quantity():
-    assert utils.isclose(utils.round_to(-0.1713*unit.kip, 10*unit.lb), -180*unit.lb)
+    assert isclose(utils.round_to(-0.1713*unit.kip, 10*unit.lb), -180*unit.lb)
 
 def test_convert_to_unit_Quantity_string():
     assert utils.convert_to_unit("1 ft") == 1*unit.ft
@@ -70,6 +62,7 @@ def test_convert_to_unit_Quantity_like_string():
     assert record[0].message.args[0] == "'1 xyz' was not evaluated as a unit"
 
 def test_read_data_table():
-    filepath = resources.joinpath("AISC_steel_materials.csv")
+    resources = importlib.resources.files("structuraltools.aisc.resources")
+    filepath = resources.joinpath("steel_materials.csv")
     steel_table = utils.read_data_table(filepath)
     assert steel_table.at["A36", "F_y"] == 36*unit.ksi

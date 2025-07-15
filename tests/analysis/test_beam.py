@@ -13,9 +13,10 @@
 # limitations under the License.
 
 
+from numpy import isclose
+
 from structuraltools import analysis
 from structuraltools.unit import unit
-from structuraltools.utils import isclose
 
 
 def test_ContinuumBeam_init():

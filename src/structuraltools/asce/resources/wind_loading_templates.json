@@ -1,0 +1,14 @@
+{
+    "calc_K_zt": {
+        "types": {"L_prime_h": "unit", "L_h": "unit", "H": "unit", "K_1_str": "str", "K_2_str": "str", "K_3_str": "str", "K_zt_str": "str"},
+        "string": "$$\\begin{{{{aligned}}}}\n    L'_h &= \\operatorname{{{{max}}}}\\left(L_h,\\ 2 \\cdot H\\right) = \\operatorname{{{{max}}}}\\left({L_h},\\ 2 \\cdot {H}\\right) &= {L_prime_h}\n    \\\\[10pt]\n    {K_1_str}\n    \\\\[10pt]\n    {K_2_str}\n    \\\\[10pt]\n    {K_3_str}\n    \\\\[10pt]\n    {K_zt_str}\n\\end{{{{aligned}}}}$$"
+    },
+    "calc_wind_server_inputs": {
+        "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "K_e_str": "str", "K_h_str": "str", "q_h_str": "str", "h": "unit", "z_min": "unit", "bar_z": "unit", "I_bar_z_str": "str", "L_bar_z_str": "str", "Q_x_str": "str", "G_x_str": "str", "Q_y_str": "str", "G_y_str": "str"},
+        "string": "{_header_}{_h_start_}Ground Elevation Factor{_h_end_}\n$$\\begin{{{{aligned}}}}\n    {K_e_str}\n\\end{{{{aligned}}}}$$\n<br/>\n{_header_}{_h_start_}Roof Velocity Pressure{_h_end_}\n$$\\begin{{{{aligned}}}}\n    {K_h_str}\n    \\\\[10pt]\n    {q_h_str}\n\\end{{{{aligned}}}}$$\n<br/>\n{_header_}{_h_start_}Gust Effect Factor{_h_end_}\n$$\\begin{{{{aligned}}}}\n    \\bar{{{{z}}}} &= \\operatorname{{{{max}}}}\\left(0.6 \\cdot h,\\ z_{{{{min}}}}\\right) = \\operatorname{{{{max}}}}\\left(0.6 \\cdot {h},\\ {z_min}\\right) &= {bar_z}\n    \\\\[10pt]\n    {I_bar_z_str}\n    \\\\[10pt]\n    {L_bar_z_str}\n    \\\\[10pt]\n    {Q_x_str}\n    \\\\[10pt]\n    {G_x_str}\n    \\\\[10pt]\n    {Q_y_str}\n    \\\\[10pt]\n    {G_y_str}\n\\end{{{{aligned}}}}$$"
+    },
+    "calc_wind_server_inputs_with_parapet": {
+        "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "K_e_str": "str", "K_h_str": "str", "q_h_str": "str", "K_p_str": "str", "q_p_str": "str", "h": "unit", "z_min": "unit", "bar_z": "unit", "I_bar_z_str": "str", "L_bar_z_str": "str", "Q_x_str": "str", "G_x_str": "str", "Q_y_str": "str", "G_y_str": "str"},
+        "string": "{_header_}{_h_start_}Ground Elevation Factor{_h_end_}\n$$\\begin{{{{aligned}}}}\n    {K_e_str}\n\\end{{{{aligned}}}}$$\n<br/>\n{_header_}{_h_start_}Roof Velocity Pressure{_h_end_}\n$$\\begin{{{{aligned}}}}\n    {K_h_str}\n    \\\\[10pt]\n    {q_h_str}\n\\end{{{{aligned}}}}$$\n<br/>\n{_header_}{_h_start_}Parapet Velocity Pressure{_h_end_}\n$$\\begin{{{{aligned}}}}\n    {K_p_str}\n    \\\\[10pt]\n    {q_p_str}\n\\end{{{{aligned}}}}$$\n<br/>\n{_header_}{_h_start_}Gust Effect Factor{_h_end_}\n$$\\begin{{{{aligned}}}}\n    \\bar{{{{z}}}} &= \\operatorname{{{{max}}}}\\left(0.6 \\cdot h,\\ z_{{{{min}}}}\\right) = \\operatorname{{{{max}}}}\\left(0.6 \\cdot {h},\\ {z_min}\\right) &= {bar_z}\n    \\\\[10pt]\n    {I_bar_z_str}\n    \\\\[10pt]\n    {L_bar_z_str}\n    \\\\[10pt]\n    {Q_x_str}\n    \\\\[10pt]\n    {G_x_str}\n    \\\\[10pt]\n    {Q_y_str}\n    \\\\[10pt]\n    {G_y_str}\n\\end{{{{aligned}}}}$$"
+    }
+}

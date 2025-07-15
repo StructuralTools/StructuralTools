@@ -13,13 +13,36 @@
 # limitations under the License.
 
 
-from structuraltools import asce
-from structuraltools.unit import unit
-from structuraltools.utils import isclose
+from numpy import isclose
 
+from structuraltools.asce import wind_loading
+from structuraltools.unit import unit
+
+
+def calc_K_zt():
+    string, K_zt = wind_loading.calc_K_zt(
+        feature="escarpment",
+        H=500*unit.ft,
+        L_h=1500*unit.ft,
+        x=300*unit.ft,
+        z=50*unit.ft,
+        exposure="B",
+        precision=4)
+    assert isclose(K_zt, 1.484767957, atol=1e-9)
+    assert string == r"""$$\begin{aligned}
+    L'_h &= \operatorname{max}\left(L_h,\ 2 \cdot H\right) = \operatorname{max}\left(1500\ \mathrm{ft},\ 2 \cdot 500\ \mathrm{ft}\right) &= 1500\ \mathrm{ft}
+    \\[10pt]
+    K_1 &= 0.75 \cdot \frac{H}{L'_h} = 0.75 \cdot \frac{500\ \mathrm{ft}}{1500\ \mathrm{ft}} &= 0.25
+    \\[10pt]
+    K_2 &= 1 - \frac{|x|}{\mu \cdot L'_h} = 1 - \frac{|300\ \mathrm{ft}|}{4 \cdot 1500\ \mathrm{ft}} &= 0.95
+    \\[10pt]
+    K_3 &= e^{- \frac{\gamma \cdot z}{L'_h}} = e^{- \frac{2.5 \cdot 50\ \mathrm{ft}}{1500\ \mathrm{ft}}} &= 0.92
+    \\[10pt]
+    K_{zt} &= \left(1 + K_1 \cdot K_2 \cdot K_3\right)^2 = \left(1 + 0.25 \cdot 0.95 \cdot 0.92\right)^2 &= 1.485
+\end{aligned}$$"""
 
 def test_calc_wind_server_inputs():
-    inputs = asce.wind_loading.calc_wind_server_inputs(
+    string, inputs = wind_loading.calc_wind_server_inputs(
         V=110*unit.mph,
         exposure="B",
         building_type="low-rise",
@@ -31,57 +54,51 @@ def test_calc_wind_server_inputs():
         h=51.25*unit.ft,
         z_e=520*unit.ft,
         h_p=53.25*unit.ft,
-        return_string=True)
+        precision=4)
     assert isclose(inputs["K_e"], 0.981352065, atol=1e-9)
     assert isclose(inputs["q_h"], 24.16680433*unit.psf, atol=1e-8*unit.psf)
     assert isclose(inputs["q_p"], 24.41477673*unit.psf, atol=1e-8*unit.psf)
     assert isclose(inputs["G_x"], 0.840652037, atol=1e-9)
     assert isclose(inputs["G_y"], 0.8068246373, atol=1e-10)
     assert isclose(inputs["a"], 7.85*unit.ft)
-    assert inputs.string == r"""#### Ground Elevation Factor
-$$ \begin{aligned}
-    K_e &= e^{-0.0000362 \cdot z_e} = e^{-0.0000362 \cdot 520\ \mathrm{ft}} &= 0.981
-\end{aligned} $$
+    assert string == r"""#### Ground Elevation Factor
+$$\begin{aligned}
+    K_e &= e^{-0.0000362 \cdot z_e} = e^{-0.0000362 \cdot 520\ \mathrm{ft}} &= 0.9814
+\end{aligned}$$
 <br/>
 #### Roof Velocity Pressure
-$$ \begin{aligned}
-    K_{h} &= 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ h\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 51.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.795
+$$\begin{aligned}
+    K_{h} &= 2.41 \cdot \left(\frac{\operatorname{min} \left(\operatorname{max}\left(15\ \mathrm{ft},\ h\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 51.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.795
     \\[10pt]
-    q_{h} &= 0.00256 \cdot K_{h} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.795 \cdot 1 \cdot 0.981 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.167\ \mathrm{psf}
-\end{aligned} $$
+    q_{h} &= 0.00256 \cdot K_{h} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.795 \cdot 1 \cdot 0.9814 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.17\ \mathrm{psf}
+\end{aligned}$$
 <br/>
 #### Parapet Velocity Pressure
-$$ \begin{aligned}
-    K_{p} &= 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ p\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 53.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.803
+$$\begin{aligned}
+    K_{p} &= 2.41 \cdot \left(\frac{\operatorname{min} \left(\operatorname{max}\left(15\ \mathrm{ft},\ p\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 53.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.8032
     \\[10pt]
-    q_{p} &= 0.00256 \cdot K_{p} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.803 \cdot 1 \cdot 0.981 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.415\ \mathrm{psf}
-\end {aligned} $$
+    q_{p} &= 0.00256 \cdot K_{p} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.8032 \cdot 1 \cdot 0.9814 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.41\ \mathrm{psf}
+\end{aligned}$$
 <br/>
 #### Gust Effect Factor
-$$ \begin{aligned}
+$$\begin{aligned}
     \bar{z} &= \operatorname{max}\left(0.6 \cdot h,\ z_{min}\right) = \operatorname{max}\left(0.6 \cdot 51.25\ \mathrm{ft},\ 30\ \mathrm{ft}\right) &= 30.75\ \mathrm{ft}
     \\[10pt]
-    I_\bar{z} &= c \cdot \left(\frac{33}{\bar{z}}\right)^\frac{1}{6} = 0.3 \cdot \left(\frac{33}{30.75\ \mathrm{ft}}\right)^\frac{1}{6} &= 0.304
+    I_\bar{z} &= c \cdot \left(\frac{33}{\bar{z}}\right)^\frac{1}{6} = 0.3 \cdot \left(\frac{33}{30.75\ \mathrm{ft}}\right)^\frac{1}{6} &= 0.3036
     \\[10pt]
-    L_\bar{z} &= l \cdot \left(\frac{\bar{z}}{33}\right)^{\bar{\epsilon}} = 320\ \mathrm{ft} \cdot \left(\frac{30.75\ \mathrm{ft}}{33}\right)^{0.333} &= 312.555\ \mathrm{ft}
-\end{aligned} $$
-
-##### X-Axis
-$$ \begin{aligned}
-    Q_{x} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{y} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{78.5\ \mathrm{ft} + 51.25\ \mathrm{ft}}{312.555\ \mathrm{ft}}\right)^{0.63}}} &= 0.857
+    L_\bar{z} &= l \cdot \left(\frac{\bar{z}}{33}\right)^\bar{\epsilon} = 320\ \mathrm{ft} \cdot \left(\frac{30.75\ \mathrm{ft}}{33}\right)^{0.3333} &= 312.6\ \mathrm{ft}
     \\[10pt]
-    G_{x} &= 0.925 \cdot \left(\frac{1 + 1.7 \cdot g_Q \cdot I_\bar{z} \cdot Q_{x}}{1 + 1.7 \cdot g_v \cdot I_\bar{z}}\right) = 0.925 \cdot \left(\frac{1 + 1.7 \cdot 3.4 \cdot 0.304 \cdot 0.857}{1 + 1.7 \cdot 3.4 \cdot 0.304}\right) &= 0.841
-\end{aligned} $$
-
-##### Y-Axis
-$$ \begin{aligned}
-    Q_{y} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{x} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{211.5\ \mathrm{ft} + 51.25\ \mathrm{ft}}{312.555\ \mathrm{ft}}\right)^{0.63}}} &= 0.799
+    Q_{x} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{y} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{78.5\ \mathrm{ft} + 51.25\ \mathrm{ft}}{312.6\ \mathrm{ft}}\right)^{0.63}}} &= 0.8568
     \\[10pt]
-    G_{y} &= 0.925 \cdot \left(\frac{1 + 1.7 \cdot g_Q \cdot I_\bar{z} \cdot Q_{y}}{1 + 1.7 \cdot g_v \cdot I_\bar{z}}\right) = 0.925 \cdot \left(\frac{1 + 1.7 \cdot 3.4 \cdot 0.304 \cdot 0.799}{1 + 1.7 \cdot 3.4 \cdot 0.304}\right) &= 0.807
-\end{aligned} $$"""
+    G_{x} &= 0.925 \cdot \left(\frac{1 + 1.7 \cdot g_Q \cdot I_\bar{z} \cdot Q_{x}}{1 + 1.7 \cdot g_v \cdot I_\bar{z}}\right) = 0.925 \cdot \left(\frac{1 + 1.7 \cdot 3.4 \cdot 0.3036 \cdot 0.8568}{1 + 1.7 \cdot 3.4 \cdot 0.3036}\right) &= 0.8407
+    \\[10pt]
+    Q_{y} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{x} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{211.5\ \mathrm{ft} + 51.25\ \mathrm{ft}}{312.6\ \mathrm{ft}}\right)^{0.63}}} &= 0.7994
+    \\[10pt]
+    G_{y} &= 0.925 \cdot \left(\frac{1 + 1.7 \cdot g_Q \cdot I_\bar{z} \cdot Q_{y}}{1 + 1.7 \cdot g_v \cdot I_\bar{z}}\right) = 0.925 \cdot \left(\frac{1 + 1.7 \cdot 3.4 \cdot 0.3036 \cdot 0.7994}{1 + 1.7 \cdot 3.4 \cdot 0.3036}\right) &= 0.8068
+\end{aligned}$$"""
 
 def test_MainWindServer_init_gable():
-    MWFRS = asce.wind_loading.MainWindServer(
+    MWFRS = wind_loading.MainWindServer(
         building_type="low-rise",
         roof_type="gable",
         roof_angle=15,
@@ -98,7 +115,7 @@ def test_MainWindServer_init_gable():
     assert isclose(MWFRS.coefs["y"]["roof"]["windward"]["c1"], -0.7917197452, atol=1e-10)
 
 def test_MainWindServer_minimum_pressure():
-    MWFRS = asce.wind_loading.MainWindServer(
+    MWFRS = wind_loading.MainWindServer(
         V=110*unit.mph,
         building_type="low-rise",
         roof_angle=15,
@@ -117,7 +134,7 @@ def test_MainWindServer_minimum_pressure():
 
 class TestMainWindServer:
     def setup_method(self, method):
-        self.MWFRS = asce.wind_loading.MainWindServer(
+        self.MWFRS = wind_loading.MainWindServer(
             V=150*unit.mph,
             building_type="low-rise",
             roof_angle=15,
@@ -162,7 +179,7 @@ class TestMainWindServer:
         assert isclose(pressure[1], -11.23661053*unit.psf, atol=1e-8*unit.psf)
 
 def test_CandCServer_init_gable():
-    CandC = asce.wind_loading.CandCServer(
+    CandC = wind_loading.CandCServer(
         building_type="low-rise",
         roof_type="gable",
         roof_angle=10,
@@ -177,7 +194,7 @@ def test_CandCServer_init_gable():
     assert CandC.coefs["C-"]["c1"] == -0.7
 
 def test_CandCServer_init_open_monoslope():
-    CandC = asce.wind_loading.CandCServer(
+    CandC = wind_loading.CandCServer(
         building_type="open",
         roof_type="monoslope_clear",
         roof_angle=22.5,
@@ -192,7 +209,7 @@ def test_CandCServer_init_open_monoslope():
 
 class TestCandCServerLowRise:
     def setup_method(self, method):
-        self.CandC = asce.wind_loading.CandCServer(
+        self.CandC = wind_loading.CandCServer(
             building_type="low-rise",
             roof_type="gable",
             roof_angle=0,
@@ -261,7 +278,7 @@ class TestCandCServerLowRise:
 
 class TestCandCServerOpen:
     def setup_method(self, method):
-        self.CandC = asce.wind_loading.CandCServer(
+        self.CandC = wind_loading.CandCServer(
             building_type="open",
             roof_type="monoslope_clear",
             roof_angle=0,
