@@ -14,10 +14,10 @@
 
 
 from structuraltools.unit import unit
-from structuraltools.utils import isclose, linterp, round_to, sign, sqrt
+from structuraltools.utils import linterp, round_to
 
 
 __all__ = (
-    isclose, linterp, round_to, sign, sqrt,
+    linterp, round_to,
     unit
 )

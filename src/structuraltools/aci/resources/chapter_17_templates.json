@@ -1,0 +1,6 @@
+{
+    "eq_17_6_1_2": {
+        "types": {"A_seN": "unit", "f_uta": "unit", "f_ya": "unit", "N_sa": "unit"},
+        "string": "N_{{{{sa}}}} &= A_{{{{se,N}}}} \\cdot \\operatorname{{{{min}}}}\\left(f_{{{{uta}}}},\\ 1.9 \\cdot f_{{{{ya}}}},\\ 125\\ \\mathrm{{{{ksi}}}}\\right) = {A_seN} \\cdot \\operatorname{{{{min}}}}\\left({f_uta},\\ 1.9 \\cdot {f_ya},\\ 125\\ \\mathrm{{{{ksi}}}}\\right) &= {N_sa}"
+    }
+}

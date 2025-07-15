@@ -17,64 +17,92 @@ import importlib.resources
 import json
 from math import e
 
-from structuraltools.asce import _chapter_26_templates as templates
+from numpy import sqrt
+
 from structuraltools.unit import unit, Length, Pressure, Velocity
-from structuraltools.utils import read_data_table, sqrt
+from structuraltools.utils import fill_template, read_data_table, Result
 
 
-resources = importlib.resources.files("structuraltools.resources")
+resources = importlib.resources.files("structuraltools.asce.resources")
+table_26_11_1 = read_data_table(resources.joinpath("Table_26-11-1.csv"))
+with open(resources.joinpath("chapter_26_templates_processed.json")) as file:
+    templates = json.load(file)
 
 
-table_26_11_1 = read_data_table(resources.joinpath("ASCE_Table_26-11-1.csv"))
-
-def fig_26_8_1(feature: str, H: Length, L_h: Length, x: Length, z: Length,
-        exposure: str, location: str = "downwind", **display_options
-        ) -> float | tuple[str, float]:
-    """Calculate the topographic factor ($K_zt$) according to
-    ASCE 7-22 Figure 26.8-1
+def fig_26_8_1_K_1(K_1_factor: float, H: Length, L_prime_h: Length,
+        **string_options) -> Result[float]:
+    """Calculate K_1 according to ACSE 7-22 Figure 26.8-1
 
     Parameters
     ==========
 
-    feature : str
-        Topographic feature causing wind speed-up.
-        One of: "ridge", "escarpment", or "hill"
+    K_1_factor : float
+        Factor to from ASCE 7-22 Figure 26.8-1 to use when calculating K_1
 
     H : Length
-        Height of feature relative to the upwind terrain
+        Height of hill or escarpment relative to the upwind terrain
 
-    L_h : Length
-        Distance upwind of crest to where the difference in ground elevation is
-        half of the height of the feature
+    L_prime_h : Length
+        L_h modified acconding to ASCE 7-22 Figure 26.8-1 footnote b"""
+    K_1 = (K_1_factor*H/L_prime_h).to("dimensionless").magnitude
+    return fill_template(K_1, templates["fig_26_8_1_K_1"], locals(), **string_options)
+
+def fig_26_8_1_K_2(x: Length, mu: float, L_prime_h: Length, **string_options
+        ) -> Result[float]:
+    """Calculate K_2 according to ASCE 7-22 Figure 26.8-1
+
+    Parameters
+    ==========
 
     x : Length
-        Distance (upwind or downwind) from the crest to the site of
-        the structure
+        Distance from the crest to the site of the building
+
+    mu : float
+        Horizontal attenuation factor
+
+    L_prime_h : Length
+        L_h modified according to ASCE 7-22 Figure 26.8-1 footnote b"""
+    K_2 = (1-abs(x)/(mu*L_prime_h)).to("dimensionless").magnitude
+    return fill_template(K_2, templates["fig_26_8_1_K_2"], locals(), **string_options)
+
+def fig_26_8_1_K_3(gamma: float, z: Length, L_prime_h: Length, **string_options
+        ) -> Result[float]:
+    """Calculate K_3 according to ASCE 7-22 Figure 26.8-1
+
+    Parameters
+    ==========
+
+    gamma : float
+        Height attenuation factor
 
     z : Length
-        Height of the structure above the ground surface at the site
+        Building height
 
-    exposure : str, optional
-        Exposure catagory. One of: "B", "C", or "D"
+    L_prime_h : Length
+        L_h modified according to ASCE 7-22 Figure 26.8-1 footnote b"""
+    K_3 = e**(-gamma*z/L_prime_h)
+    return fill_template(K_3, templates["fig_26_8_1_K_3"], locals(), **string_options)
 
-    location : str, optional
-        On of: "upwind" or "downwind", indicating the location of the structure
-        relative to the feature. Conservatively defaults to "downwind"."""
-    with open(resources.joinpath("ASCE_TopoCoefficients.json"), "r") as file:
-        topo_coefs = json.load(file)[feature]
+def fig_26_8_1_K_zt(K_1: float, K_2: float, K_3: float, **string_options
+        ) -> Result[float]:
+    """Calculate K_zt according to ASCE 7-22 Figure 26.8-1
 
-    K_1_factor = topo_coefs["K_1/(H/L_h)"][exposure]
-    mu = topo_coefs["mu"][location]
-    gamma = topo_coefs["gamma"]
+    Parameters
+    ==========
 
-    L_h_bounded = max(L_h, 2*H)
-    K_1 = (K_1_factor*H/L_h_bounded).to("dimensionless").magnitude
-    K_2 = (1-abs(x)/(mu*L_h_bounded)).to("dimensionless").magnitude
-    K_3 = e**(-gamma*z/L_h_bounded)
+    K_1 : float
+        Factor to account for shape of topographic feature and maximum speed-up effect
+
+    K_2 : float
+        Factor to account for reduction in speed-up with distance upwind or
+        downwind of crest
+
+    K_3 : float
+        Factor to account for reduction in speed-up with height above local terrain"""
     K_zt = (1+K_1*K_2*K_3)**2
-    return templates.fig_26_8_1.fill(locals(), K_zt, **display_options)
+    return fill_template(K_zt, templates["fig_26_8_1_K_zt"], locals(), **string_options)
 
-def table_26_9_1(z_e: Length, **display_options) -> float | tuple[str, float]:
+def table_26_9_1(z_e: Length, **string_options) -> Result[float]:
     """Calculate the ground elevation factor ($K_e$) according to
     ASCE 7-22 Table 26.9-1 footnote 2
 
@@ -85,10 +113,10 @@ def table_26_9_1(z_e: Length, **display_options) -> float | tuple[str, float]:
         Ground elevation above sea level"""
     z_e = z_e.to("ft")
     K_e = e**(-0.0000362*z_e.magnitude)
-    return templates.table_26_9_1.fill(locals(), K_e, **display_options)
+    return fill_template(K_e, templates["table_26_9_1"], locals(), **string_options)
 
 def table_26_10_1(z: Length, z_g: Length, alpha: float, elevation: str = "z",
-        **display_options) -> float | tuple[str, float]:
+        **string_options) -> Result[float]:
     """Calculate the velocity pressure exposure coefficient ($K_z$) according to
     ASCE 7-22 Table 26.10-1 Footnote 1
 
@@ -110,10 +138,10 @@ def table_26_10_1(z: Length, z_g: Length, alpha: float, elevation: str = "z",
     if z < 0*unit.ft or 3280*unit.ft < z:
         raise ValueError("z is outside of the bounds supported by ASCE 7-22")
     K_z = (2.41*(min(max(15*unit.ft, z), z_g)/z_g)**(2/alpha)).to("dimensionless").magnitude
-    return templates.table_26_10_1.fill(locals(), K_z, **display_options)
+    return fill_template(K_z, templates["table_26_10_1"], locals(), **string_options)
 
 def eq_26_10_1(K_z: float, K_zt: float, K_e: float, V: Velocity,
-        elevation: str = "z", **display_options) -> Pressure | tuple[str, Pressure]:
+        elevation: str = "z", **string_options) -> Result[Pressure]:
     """ASCE 7-22 Equation 26.10-1
 
     Parameters
@@ -136,10 +164,10 @@ def eq_26_10_1(K_z: float, K_zt: float, K_e: float, V: Velocity,
         defaults to "z" """
     V = V.to("mph")
     q_z = 0.00256*K_z*K_zt*K_e*((V.magnitude)**2)*unit.psf
-    return templates.eq_26_10_1.fill(locals(), q_z, **display_options)
+    return fill_template(q_z, templates["eq_26_10_1"], locals(), **string_options)
 
 def eq_26_11_6(I_bar_z: float, Q: float, axis: str = "", g_Q: float = 3.4, g_v:
-        float = 3.4, **display_options) -> float | tuple[str, float]:
+        float = 3.4, **string_options) -> Result[float]:
     """ASCE 7-22 Equation 26.11-6
 
     Parameters
@@ -162,9 +190,9 @@ def eq_26_11_6(I_bar_z: float, Q: float, axis: str = "", g_Q: float = 3.4, g_v:
         Factor defined in ASCE 7-22 Section 26.22.4. This can always be left as
         the default value."""
     G = 0.925*(1+1.7*g_Q*I_bar_z*Q)/(1+1.7*g_v*I_bar_z)
-    return templates.eq_26_11_6.fill(locals(), G, **display_options)
+    return fill_template(G, templates["eq_26_11_6"], locals(), **string_options)
 
-def eq_26_11_7(c: float, bar_z: Length, **display_options) -> float | tuple[str, float]:
+def eq_26_11_7(c: float, bar_z: Length, **string_options) -> Result[float]:
     """ASCE 7-22 Equation 26.11-7
 
     Parameters
@@ -179,10 +207,10 @@ def eq_26_11_7(c: float, bar_z: Length, **display_options) -> float | tuple[str,
 
     bar_z = bar_z.to("ft")
     I_bar_z = c*(33/bar_z.magnitude)**(1/6)
-    return templates.eq_26_11_7.fill(locals(), I_bar_z, **display_options)
+    return fill_template(I_bar_z, templates["eq_26_11_7"], locals(), **string_options)
 
 def eq_26_11_8(L: Length, h: Length, L_bar_z: Length, axis_1: str = "",
-        axis_2: str = "", **display_options) -> float | tuple[str, float]:
+        axis_2: str = "", **string_options) -> Result[float]:
     """ASCE 7-22 Equation 26.11-8
 
     Parameters
@@ -204,10 +232,10 @@ def eq_26_11_8(L: Length, h: Length, L_bar_z: Length, axis_1: str = "",
         Subscript to indicate the axis perpendicular to the axis the gust effect
         factor is calculated for"""
     Q = sqrt(1/(1+0.63*((L+h)/L_bar_z)**0.63)).to("dimensionless").magnitude
-    return templates.eq_26_11_8.fill(locals(), Q, **display_options)
+    return fill_template(Q, templates["eq_26_11_8"], locals(), **string_options)
 
-def eq_26_11_9(L: Length, bar_z: Length, bar_epsilon: float, **display_options
-               ) -> Length | tuple[str, Length]:
+def eq_26_11_9(L: Length, bar_z: Length, bar_epsilon: float, **string_options
+               ) -> Result[Length]:
     r"""ASCE 7-22 Equation 26.11-9
 
     Parameters
@@ -224,4 +252,4 @@ def eq_26_11_9(L: Length, bar_z: Length, bar_epsilon: float, **display_options
         Terrain exposure constant $\bar{\epsilon}$ for ASCE 7-22 Table 26.11-1"""
     bar_z = bar_z.to("ft")
     L_bar_z = L*(bar_z.magnitude/33)**bar_epsilon
-    return templates.eq_26_11_9.fill(locals(), L_bar_z, **display_options)
+    return fill_template(L_bar_z, templates["eq_26_11_9"], locals(), **string_options)

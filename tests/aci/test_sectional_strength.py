@@ -13,34 +13,59 @@
 # limitations under the License.
 
 
-from structuraltools import aci, materials
+from numpy import isclose
+
+from structuraltools.aci import materials, sectional_strength
 from structuraltools.unit import unit
-from structuraltools.utils import isclose
 
 
-def test_calc_phi_compression_controlled():
-    rebar = materials.Rebar(4)
-    phi = aci.sectional_strength.calc_phi(rebar, 0.002, return_string=True)
-    assert phi == 0.65
+def test_calc_a():
+    string, a = sectional_strength.calc_a(
+        A_st=0.6*unit.inch**2,
+        f_y=60*unit.ksi,
+        f_prime_c=4*unit.ksi,
+        b=8*unit.inch,
+        precision=4)
+    assert isclose(a, 1.323529412*unit.inch, atol=1e-9*unit.inch)
+    assert string == r"a &= \frac{A_{st} \cdot f_y}{0.85 \cdot f'_c \cdot b} = \frac{0.6\ \mathrm{in}^{2} \cdot 60\ \mathrm{ksi}}{0.85 \cdot 4\ \mathrm{ksi} \cdot 8\ \mathrm{in}} &= 1.324\ \mathrm{in}"
 
-def test_calc_phi_transition():
-    rebar = materials.Rebar(4)
-    phi = aci.sectional_strength.calc_phi(rebar, 0.003, return_string=True)
-    assert isclose(phi, 0.7275862083, atol=1e-8)
+def test_calc_M_n():
+    string, M_n = sectional_strength.calc_M_n(
+        A_st=0.6*unit.inch**2,
+        f_y=60*unit.ksi,
+        d=12*unit.inch,
+        a=1.32353*unit.inch,
+        precision=4)
+    assert isclose(M_n, 34.014705*unit.kipft, atol=1e-6*unit.kipft)
+    assert string == r"M_n &= A_{st} \cdot f_y \cdot \left(d - \frac{a}{2}\right) = 0.6\ \mathrm{in}^{2} \cdot 60\ \mathrm{ksi} \cdot \left(12\ \mathrm{in} - \frac{1.324\ \mathrm{in}}{2}\right) &= 34.01\ \mathrm{kipft}"
 
-def test_calc_phi_tension_controlled():
-    rebar = materials.Rebar(4)
-    phi = aci.sectional_strength.calc_phi(rebar, 0.006, return_string=True)
-    assert phi == 0.9
+def test_calc_epsilon_t():
+    string, epsilon_t = sectional_strength.calc_epsilon_t(
+        beta_1=0.85,
+        d_t=12*unit.inch,
+        a=1.32353*unit.inch,
+        precision=4)
+    assert isclose(epsilon_t, 0.0201199897, atol=1e-10)
+    assert string == r"\epsilon_t &= 0.003 \cdot \left(\frac{\beta_1 \cdot d_t}{a} - 1\right) = 0.003 \cdot \left(\frac{0.85 \cdot 12\ \mathrm{in}}{1.324\ \mathrm{in}} - 1\right) &= 0.02012"
 
 def test_moment_capacity():
     concrete = materials.Concrete(4*unit.ksi)
     rebar = materials.Rebar(4)
-    phi, M_n = aci.sectional_strength.moment_capacity(
+    string, phiM_n = sectional_strength.moment_capacity(
         b=8*unit.inch,
         d=12*unit.inch,
         concrete=concrete,
         rebar=rebar,
         n=3,
         return_string=True)
-    assert isclose(phi*M_n, 30.61323529*unit.kipft, atol=1e-8)
+    assert isclose(phiM_n[0]*phiM_n[1], 30.61323529*unit.kipft, atol=1e-8*unit.kipft)
+    assert string == r"""$$\begin{aligned}
+    a &= \frac{A_{st} \cdot f_y}{0.85 \cdot f'_c \cdot b} = \frac{0.6\ \mathrm{in}^{2} \cdot 6\times 10^{4}\ \mathrm{psi}}{0.85 \cdot 4000\ \mathrm{psi} \cdot 8\ \mathrm{in}} &= 1.324\ \mathrm{in}
+    \\[10pt]
+    M_n &= A_{st} \cdot f_y \cdot \left(d - \frac{a}{2}\right) = 0.6\ \mathrm{in}^{2} \cdot 6\times 10^{4}\ \mathrm{psi} \cdot \left(12\ \mathrm{in} - \frac{1.324\ \mathrm{in}}{2}\right) &= 34.01\ \mathrm{kipft}
+    \\[10pt]
+    \epsilon_t &= 0.003 \cdot \left(\frac{\beta_1 \cdot d_t}{a} - 1\right) = 0.003 \cdot \left(\frac{0.85 \cdot 12\ \mathrm{in}}{1.324\ \mathrm{in}} - 1\right) &= 0.02012
+\end{aligned}$$
+\begin{aligned}
+    & \text{Since, } \left(\epsilon_t \geq \epsilon_{ty} +0.003 \Leftarrow 0.02012 \geq 0.005069\right): & \phi &= 0.9
+\end{aligned}"""

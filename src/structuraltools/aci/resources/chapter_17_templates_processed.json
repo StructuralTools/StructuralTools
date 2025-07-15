@@ -1,0 +1,3 @@
+{
+    "eq_17_6_1_2": "N_{{sa}} &= A_{{se,N}} \\cdot \\operatorname{{min}}\\left(f_{{uta}},\\ 1.9 \\cdot f_{{ya}},\\ 125\\ \\mathrm{{ksi}}\\right) = {A_seN:{_qformat_}.{_precision_}{_gformat_}} \\cdot \\operatorname{{min}}\\left({f_uta:{_qformat_}.{_precision_}{_gformat_}},\\ 1.9 \\cdot {f_ya:{_qformat_}.{_precision_}{_gformat_}},\\ 125\\ \\mathrm{{ksi}}\\right) &= {N_sa:{_qformat_}.{_precision_}{_gformat_}}"
+}

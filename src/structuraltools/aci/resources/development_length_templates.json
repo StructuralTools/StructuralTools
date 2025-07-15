@@ -1,0 +1,10 @@
+{
+    "straight": {
+        "types": {"modifiers_str": "str", "K_tr_str": "str", "c_b": "unit", "c_c": "unit", "d_b": "unit", "s": "unit", "l_prime_d_str": "str", "l_d_min": "unit", "l_d": "unit", "l_prime_d": "unit"},
+        "string": "$${modifiers_str}$$\n$$\\begin{{{{aligned}}}}\n    {K_tr_str}\n    \\\\[10pt]\n    c_b &= \\operatorname{{{{min}}}}\\left(c_c + \\frac{{{{d_b}}}}{{{{2}}}},\\ \\frac{{{{s}}}}{{{{2}}}}\\right) = \\operatorname{{{{min}}}}\\left({c_c} + \\frac{{{{{d_b}}}}}{{{{2}}}},\\ \\frac{{{{{s}}}}}{{{{2}}}}\\right) &= {c_b}\n    \\\\[10pt]\n    {l_prime_d_str}\n    \\\\[10pt]\n    l_d &= \\operatorname{{{{max}}}}\\left(l'_d,\\ {l_d_min}\\right) = \\operatorname{{{{max}}}}\\left({l_prime_d},\\ {l_d_min}\\right) &= {l_d}\n\\end{{{{aligned}}}}$$"
+    },
+    "hook": {
+        "types": {"modifiers_str": "str", "l_prime_dh_str": "str", "d_b": "unit", "l_dh_min": "unit", "l_dh": "unit", "l_prime_dh": "unit"},
+        "string": "{modifiers_str}\n$$\\begin{{{{aligned}}}}\n    {l_prime_dh_str}\n    \\\\[10pt]\n    l_{{{{dh}}}} &= \\operatorname{{{{max}}}}\\left(l'_{{{{dh}}}},\\ 8 \\cdot d_b,\\ {l_dh_min}\\right) = \\operatorname{{{{max}}}}\\left({l_prime_dh},\\ 8 \\cdot {d_b},\\ {l_dh_min}\\right) &= {l_dh}\n\\end{{{{aligned}}}}$$"
+    }
+}

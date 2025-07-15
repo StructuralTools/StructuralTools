@@ -1,0 +1,46 @@
+{
+    "fig_26_8_1_K_1": {
+        "types": {"K_1_factor": "float", "H": "unit", "L_prime_h": "unit", "K_1": "float"},
+        "string": "K_1 &= {K_1_factor} \\cdot \\frac{{{{H}}}}{{{{L'_h}}}} = {K_1_factor} \\cdot \\frac{{{{{H}}}}}{{{{{L_prime_h}}}}} &= {K_1}"
+    },
+    "fig_26_8_1_K_2": {
+        "types": {"x": "unit", "mu": "float", "L_prime_h": "unit", "K_2": "float"},
+        "string": "K_2 &= 1 - \\frac{{{{|x|}}}}{{{{\\mu \\cdot L'_h}}}} = 1 - \\frac{{{{|{x}|}}}}{{{{{mu} \\cdot {L_prime_h}}}}} &= {K_2}"
+    },
+    "fig_26_8_1_K_3": {
+        "types": {"gamma": "float", "z": "unit", "L_prime_h": "unit", "K_3": "float"},
+        "string": "K_3 &= e^{{{{- \\frac{{{{\\gamma \\cdot z}}}}{{{{L'_h}}}}}}}} = e^{{{{- \\frac{{{{{gamma} \\cdot {z}}}}}{{{{{L_prime_h}}}}}}}}} &= {K_3}"
+    },
+    "fig_26_8_1_K_zt": {
+        "types": {"K_1": "float", "K_2": "float", "K_3": "float", "K_zt": "float"},
+        "string": "K_{{{{zt}}}} &= \\left(1 + K_1 \\cdot K_2 \\cdot K_3\\right)^2 = \\left(1 + {K_1} \\cdot {K_2} \\cdot {K_3}\\right)^2 &= {K_zt}"
+    },
+    "table_26_9_1": {
+        "types": {"z_e": "unit", "K_e": "float"},
+        "string": "K_e &= e^{{{{-0.0000362 \\cdot z_e}}}} = e^{{{{-0.0000362 \\cdot {z_e}}}}} &= {K_e}"
+    },
+    "table_26_10_1": {
+        "types": {"elevation": "str", "z": "unit", "z_g": "unit", "alpha": "float", "K_z": "float"},
+        "string": "K_{{{{{elevation}}}}} &= 2.41 \\cdot \\left(\\frac{{{{\\operatorname{{{{min}}}} \\left(\\operatorname{{{{max}}}}\\left(15\\ \\mathrm{{{{ft}}}},\\ {elevation}\\right),\\ z_g\\right)}}}}{{{{z_g}}}}\\right)^{{{{\\frac{{{{2}}}}{{{{\\alpha}}}}}}}} = 2.41 \\cdot \\left(\\frac{{{{\\operatorname{{{{min}}}}\\left(\\operatorname{{{{max}}}}\\left(15\\ \\mathrm{{{{ft}}}},\\ {z}\\right),\\ {z_g}\\right)}}}}{{{{{z_g}}}}}\\right)^{{{{\\frac{{{{2}}}}{{{{{alpha}}}}}}}}} &= {K_z}"
+    },
+    "eq_26_10_1": {
+        "types": {"elevation": "str", "K_z": "float", "K_zt": "float", "K_e": "float", "V": "unit", "q_z": "unit"},
+        "string": "q_{{{{{elevation}}}}} &= 0.00256 \\cdot K_{{{{{elevation}}}}} \\cdot K_{{{{zt}}}} \\cdot K_e \\cdot V^2 = 0.00256 \\cdot {K_z} \\cdot {K_zt} \\cdot {K_e} \\cdot \\left({V}\\right)^2 &= {q_z}"
+    },
+    "eq_26_11_6": {
+        "types": {"axis": "str", "g_Q": "float", "I_bar_z": "float", "Q": "float", "g_v": "float", "G": "float"},
+        "string": "G_{{{{{axis}}}}} &= 0.925 \\cdot \\left(\\frac{{{{1 + 1.7 \\cdot g_Q \\cdot I_\\bar{{{{z}}}} \\cdot Q_{{{{{axis}}}}}}}}}{{{{1 + 1.7 \\cdot g_v \\cdot I_\\bar{{{{z}}}}}}}}\\right) = 0.925 \\cdot \\left(\\frac{{{{1 + 1.7 \\cdot {g_Q} \\cdot {I_bar_z} \\cdot {Q}}}}}{{{{1 + 1.7 \\cdot {g_v} \\cdot {I_bar_z}}}}}\\right) &= {G}"
+    },
+    "eq_26_11_7": {
+        "types": {"c": "float", "bar_z": "unit", "I_bar_z": "float"},
+        "string": "I_\\bar{{{{z}}}} &= c \\cdot \\left(\\frac{{{{33}}}}{{{{\\bar{{{{z}}}}}}}}\\right)^\\frac{{{{1}}}}{{{{6}}}} = {c} \\cdot \\left(\\frac{{{{33}}}}{{{{{bar_z}}}}}\\right)^\\frac{{{{1}}}}{{{{6}}}} &= {I_bar_z}"
+    },
+    "eq_26_11_8": {
+        "types": {"axis_1": "str", "axis_2": "str", "L": "unit", "h": "unit", "L_bar_z": "unit", "Q": "float"},
+        "string": "Q_{{{{{axis_1}}}}} &= \\sqrt{{{{\\frac{{{{1}}}}{{{{1 + 0.63 \\cdot \\left(\\frac{{{{L_{{{{{axis_2}}}}} + h}}}}{{{{L_\\bar{{{{z}}}}}}}}\\right)^{{{{0.63}}}}}}}}}}}} = \\sqrt{{{{\\frac{{{{1}}}}{{{{1 + 0.63 \\cdot \\left(\\frac{{{{{L} + {h}}}}}{{{{{L_bar_z}}}}}\\right)^{{{{0.63}}}}}}}}}}}} &= {Q}"
+    },
+    "eq_26_11_9": {
+        "types": {"L": "unit", "bar_z": "unit", "bar_epsilon": "float", "L_bar_z": "unit"},
+        "string": "L_\\bar{{{{z}}}} &= l \\cdot \\left(\\frac{{{{\\bar{{{{z}}}}}}}}{{{{33}}}}\\right)^\\bar{{{{\\epsilon}}}} = {L} \\cdot \\left(\\frac{{{{{bar_z}}}}}{{{{33}}}}\\right)^{{{{{bar_epsilon}}}}} &= {L_bar_z}"
+    }
+}

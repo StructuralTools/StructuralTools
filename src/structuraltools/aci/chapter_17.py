@@ -13,9 +13,16 @@
 # limitations under the License.
 
 
-from structuraltools.aci.config import templates
+import importlib.resources
+import json
+
 from structuraltools.unit import unit, Area, Force, Stress
 from structuraltools.utils import fill_template, Result
+
+
+resources = importlib.resources.files("structuraltools.aci.resources")
+with open(resources.joinpath("chapter_17_templates_processed.json")) as file:
+    templates = json.load(file)
 
 
 def eq_17_6_1_2(A_seN: Area, f_uta: Stress, f_ya: Stress, **string_options) -> Result[Force]:

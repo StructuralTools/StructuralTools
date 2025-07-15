@@ -14,22 +14,25 @@
 
 
 import importlib.resources
+import json
 from typing import Optional
 
-from structuraltools import materials, sections, utils
+from numpy import sqrt
+
 from structuraltools.aisc import chapter_B, chapter_F
-from structuraltools.aisc import _shapes_templates as templates
-from structuraltools.template import Result
 from structuraltools.unit import unit, Length, Moment
-from structuraltools.utils import set_sub_display
+from structuraltools.utils import fill_template, read_data_table, Result
 
 
-resources = importlib.resources.files("structuraltools.resources")
+resources = importlib.resources.files("structuraltools.aisc.resources")
+materials = read_data_table(resources.joinpath("steel_materials.csv"))
+with open(resources.joinpath("shapes_templates_processed.json")) as file:
+    templates = json.load(file)
 
 
 class Shape:
     """Base class for AISC steel shapes"""
-    def __init__(self, size: str, material: Optional[materials.Steel] = None):
+    def __init__(self, size: str, material: Optional[str] = None):
         """Create an instance from the specified database
 
         Parameters
@@ -38,71 +41,72 @@ class Shape:
         size : str
             Name to use when looking up the shape dimensions
 
-        material : materials.Steel
-            Material to use for the member"""
+        material : str
+            Name to use when looking up steel properties"""
         self.size = size
         properties = self.database.loc[size, :].to_dict()
         if not material:
             material = self.default_material
-        properties.update(vars(material))
+        self.material = material
+        material = materials.loc[material, :].to_dict()
+        properties.update(material)
         for attribute, value in properties.items():
             setattr(self, attribute, value)
-        delattr(self, "name")
 
 
 class Angle(Shape):
     """Class to represent angle shapes"""
-    database = utils.read_data_table(resources.joinpath("AISC_Angle.csv"))
-    default_material = materials.Steel("A572Gr50")
+    database = read_data_table(resources.joinpath("Angle.csv"))
+    default_material = "A572Gr50"
 
 
 class Channel(Shape):
     """Class to represent channel shapes"""
-    database = utils.read_data_table(resources.joinpath("AISC_Channel.csv"))
-    default_material = materials.Steel("A992")
+    database = read_data_table(resources.joinpath("Channel.csv"))
+    default_material = "A992"
 
 
-class Plate(sections.Rectangle):
+class Plate(Shape):
     """Class for calculating steel plate strength. For consistency with the
     other shapes the x-axis intersects the width of the plate (b) and
     represents the strong axis for bending."""
-    default_material = materials.Steel("A36")
+    default_material = "A572Gr50"
 
-    def __init__(
-        self,
-        d: Length,
-        t: Length,
-        material: Optional[materials.Steel] = None):
-        """Create a new steel plate.
+    def __init__(self, d: Length, t: Length, material: str = "A572Gr50"):
+        """Create a new steel plate. Major axis bending has d perpendicular to
+        the bending axis.
 
         Parameters
         ==========
 
         d : pint length quantity
-            Plate width. This is specified at instance initialization to
-            make this act more like other shapes.
+            Plate width
 
         t : pint length quantity
             Plate thickness
 
-        material : structuraltools.materials.Steel instance
+        material : str
             Material to use for the member"""
-        super().__init__(d, t)
-        self.t = self.b
-        delattr(self, "b")
-
+        self.size = f"Plate {d}X{t}"
+        self.d = d.to("inch")
+        self.t = t.to("inch")
+        self.A = (self.d*self.t).to("inch**2")
+        self.S_x = (self.t*self.d**2/6).to("inch**3")
+        self.I_x = (self.t*self.d**3/12).to("inch**4")
+        self.r_x = (sqrt(self.I_x/self.A)).to("inch")
         self.Z_x = (self.t*self.d**2/4).to("inch**3")
+        self.S_y = (self.d*self.t**2/6).to("inch**3")
+        self.I_y = (self.d*self.t**3/12).to("inch**4")
+        self.r_y = (sqrt(self.I_y/self.A)).to("inch")
         self.Z_y = (self.d*self.t**2/4).to("inch**3")
 
-        if not material:
-            material = self.default_material
-        material = vars(material)
+        self.material = material
+        material = materials.loc[material, :].to_dict()
         for attribute, value in material.items():
             setattr(self, attribute, value)
-        delattr(self, "name")
 
     def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
-            C_b: float = 1, **display_options) -> Result[Moment]:
+            C_b: float = 1, **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity of a plate according to
         AISC 360-22 Section F11.
 
@@ -117,37 +121,35 @@ class Plate(sections.Rectangle):
 
         C_b : float
             Lateral-torsional buckling modification factor"""
-        sub_options = set_sub_display(display_options)
-
         phi_b = 0.9
 
         if axis == "x":
-            M_n = chapter_F.sec_F11(self, L_b, C_b, **sub_options)
-            template = templates.Plate_moment_capacity_x
+            M_n_str, M_n = chapter_F.sec_F11(self, L_b, C_b, **string_options)
+            template = templates["Plate_moment_capacity_x"]
         elif axis == "y":
             F_y = self.F_y
             Z_y = self.Z_y
             S_y = self.S_y
             M_n = min(F_y*Z_y, 1.5*F_y*S_y).to("kipft")
-            template = templates.Plate_moment_capacity_y
+            template = templates["Plate_moment_capacity_y"]
         else:
             raise ValueError(f"Unsupported axis: {axis}")
-        return template.fill(locals(), phi_b, M_n, **display_options)
+        return fill_template((phi_b, M_n), template, locals(), **string_options)
 
 
 class RectHSS(Shape):
     """Class to represent rectangular HSS shapes"""
-    database = utils.read_data_table(resources.joinpath("AISC_RectHSS.csv"))
-    default_material = materials.Steel("A500GrC")
+    database = read_data_table(resources.joinpath("RectHSS.csv"))
+    default_material = "A500GrC"
 
 
 class RoundHSS(Shape):
     """Class to represent round HSS shapes"""
-    database = utils.read_data_table(resources.joinpath("AISC_RoundHSS.csv"))
-    RoundHSS_default_material = materials.Steel("A500GrC")
-    Pipe_default_material = materials.Steel("A53GrB")
+    database = read_data_table(resources.joinpath("RoundHSS.csv"))
+    RoundHSS_default_material = "A500GrC"
+    Pipe_default_material = "A53GrB"
 
-    def __init__(self, size: str, material: Optional[materials.Steel] = None):
+    def __init__(self, size: str, material: Optional[str] = None):
         """Create an instance from the specified database
 
         Parameters
@@ -165,19 +167,20 @@ class RoundHSS(Shape):
                 material = self.RoundHSS_default_material
             else:
                 material = self.Pipe_default_material
-        properties.update(vars(material))
+        self.material = material
+        material = materials.loc[material, :].to_dict()
+        properties.update(material)
         for attribute, value in properties.items():
             setattr(self, attribute, value)
-        delattr(self, "name")
 
 
 class WideFlange(Shape):
     """Class to represent wide-flange shapes"""
-    database = utils.read_data_table(resources.joinpath("AISC_WideFlange.csv"))
-    default_material = materials.Steel("A992")
+    database = read_data_table(resources.joinpath("WideFlange.csv"))
+    default_material = "A992"
 
     def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
-            C_b: float = 1, **display_options) -> Result[Moment]:
+            C_b: float = 1, **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity of an I shape with a compact
         web according to AISC 360-22 Sections F2 and F3.
 
@@ -192,14 +195,15 @@ class WideFlange(Shape):
 
         C_b : float
             Lateral-torsional buckling modification factor"""
-        sub_options = set_sub_display(display_options)
-
         phi_b = 0.9
+        _, lamb_pw = chapter_B.table_B4_1b_15_lamb_p(self.E, self.F_y, return_string=False)
+        _, lamb_pf = chapter_B.table_B4_1b_10_lamb_p(self.E, self.F_y, return_string=False)
 
-        if self.lamb_w >= chapter_B.table_B4_1b_15_lamb_p(self.E, self.F_y):
+        if self.lamb_w >= lamb_pw:
             raise ValueError("Only sections with compact webs are supported")
-        elif self.lamb_f >= chapter_B.table_B4_1b_10_lamb_p(self.E, self.F_y):
-            M_n = chapter_F.sec_F3(self, L_b, C_b, **sub_options)
+        elif self.lamb_f >= lamb_pf:
+            M_n_str, M_n = chapter_F.sec_F3(self, L_b, C_b, **string_options)
         else:
-            M_n = chapter_F.sec_F2(self, L_b, C_b, **sub_options)
-        return templates.WideFlange_moment_capacity.fill(locals(), phi_b, M_n, **display_options)
+            M_n_str, M_n = chapter_F.sec_F2(self, L_b, C_b, **string_options)
+        template = templates["WideFlange_moment_capacity_x"]
+        return fill_template((phi_b, M_n), template, locals(), **string_options)
