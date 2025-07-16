@@ -1,0 +1,8 @@
+{
+    "eq_E3_1": "P_n &= F_n \\cdot A_g = {F_n:{_qformat_}.{_precision_}{_gformat_}} \\cdot {A_g:{_qformat_}.{_precision_}{_gformat_}} &= {P_n:{_qformat_}.{_precision_}{_gformat_}}",
+    "eq_E3_2": "F_n &= \\left(0.658^{{\\frac{{F_y}}{{F_e}}}}\\right) \\cdot F_y = \\left(0.658^{{\\frac{{{F_y:{_qformat_}.{_precision_}{_gformat_}}}}{{{F_e:{_qformat_}.{_precision_}{_gformat_}}}}}}\\right) \\cdot {F_y:{_qformat_}.{_precision_}{_gformat_}} &=  {F_n:{_qformat_}.{_precision_}{_gformat_}}",
+    "eq_E3_3": "F_n &= 0.877 \\cdot F_e = 0.877 \\cdot {F_e:{_qformat_}.{_precision_}{_gformat_}} &= {F_n:{_qformat_}.{_precision_}{_gformat_}}",
+    "eq_E3_4": "F_e &= \\frac{{\\pi^2 \\cdot E}}{{\\left(\\frac{{L_{{c_{{{axis}}}}}}}{{r_{{{axis}}}}}\\right)^2}} = \\frac{{\\pi^2 \\cdot {E:{_qformat_}.{_precision_}{_gformat_}}}}{{\\left(\\frac{{{L_c:{_qformat_}.{_precision_}{_gformat_}}}}{{{r:{_qformat_}.{_precision_}{_gformat_}}}}\\right)^2}} &= {F_e:{_qformat_}.{_precision_}{_gformat_}}",
+    "sec_E3_inelastic": "\\begin{{aligned}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{Since, }} & \\left(\\frac{{F_y}}{{F_e}} \\leq 2.25 \\Leftarrow \\frac{{{F_y:{_qformat_}.{_precision_}{_gformat_}}}}{{{F_e:{_qformat_}.{_precision_}{_gformat_}}}} \\leq 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{aligned}}",
+    "sec_E3_elastic": "\\begin{{aligned}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{Since, }} & \\left(\\frac{{F_y}}{{F_e}} > 2.25 \\Leftarrow \\frac{{{F_y:{_qformat_}.{_precision_}{_gformat_}}}}{{{F_e:{_qformat_}.{_precision_}{_gformat_}}}} > 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{aligned}}"
+}

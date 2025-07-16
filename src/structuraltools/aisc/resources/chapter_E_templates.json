@@ -1,0 +1,26 @@
+{
+    "eq_E3_1": {
+        "types": {"F_n": "unit", "A_g": "unit", "P_n": "unit"},
+        "string": "P_n &= F_n \\cdot A_g = {F_n} \\cdot {A_g} &= {P_n}"
+    },
+    "eq_E3_2": {
+        "types": {"F_y": "unit", "F_e": "unit", "F_n": "unit"},
+        "string": "F_n &= \\left(0.658^{{{{\\frac{{{{F_y}}}}{{{{F_e}}}}}}}}\\right) \\cdot F_y = \\left(0.658^{{{{\\frac{{{{{F_y}}}}}{{{{{F_e}}}}}}}}}\\right) \\cdot {F_y} &=  {F_n}"
+    },
+    "eq_E3_3": {
+        "types": {"F_e": "unit", "F_n": "unit"},
+        "string": "F_n &= 0.877 \\cdot F_e = 0.877 \\cdot {F_e} &= {F_n}"
+    },
+    "eq_E3_4": {
+        "types": {"E": "unit", "L_c": "unit", "r": "unit", "axis": "str", "F_e": "unit"},
+        "string": "F_e &= \\frac{{{{\\pi^2 \\cdot E}}}}{{{{\\left(\\frac{{{{L_{{{{c_{{{{{axis}}}}}}}}}}}}}{{{{r_{{{{{axis}}}}}}}}}\\right)^2}}}} = \\frac{{{{\\pi^2 \\cdot {E}}}}}{{{{\\left(\\frac{{{{{L_c}}}}}{{{{{r}}}}}\\right)^2}}}} &= {F_e}"
+    },
+    "sec_E3_inelastic": {
+        "types": {"F_e_str": "str", "F_y": "unit", "F_e": "unit", "F_n_str": "str", "P_n_str": "str"},
+        "string": "\\begin{{{{aligned}}}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{F_y}}}}{{{{F_e}}}} \\leq 2.25 \\Leftarrow \\frac{{{{{F_y}}}}}{{{{{F_e}}}}} \\leq 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{{{aligned}}}}"
+    },
+    "sec_E3_elastic": {
+        "types": {"F_e_str": "str", "F_y": "unit", "F_e": "unit", "F_n_str": "str", "P_n_str": "str"},
+        "string": "\\begin{{{{aligned}}}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{F_y}}}}{{{{F_e}}}} > 2.25 \\Leftarrow \\frac{{{{{F_y}}}}}{{{{{F_e}}}}} > 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{{{aligned}}}}"
+    }
+}

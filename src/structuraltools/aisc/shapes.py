@@ -19,8 +19,8 @@ from typing import Optional
 
 from numpy import sqrt
 
-from structuraltools.aisc import chapter_B, chapter_F
-from structuraltools.unit import unit, Length, Moment
+from structuraltools.aisc import chapter_B, chapter_E, chapter_F
+from structuraltools.unit import unit, Force, Length, Moment
 from structuraltools.utils import fill_template, read_data_table, Result
 
 
@@ -105,7 +105,26 @@ class Plate(Shape):
         for attribute, value in material.items():
             setattr(self, attribute, value)
 
-    def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
+    def compression_capacity(self, L_c: Length, axis: str = "y",
+            **string_options) -> Result[Force]:
+        """Calculate the nominal compression capacity of a plate according to
+        AISC 360-22 Section E3.
+
+        Parameters
+        ==========
+
+        L_c : Length
+            Effective length for compression
+
+        axis : str
+            Member local axis to calculate the compression capacity for"""
+        phi_c = 0.9
+
+        P_n_str, P_n = chapter_E.sec_E3(self, L_c, axis, **string_options)
+        template = templates["Plate_compression_capacity"]
+        return fill_template((phi_c, P_n), template, locals(), **string_options)
+
+    def moment_capacity(self, L_b: Length = 0*unit.ft, axis: str = "x",
             C_b: float = 1, **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity of a plate according to
         AISC 360-22 Section F11.
@@ -113,11 +132,11 @@ class Plate(Shape):
         Parameters
         ==========
 
-        axis : str
-            Member local axis to calculate the moment capacity about
-
         L_b : Length
             Compression side unbraced length
+
+        axis : str
+            Member local axis to calculate the moment capacity about
 
         C_b : float
             Lateral-torsional buckling modification factor"""
@@ -179,7 +198,7 @@ class WideFlange(Shape):
     database = read_data_table(resources.joinpath("WideFlange.csv"))
     default_material = "A992"
 
-    def moment_capacity(self, axis: str = "x", L_b: Length = 0*unit.ft,
+    def moment_capacity(self, L_b: Length = 0*unit.ft, axis: str = "x",
             C_b: float = 1, **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity of an I shape with a compact
         web according to AISC 360-22 Sections F2 and F3.
@@ -187,11 +206,11 @@ class WideFlange(Shape):
         Parameters
         ==========
 
-        axis : str
-            Member local axis to calculate the moment capacity about
-
         L_b : Length
             Compression flange unbraced length
+
+        axis : str
+            Member local axis to calculate the moment capacity about
 
         C_b : float
             Lateral-torsional buckling modification factor"""
