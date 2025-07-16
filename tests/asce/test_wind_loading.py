@@ -64,6 +64,7 @@ def test_calc_wind_server_inputs():
     assert isclose(inputs["G_y"], 0.8068246373, atol=1e-10)
     assert isclose(inputs["a"], 7.85*unit.ft)
     assert string == r"""#### Ground Elevation Factor
+
 $$
 \begin{aligned}
     K_e &= e^{-0.0000362 \cdot z_e} = e^{-0.0000362 \cdot 520\ \mathrm{ft}} &= 0.9814
@@ -71,6 +72,7 @@ $$
 $$
 
 #### Roof Velocity Pressure
+
 $$
 \begin{aligned}
     K_{h} &= 2.41 \cdot \left(\frac{\operatorname{min} \left(\operatorname{max}\left(15\ \mathrm{ft},\ h\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 51.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.795
@@ -80,6 +82,7 @@ $$
 $$
 
 #### Parapet Velocity Pressure
+
 $$
 \begin{aligned}
     K_{p} &= 2.41 \cdot \left(\frac{\operatorname{min} \left(\operatorname{max}\left(15\ \mathrm{ft},\ p\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 53.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.8032
@@ -89,6 +92,7 @@ $$
 $$
 
 #### Gust Effect Factor
+
 $$
 \begin{aligned}
     \bar{z} &= \operatorname{max}\left(0.6 \cdot h,\ z_{min}\right) = \operatorname{max}\left(0.6 \cdot 51.25\ \mathrm{ft},\ 30\ \mathrm{ft}\right) &= 30.75\ \mathrm{ft}
