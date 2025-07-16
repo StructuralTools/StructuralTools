@@ -36,13 +36,31 @@ class TestPlate:
     def setup_method(self, method):
         self.plate = aisc.Plate(12*unit.inch, 1*unit.inch, "A36")
 
-    #def test_compression_capacity_inelastic(self):
-        #phi, P_n = self.plate.compression_capacity(L_x=3*unit.ft, L_y=3*unit.ft)
-        #assert isclose(P_n, 190.50898212391965*unit.kip)
+    def test_compression_capacity_inelastic(self):
+        string, phiP_n = self.plate.compression_capacity(3*unit.ft, "y", precision=4)
+        assert isclose(phiP_n[1], 190.50898212391965*unit.kip)
+        assert string == r"""$$\begin{aligned}
+    F_e &= \frac{\pi^2 \cdot E}{\left(\frac{L_{c_{y}}}{r_{y}}\right)^2} = \frac{\pi^2 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{\left(\frac{3\ \mathrm{ft}}{0.2887\ \mathrm{in}}\right)^2} &= 18.4\ \mathrm{ksi}
+    \\[10pt]
+    \text{Since, } & \left(\frac{F_y}{F_e} \leq 2.25 \Leftarrow \frac{36\ \mathrm{ksi}}{18.4\ \mathrm{ksi}} \leq 2.25\right):
+    \\[10pt]
+    F_n &= \left(0.658^{\frac{F_y}{F_e}}\right) \cdot F_y = \left(0.658^{\frac{36\ \mathrm{ksi}}{18.4\ \mathrm{ksi}}}\right) \cdot 36\ \mathrm{ksi} &=  15.88\ \mathrm{ksi}
+    \\[10pt]
+    P_n &= F_n \cdot A_g = 15.88\ \mathrm{ksi} \cdot 12\ \mathrm{in}^{2} &= 190.5\ \mathrm{kip}
+\end{aligned}$$"""
 
-    #def test_compression_capacity_elastic(self):
-        #phi, P_n = self.plate.compression_capacity(L_x=4*unit.ft, L_y=4*unit.ft)
-        #assert isclose(P_n, 108.94689615143473*unit.kip)
+    def test_compression_capacity_elastic(self):
+        string, phiP_n = self.plate.compression_capacity(4*unit.ft, "y", precision=4)
+        assert isclose(phiP_n[1], 108.94689615143473*unit.kip)
+        assert string == r"""$$\begin{aligned}
+    F_e &= \frac{\pi^2 \cdot E}{\left(\frac{L_{c_{y}}}{r_{y}}\right)^2} = \frac{\pi^2 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{\left(\frac{4\ \mathrm{ft}}{0.2887\ \mathrm{in}}\right)^2} &= 10.35\ \mathrm{ksi}
+    \\[10pt]
+    \text{Since, } & \left(\frac{F_y}{F_e} > 2.25 \Leftarrow \frac{36\ \mathrm{ksi}}{10.35\ \mathrm{ksi}} > 2.25\right):
+    \\[10pt]
+    F_n &= 0.877 \cdot F_e = 0.877 \cdot 10.35\ \mathrm{ksi} &= 9.079\ \mathrm{ksi}
+    \\[10pt]
+    P_n &= F_n \cdot A_g = 9.079\ \mathrm{ksi} \cdot 12\ \mathrm{in}^{2} &= 108.9\ \mathrm{kip}
+\end{aligned}$$"""
 
     def test_moment_capacity_plastic(self):
         string, phiM_n = self.plate.moment_capacity(precision=4)
@@ -115,7 +133,7 @@ $$\begin{aligned}
 \end{aligned}$$"""
 
     def test_moment_capacity_minor(self):
-        string, phiM_n = self.plate.moment_capacity("y", precision=4)
+        string, phiM_n = self.plate.moment_capacity(axis="y", precision=4)
         assert isclose(phiM_n[1], 9*unit.kipft)
         assert string == r"""#### Nominal Moment Capacity
 $$\begin{aligned}
