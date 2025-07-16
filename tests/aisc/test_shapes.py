@@ -70,6 +70,7 @@ $$"""
         string, phiM_n = self.plate.moment_capacity(precision=4)
         assert isclose(phiM_n[1], 108*unit.kipft)
         assert string == r"""#### Plastic Moment Capacity
+
 $$
 \begin{aligned}
     M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 36\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 24\ \mathrm{in}^{3}\right) &= 108\ \mathrm{kipft}
@@ -77,6 +78,7 @@ $$
 $$
 
 #### Lateral-Torsional Buckling Moment Capacity
+
 $$
 \begin{aligned}
     \text{Since, } & \left(\frac{L_b \cdot d}{t^2} \leq \frac{0.08 \cdot E}{F_y} \Leftarrow \frac{0\ \mathrm{ft} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{0.08 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
@@ -86,18 +88,20 @@ $$
 $$
 
 #### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(108\ \mathrm{kipft},\ 108\ \mathrm{kipft}\right) &= 108\ \mathrm{kipft}
 \end{aligned}
 $$"""
 
-    def test_moment_capacity_LTB_short(self):
+    def test_moment_capacity_LTB_inelastic(self):
         string, phiM_n = self.plate.moment_capacity(
             L_b=100*unit.inch,
             precision=4)
         assert isclose(phiM_n[1], 80.05208276*unit.kipft, atol=1e-8)
         assert string == r"""#### Plastic Moment Capacity
+
 $$
 \begin{aligned}
     M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 36\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 24\ \mathrm{in}^{3}\right) &= 108\ \mathrm{kipft}
@@ -105,6 +109,7 @@ $$
 $$
 
 #### Lateral-Torsional Buckling Moment Capacity
+
 $$
 \begin{aligned}
     \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}} < \frac{100\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{1.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
@@ -118,18 +123,20 @@ $$
 $$
 
 #### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(108\ \mathrm{kipft},\ 80.05\ \mathrm{kipft}\right) &= 80.05\ \mathrm{kipft}
 \end{aligned}
 $$"""
 
-    def test_moment_capacity_LTB_long(self):
+    def test_moment_capacity_LTB_elastic(self):
         string, phiM_n = self.plate.moment_capacity(
             L_b=130*unit.inch,
             precision=4)
         assert isclose(phiM_n[1], 70.64102564*unit.kipft, atol=1e-8)
         assert string == r"""#### Plastic Moment Capacity
+
 $$
 \begin{aligned}
     M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 36\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 24\ \mathrm{in}^{3}\right) &= 108\ \mathrm{kipft}
@@ -137,6 +144,7 @@ $$
 $$
 
 #### Lateral-Torsional Buckling Moment Capacity
+
 $$
 \begin{aligned}
     \text{Since, } & \left(\frac{L_b \cdot d}{t^2} > \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{130\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} > \frac{1.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
@@ -148,6 +156,7 @@ $$
 $$
 
 #### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(108\ \mathrm{kipft},\ 70.64\ \mathrm{kipft}\right) &= 70.64\ \mathrm{kipft}
@@ -158,6 +167,7 @@ $$"""
         string, phiM_n = self.plate.moment_capacity(axis="y", precision=4)
         assert isclose(phiM_n[1], 9*unit.kipft)
         assert string == r"""#### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(F_y \cdot Z_y,\ 1.5 \cdot F_y \cdot S_y\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 3\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 2\ \mathrm{in}^{3}\right) &= 9\ \mathrm{kipft}
@@ -177,6 +187,7 @@ class TestWideFlange:
         string, phiM_n = wide_flange.moment_capacity(precision=4)
         assert isclose(phiM_n[0]*phiM_n[1], 110*unit.kipft, atol=1*unit.kipft)
         assert string == r"""#### Plastic Moment Capacity
+
 $$
 \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.1\ \mathrm{kipft}
@@ -184,6 +195,7 @@ $$
 $$
 
 #### Lateral-Torsional Buckling Moment Capacity
+
 $$
 \begin{aligned}
     L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
@@ -195,6 +207,7 @@ $$
 $$
 
 #### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(122.1\ \mathrm{kipft},\ 122.1\ \mathrm{kipft}\right) &= 122.1\ \mathrm{kipft}
@@ -206,6 +219,7 @@ $$"""
         string, phiM_n = wide_flange.moment_capacity(L_b=7*unit.ft, precision=4)
         assert isclose(phiM_n[0]*phiM_n[1], 81.7*unit.kipft, atol=1*unit.kipft)
         assert string == r"""#### Plastic Moment Capacity
+
 $$
 \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.1\ \mathrm{kipft}
@@ -213,6 +227,7 @@ $$
 $$
 
 #### Lateral-Torsional Buckling Moment Capacity
+
 $$
 \begin{aligned}
     L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
@@ -234,6 +249,7 @@ $$
 $$
 
 #### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(122.1\ \mathrm{kipft},\ 90.76\ \mathrm{kipft}\right) &= 90.76\ \mathrm{kipft}
@@ -245,6 +261,7 @@ $$"""
         string, phiM_n = wide_flange.moment_capacity(L_b=15*unit.ft, precision=4)
         assert isclose(phiM_n[0]*phiM_n[1], 32.9*unit.kipft, atol=1*unit.kipft)
         assert string == r"""#### Plastic Moment Capacity
+
 $$
 \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.1\ \mathrm{kipft}
@@ -252,6 +269,7 @@ $$
 $$
 
 #### Lateral-Torsional Buckling Moment Capacity
+
 $$
 \begin{aligned}
     L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
@@ -273,6 +291,7 @@ $$
 $$
 
 #### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(122.1\ \mathrm{kipft},\ 36.54\ \mathrm{kipft}\right) &= 36.54\ \mathrm{kipft}
@@ -284,6 +303,7 @@ $$"""
         string, phiM_n = wide_flange.moment_capacity(precision=4)
         assert isclose(phiM_n[0]*phiM_n[1], 46.9*unit.kipft, atol=1*unit.kipft)
         assert string == r"""#### Plastic Moment
+
 $$
 \begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 12.6\ \mathrm{in}^{3} &= 52.5\ \mathrm{kipft}
@@ -291,6 +311,7 @@ $$
 $$
 
 #### Lateral-Torsional Buckling Moment Capacity
+
 $$
 \begin{aligned}
     L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.785\ \mathrm{in} \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.773\ \mathrm{ft}
@@ -302,6 +323,7 @@ $$
 $$
 
 #### Compression Flange Local Buckling Moment Capacity
+
 $$
 \begin{aligned}
     \lambda_{p_f} &= 0.38 \cdot \sqrt{\frac{E}{F_y}} = 0.38 \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 9.152
@@ -319,6 +341,7 @@ $$
 $$
 
 #### Nominal Moment Capacity
+
 $$
 \begin{aligned}
     M_n &= \operatorname{min}\left(M_{ltb},\ M_{flb}\right) = \operatorname{min}\left(52.5\ \mathrm{kipft},\ 52.11\ \mathrm{kipft}\right) &= 52.11\ \mathrm{kipft}

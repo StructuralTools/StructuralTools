@@ -45,7 +45,7 @@
     },
     "sec_F2": {
         "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
-        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n{M_ltb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
+        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n\n{M_ltb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
     },
     "eq_F3_1": {
         "types": {"M_p": "unit", "F_y": "unit", "S_x": "unit", "lamb_f": "float", "lamb_pf": "float", "lamb_rf": "float", "M_flb": "unit"},
@@ -69,7 +69,7 @@
     },
     "sec_F3": {
         "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_flb_str": "str", "M_ltb": "unit", "M_flb": "unit", "M_n": "unit"},
-        "string": "{_header_}{_h_start_}Plastic Moment{_h_end_}\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n{M_ltb_str}\n\n{_header_}{_h_start_}Compression Flange Local Buckling Moment Capacity{_h_end_}\n{M_flb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_{{{{ltb}}}},\\ M_{{{{flb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_ltb},\\ {M_flb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
+        "string": "{_header_}{_h_start_}Plastic Moment{_h_end_}\n\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n\n{M_ltb_str}\n\n{_header_}{_h_start_}Compression Flange Local Buckling Moment Capacity{_h_end_}\n\n{M_flb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_{{{{ltb}}}},\\ M_{{{{flb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_ltb},\\ {M_flb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
     },
     "eq_F11_1": {
         "types": {"F_y": "unit", "Z_x": "unit", "S_x": "unit", "M_p": "unit"},
@@ -105,6 +105,6 @@
     },
     "sec_F11": {
         "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
-        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n{M_ltb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
+        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n\n{M_ltb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
     }
 }
