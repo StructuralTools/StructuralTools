@@ -1,4 +1,8 @@
 {
+    "Plate_compression_capacity": {
+        "types": {"P_n_str": "str"},
+        "string": "$${P_n_str}$$"
+    },
     "Plate_moment_capacity_x": {
         "types": {"M_n_str": "str"},
         "string": "{M_n_str}"
