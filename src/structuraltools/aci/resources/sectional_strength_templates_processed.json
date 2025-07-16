@@ -2,5 +2,5 @@
     "calc_a": "a &= \\frac{{A_{{st}} \\cdot f_y}}{{0.85 \\cdot f'_c \\cdot b}} = \\frac{{{A_st:{_qformat_}.{_precision_}{_gformat_}} \\cdot {f_y:{_qformat_}.{_precision_}{_gformat_}}}}{{0.85 \\cdot {f_prime_c:{_qformat_}.{_precision_}{_gformat_}} \\cdot {b:{_qformat_}.{_precision_}{_gformat_}}}} &= {a:{_qformat_}.{_precision_}{_gformat_}}",
     "calc_M_n": "M_n &= A_{{st}} \\cdot f_y \\cdot \\left(d - \\frac{{a}}{{2}}\\right) = {A_st:{_qformat_}.{_precision_}{_gformat_}} \\cdot {f_y:{_qformat_}.{_precision_}{_gformat_}} \\cdot \\left({d:{_qformat_}.{_precision_}{_gformat_}} - \\frac{{{a:{_qformat_}.{_precision_}{_gformat_}}}}{{2}}\\right) &= {M_n:{_qformat_}.{_precision_}{_gformat_}}",
     "calc_epsilon_t": "\\epsilon_t &= 0.003 \\cdot \\left(\\frac{{\\beta_1 \\cdot d_t}}{{a}} - 1\\right) = 0.003 \\cdot \\left(\\frac{{{beta_1:.{_precision_}{_gformat_}} \\cdot {d_t:{_qformat_}.{_precision_}{_gformat_}}}}{{{a:{_qformat_}.{_precision_}{_gformat_}}}} - 1\\right) &= {epsilon_t:.{_precision_}{_gformat_}}",
-    "moment_capacity": "$$\\begin{{aligned}}\n    {a_str}\n    \\\\[10pt]\n    {M_n_str}\n    \\\\[10pt]\n    {epsilon_t_str}\n\\end{{aligned}}$$\n{phi_str}"
+    "moment_capacity": "$$\n\\begin{{aligned}}\n    {a_str}\n    \\\\[10pt]\n    {M_n_str}\n    \\\\[10pt]\n    {epsilon_t_str}\n\\end{{aligned}}\n$$\n{phi_str}"
 }

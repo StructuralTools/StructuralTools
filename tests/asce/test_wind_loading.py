@@ -29,7 +29,8 @@ def calc_K_zt():
         exposure="B",
         precision=4)
     assert isclose(K_zt, 1.484767957, atol=1e-9)
-    assert string == r"""$$\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     L'_h &= \operatorname{max}\left(L_h,\ 2 \cdot H\right) = \operatorname{max}\left(1500\ \mathrm{ft},\ 2 \cdot 500\ \mathrm{ft}\right) &= 1500\ \mathrm{ft}
     \\[10pt]
     K_1 &= 0.75 \cdot \frac{H}{L'_h} = 0.75 \cdot \frac{500\ \mathrm{ft}}{1500\ \mathrm{ft}} &= 0.25
@@ -39,7 +40,8 @@ def calc_K_zt():
     K_3 &= e^{- \frac{\gamma \cdot z}{L'_h}} = e^{- \frac{2.5 \cdot 50\ \mathrm{ft}}{1500\ \mathrm{ft}}} &= 0.92
     \\[10pt]
     K_{zt} &= \left(1 + K_1 \cdot K_2 \cdot K_3\right)^2 = \left(1 + 0.25 \cdot 0.95 \cdot 0.92\right)^2 &= 1.485
-\end{aligned}$$"""
+\end{aligned}
+$$"""
 
 def test_calc_wind_server_inputs():
     string, inputs = wind_loading.calc_wind_server_inputs(
@@ -62,26 +64,33 @@ def test_calc_wind_server_inputs():
     assert isclose(inputs["G_y"], 0.8068246373, atol=1e-10)
     assert isclose(inputs["a"], 7.85*unit.ft)
     assert string == r"""#### Ground Elevation Factor
-$$\begin{aligned}
+$$
+\begin{aligned}
     K_e &= e^{-0.0000362 \cdot z_e} = e^{-0.0000362 \cdot 520\ \mathrm{ft}} &= 0.9814
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Roof Velocity Pressure
-$$\begin{aligned}
+$$
+\begin{aligned}
     K_{h} &= 2.41 \cdot \left(\frac{\operatorname{min} \left(\operatorname{max}\left(15\ \mathrm{ft},\ h\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 51.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.795
     \\[10pt]
     q_{h} &= 0.00256 \cdot K_{h} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.795 \cdot 1 \cdot 0.9814 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.17\ \mathrm{psf}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Parapet Velocity Pressure
-$$\begin{aligned}
+$$
+\begin{aligned}
     K_{p} &= 2.41 \cdot \left(\frac{\operatorname{min} \left(\operatorname{max}\left(15\ \mathrm{ft},\ p\right),\ z_g\right)}{z_g}\right)^{\frac{2}{\alpha}} = 2.41 \cdot \left(\frac{\operatorname{min}\left(\operatorname{max}\left(15\ \mathrm{ft},\ 53.25\ \mathrm{ft}\right),\ 3280\ \mathrm{ft}\right)}{3280\ \mathrm{ft}}\right)^{\frac{2}{7.5}} &= 0.8032
     \\[10pt]
     q_{p} &= 0.00256 \cdot K_{p} \cdot K_{zt} \cdot K_e \cdot V^2 = 0.00256 \cdot 0.8032 \cdot 1 \cdot 0.9814 \cdot \left(110\ \mathrm{mph}\right)^2 &= 24.41\ \mathrm{psf}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Gust Effect Factor
-$$\begin{aligned}
+$$
+\begin{aligned}
     \bar{z} &= \operatorname{max}\left(0.6 \cdot h,\ z_{min}\right) = \operatorname{max}\left(0.6 \cdot 51.25\ \mathrm{ft},\ 30\ \mathrm{ft}\right) &= 30.75\ \mathrm{ft}
     \\[10pt]
     I_\bar{z} &= c \cdot \left(\frac{33}{\bar{z}}\right)^\frac{1}{6} = 0.3 \cdot \left(\frac{33}{30.75\ \mathrm{ft}}\right)^\frac{1}{6} &= 0.3036
@@ -95,7 +104,8 @@ $$\begin{aligned}
     Q_{y} &= \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{L_{x} + h}{L_\bar{z}}\right)^{0.63}}} = \sqrt{\frac{1}{1 + 0.63 \cdot \left(\frac{211.5\ \mathrm{ft} + 51.25\ \mathrm{ft}}{312.6\ \mathrm{ft}}\right)^{0.63}}} &= 0.7994
     \\[10pt]
     G_{y} &= 0.925 \cdot \left(\frac{1 + 1.7 \cdot g_Q \cdot I_\bar{z} \cdot Q_{y}}{1 + 1.7 \cdot g_v \cdot I_\bar{z}}\right) = 0.925 \cdot \left(\frac{1 + 1.7 \cdot 3.4 \cdot 0.3036 \cdot 0.7994}{1 + 1.7 \cdot 3.4 \cdot 0.3036}\right) &= 0.8068
-\end{aligned}$$"""
+\end{aligned}
+$$"""
 
 def test_MainWindServer_init_gable():
     MWFRS = wind_loading.MainWindServer(

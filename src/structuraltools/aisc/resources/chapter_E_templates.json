@@ -17,10 +17,10 @@
     },
     "sec_E3_inelastic": {
         "types": {"F_e_str": "str", "F_y": "unit", "F_e": "unit", "F_n_str": "str", "P_n_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{F_y}}}}{{{{F_e}}}} \\leq 2.25 \\Leftarrow \\frac{{{{{F_y}}}}}{{{{{F_e}}}}} \\leq 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{F_y}}}}{{{{F_e}}}} \\leq 2.25 \\Leftarrow \\frac{{{{{F_y}}}}}{{{{{F_e}}}}} \\leq 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_E3_elastic": {
         "types": {"F_e_str": "str", "F_y": "unit", "F_e": "unit", "F_n_str": "str", "P_n_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{F_y}}}}{{{{F_e}}}} > 2.25 \\Leftarrow \\frac{{{{{F_y}}}}}{{{{{F_e}}}}} > 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {F_e_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{F_y}}}}{{{{F_e}}}} > 2.25 \\Leftarrow \\frac{{{{{F_y}}}}}{{{{{F_e}}}}} > 2.25\\right):\n    \\\\[10pt]\n    {F_n_str}\n    \\\\[10pt]\n    {P_n_str}\n\\end{{{{aligned}}}}\n$$"
     }
 }
