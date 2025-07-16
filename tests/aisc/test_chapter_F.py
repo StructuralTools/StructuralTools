@@ -117,9 +117,11 @@ def test_sec_F2_1():
     string, M_p = chapter_F.sec_F2_1(shape, precision=4)
     assert isclose(M_p, 122.0833333*unit.kipft, atol=1e-7*unit.kipft)
     assert M_p.units == "kipft"
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.1\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F2_2_plastic_WideFlange():
     shape = aisc.WideFlange("W12X22", "A992")
@@ -132,13 +134,15 @@ def test_sec_F2_2_plastic_WideFlange():
         precision=4)
     assert isclose(M_ltb, 122.0833333*unit.kipft, atol=1e-7*unit.kipft)
     assert M_ltb.units == "kipft"
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
     \\[10pt]
     \text{Since, } & \left(L_b \leq L_p \Leftarrow 2\ \mathrm{ft} \leq 2.995\ \mathrm{ft}\right):
         \\[10pt]
         M_{ltb} &= M_p = 122.1\ \mathrm{kipft} &= 122.1\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F2_2_inelastic_WideFlange():
     shape = aisc.WideFlange("W12X22", "A992")
@@ -151,7 +155,8 @@ def test_sec_F2_2_inelastic_WideFlange():
         precision=4)
     assert isclose(M_ltb, 90.7*unit.kipft, atol=1*unit.kipft)
     assert M_ltb.units == "kipft"
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
     \\[10pt]
     L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
@@ -167,7 +172,8 @@ def test_sec_F2_2_inelastic_WideFlange():
 &= 1 \cdot \left(122.1\ \mathrm{kipft} - \left(122.1\ \mathrm{kipft} - 0.7 \cdot 50\ \mathrm{ksi} \cdot 25.4\ \mathrm{in}^{3}\right) \cdot \left(\frac{7\ \mathrm{ft} - 2.995\ \mathrm{ft}}{9.133\ \mathrm{ft} - 2.995\ \mathrm{ft}}\right)\right)
 \\
 &= 90.76\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F2_2_elastic_WideFlange():
     shape = aisc.WideFlange("W12X22", "A992")
@@ -180,7 +186,8 @@ def test_sec_F2_2_elastic_WideFlange():
         precision=4)
     assert isclose(M_ltb, 36.5*unit.kipft, atol=1*unit.kipft)
     assert M_ltb.units == "kipft"
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
 \\
 &= 1.95 \cdot 1.04\ \mathrm{in} \frac{2.9\times 10^{4}\ \mathrm{ksi}}{0.7 \cdot 50\ \mathrm{ksi}} \cdot \sqrt{\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}} + \sqrt{\left(\frac{0.293\ \mathrm{in}^{4} \cdot 1}{25.4\ \mathrm{in}^{3} \cdot 11.9\ \mathrm{in}}\right)^2 +6.76 \cdot \left(\frac{0.7 \cdot 50\ \mathrm{ksi}}{2.9\times 10^{4}\ \mathrm{ksi}}\right)^2}}
@@ -196,7 +203,8 @@ def test_sec_F2_2_elastic_WideFlange():
 &= 17.26\ \mathrm{ksi}
         \\[10pt]
         M_{ltb} &= F_{cr} \cdot S_x = 17.26\ \mathrm{ksi} \cdot 25.4\ \mathrm{in}^{3} &= 36.54\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F2():
     shape = aisc.WideFlange("W12X22", "A992")
@@ -208,12 +216,15 @@ def test_sec_F2():
     assert isclose(M_n, 90.7*unit.kipft, atol=0.1*unit.kipft)
     assert M_n.units == "kipft"
     assert string == r"""#### Plastic Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 29.3\ \mathrm{in}^{3} &= 122.1\ \mathrm{kipft}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Lateral-Torsional Buckling Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.848\ \mathrm{in} \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.995\ \mathrm{ft}
     \\[10pt]
     L_r &= 1.95 \cdot r_{ts} \cdot \frac{E}{0.7 \cdot F_y} \cdot \sqrt{\frac{J \cdot c}{S_x \cdot h_o} + \sqrt{\left(\frac{J \cdot c}{S_x \cdot h_o}\right)^2 + 6.76 \cdot \left(\frac{0.7 \cdot F_y}{E}\right)^2}}
@@ -229,12 +240,15 @@ $$\begin{aligned}
 &= 1 \cdot \left(122.1\ \mathrm{kipft} - \left(122.1\ \mathrm{kipft} - 0.7 \cdot 50\ \mathrm{ksi} \cdot 25.4\ \mathrm{in}^{3}\right) \cdot \left(\frac{7\ \mathrm{ft} - 2.995\ \mathrm{ft}}{9.133\ \mathrm{ft} - 2.995\ \mathrm{ft}}\right)\right)
 \\
 &= 90.76\ \mathrm{kipft}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Nominal Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(122.1\ \mathrm{kipft},\ 90.76\ \mathrm{kipft}\right) &= 90.76\ \mathrm{kipft}
-\end{aligned}$$"""
+\end{aligned}
+$$"""
 
 def test_eq_F3_1():
     string, M_flb = chapter_F.eq_F3_1(
@@ -283,7 +297,8 @@ def test_sec_F3_2_noncompact():
     shape = aisc.WideFlange("W10X12", "A992")
     string, M_flb = chapter_F.sec_F3_2(shape, 52.5*unit.kipft, precision=4)
     assert isclose(M_flb, 52.11390857*unit.kipft, atol=1e-8*unit.kipft)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     \lambda_{p_f} &= 0.38 \cdot \sqrt{\frac{E}{F_y}} = 0.38 \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 9.152
     \\[10pt]
     \lambda_{r_f} &= \sqrt{\frac{E}{F_y}} = \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 24.08
@@ -295,7 +310,8 @@ def test_sec_F3_2_noncompact():
 &= 52.5\ \mathrm{kipft} - \left(52.5\ \mathrm{kipft} -0.7 \cdot 50\ \mathrm{ksi} \cdot 10.9\ \mathrm{in}^{3}\right) \cdot \left(\frac{9.43 - 9.152}{24.08 - 9.152}\right)
 \\
 &= 52.11\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F3_2_slender():
     """This test fakes a slender flange, and doesn't actually calculate the
@@ -305,7 +321,8 @@ def test_sec_F3_2_slender():
     shape.lamb_f = 26.4
     string, M_flb = chapter_F.sec_F3_2(shape, 52.5*unit.kipft, precision=4)
     assert isclose(M_flb, 19.93172738*unit.kipft, atol=1e-8*unit.kipft)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     \lambda_{r_f} &= \sqrt{\frac{E}{F_y}} = \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 24.08
     \\[10pt]
     \text{Since, } & \left(\lambda_f \geq \lambda_{rf} \Leftarrow 26.4 \geq 24.08\right):
@@ -313,28 +330,34 @@ def test_sec_F3_2_slender():
         k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{46.6}}\right),\ 0.76\right) &= 0.586
         \\[10pt]
         M_{flb} &= \frac{0.9 \cdot E \cdot k_c \cdot S_x}{\lambda_f^2} = \frac{0.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi} \cdot 0.586 \cdot 10.9\ \mathrm{in}^{3}}{26.4^2} &= 19.93\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F3():
     shape = aisc.WideFlange("W10X12", "A992")
     string, M_n = chapter_F.sec_F3(shape, 0*unit.ft, 1, precision=4)
     assert isclose(M_n, 52.11390857*unit.kipft, atol=1e-8*unit.kipft)
     assert string == r"""#### Plastic Moment
-$$\begin{aligned}
+$$
+\begin{aligned}
     M_p &= F_y \cdot Z_x = 50\ \mathrm{ksi} \cdot 12.6\ \mathrm{in}^{3} &= 52.5\ \mathrm{kipft}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Lateral-Torsional Buckling Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     L_p &= 1.76 \cdot r_y \cdot \sqrt{\frac{E}{F_y}} = 1.76 \cdot 0.785\ \mathrm{in} \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 2.773\ \mathrm{ft}
     \\[10pt]
     \text{Since, } & \left(L_b \leq L_p \Leftarrow 0\ \mathrm{ft} \leq 2.773\ \mathrm{ft}\right):
         \\[10pt]
         M_{ltb} &= M_p = 52.5\ \mathrm{kipft} &= 52.5\ \mathrm{kipft}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Compression Flange Local Buckling Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     \lambda_{p_f} &= 0.38 \cdot \sqrt{\frac{E}{F_y}} = 0.38 \cdot \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 9.152
     \\[10pt]
     \lambda_{r_f} &= \sqrt{\frac{E}{F_y}} = \sqrt{\frac{2.9\times 10^{4}\ \mathrm{ksi}}{50\ \mathrm{ksi}}} &= 24.08
@@ -346,12 +369,15 @@ $$\begin{aligned}
 &= 52.5\ \mathrm{kipft} - \left(52.5\ \mathrm{kipft} -0.7 \cdot 50\ \mathrm{ksi} \cdot 10.9\ \mathrm{in}^{3}\right) \cdot \left(\frac{9.43 - 9.152}{24.08 - 9.152}\right)
 \\
 &= 52.11\ \mathrm{kipft}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Nominal Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     M_n &= \operatorname{min}\left(M_{ltb},\ M_{flb}\right) = \operatorname{min}\left(52.5\ \mathrm{kipft},\ 52.11\ \mathrm{kipft}\right) &= 52.11\ \mathrm{kipft}
-\end{aligned}$$"""
+\end{aligned}
+$$"""
 
 def test_eq_F11_1():
     string, M_p = chapter_F.eq_F11_1(
@@ -399,9 +425,11 @@ def test_sec_F11_1_rect():
     shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
     string, M_p = chapter_F.sec_F11_1(shape, precision=4)
     assert isclose(M_p, 12*unit.kipft)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 4\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}\right) &= 12\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F11_2_plastic():
     shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
@@ -413,11 +441,13 @@ def test_sec_F11_2_plastic():
         C_b=1,
         precision=4)
     assert isclose(M_ltb, 12*unit.kipft)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     \text{Since, } & \left(\frac{L_b \cdot d}{t^2} \leq \frac{0.08 \cdot E}{F_y} \Leftarrow \frac{12\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{0.08 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
         \\[10pt]
         M_{ltb} &= M_p = 12\ \mathrm{kipft} &= 12\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F11_2_inelastic():
     shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
@@ -429,7 +459,8 @@ def test_sec_F11_2_inelastic():
         C_b=1,
         precision=4)
     assert isclose(M_ltb, 11.89877407*unit.kipft, atol=1e-8*unit.kipft)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}} < \frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{1.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
         \\[10pt]
         M_{ltb} &= C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{L_b \cdot d}{t^2}\right) \cdot \frac{F_y}{E}\right) \cdot F_y \cdot S_x
@@ -437,7 +468,8 @@ def test_sec_F11_2_inelastic():
 &= 1 \cdot \left(1.52 - 0.274 \cdot \left(\frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}\right) \cdot \frac{36\ \mathrm{ksi}}{2.9\times 10^{4}\ \mathrm{ksi}}\right) \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}
 \\
 &= 11.9\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F11_2_elastic():
     shape = aisc.Plate(12*unit.inch, 1*unit.inch, "A36")
@@ -449,13 +481,15 @@ def test_sec_F11_2_elastic():
         C_b=1,
         precision=4)
     assert isclose(M_ltb, 70.64102564*unit.kipft, atol=1e-8*unit.kipft)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     \text{Since, } & \left(\frac{L_b \cdot d}{t^2} > \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{130\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} > \frac{1.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
         \\[10pt]
         F_{cr} &= \frac{1.9 \cdot E \cdot C_b}{\frac{L_b \cdot d}{t^2}} = \frac{1.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi} \cdot 1}{\frac{130\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}} &= 35.32\ \mathrm{ksi}
         \\[10pt]
         M_{ltb} &= F_{cr} \cdot S_x = 35.32\ \mathrm{ksi} \cdot 24\ \mathrm{in}^{3} &= 70.64\ \mathrm{kipft}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_F11():
     shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
@@ -466,12 +500,15 @@ def test_sec_F11():
         precision=4)
     assert isclose(M_n, 11.89877407*unit.kipft, atol=1e-8*unit.kipft)
     assert string == r"""#### Plastic Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     M_p &= \operatorname{min}\left(F_y \cdot Z_x,\ 1.5 \cdot F_y \cdot S_x\right) = \operatorname{min}\left(36\ \mathrm{ksi} \cdot 4\ \mathrm{in}^{3},\ 1.5 \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}\right) &= 12\ \mathrm{kipft}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Lateral-Torsional Buckling Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     \text{Since, } & \left(\frac{0.08 \cdot E}{F_y} < \frac{L_b \cdot d}{t^2} \leq \frac{1.9 \cdot E}{F_y} \Leftarrow \frac{0.08 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}} < \frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2} \leq \frac{1.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{36\ \mathrm{ksi}}\right):
         \\[10pt]
         M_{ltb} &= C_b \cdot \left(1.52 - 0.274 \cdot \left(\frac{L_b \cdot d}{t^2}\right) \cdot \frac{F_y}{E}\right) \cdot F_y \cdot S_x
@@ -479,9 +516,12 @@ $$\begin{aligned}
 &= 1 \cdot \left(1.52 - 0.274 \cdot \left(\frac{24\ \mathrm{in} \cdot 4\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}\right) \cdot \frac{36\ \mathrm{ksi}}{2.9\times 10^{4}\ \mathrm{ksi}}\right) \cdot 36\ \mathrm{ksi} \cdot 2.667\ \mathrm{in}^{3}
 \\
 &= 11.9\ \mathrm{kipft}
-\end{aligned}$$
-<br/>
+\end{aligned}
+$$
+
 #### Nominal Moment Capacity
-$$\begin{aligned}
+$$
+\begin{aligned}
     M_n &= \operatorname{min}\left(M_p,\ M_{ltb}\right) = \operatorname{min}\left(12\ \mathrm{kipft},\ 11.9\ \mathrm{kipft}\right) &= 11.9\ \mathrm{kipft}
-\end{aligned}$$"""
+\end{aligned}
+$$"""

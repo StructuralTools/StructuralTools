@@ -1,6 +1,6 @@
 {
-    "Plate_compression_capacity": "$${P_n_str}$$",
+    "Plate_compression_capacity": "{P_n_str}",
     "Plate_moment_capacity_x": "{M_n_str}",
-    "Plate_moment_capacity_y": "{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{aligned}}\n    M_n &= \\operatorname{{min}}\\left(F_y \\cdot Z_y,\\ 1.5 \\cdot F_y \\cdot S_y\\right) = \\operatorname{{min}}\\left({F_y:{_qformat_}.{_precision_}{_gformat_}} \\cdot {Z_y:{_qformat_}.{_precision_}{_gformat_}},\\ 1.5 \\cdot {F_y:{_qformat_}.{_precision_}{_gformat_}} \\cdot {S_y:{_qformat_}.{_precision_}{_gformat_}}\\right) &= {M_n:{_qformat_}.{_precision_}{_gformat_}}\n\\end{{aligned}}$$",
+    "Plate_moment_capacity_y": "{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\n\\begin{{aligned}}\n    M_n &= \\operatorname{{min}}\\left(F_y \\cdot Z_y,\\ 1.5 \\cdot F_y \\cdot S_y\\right) = \\operatorname{{min}}\\left({F_y:{_qformat_}.{_precision_}{_gformat_}} \\cdot {Z_y:{_qformat_}.{_precision_}{_gformat_}},\\ 1.5 \\cdot {F_y:{_qformat_}.{_precision_}{_gformat_}} \\cdot {S_y:{_qformat_}.{_precision_}{_gformat_}}\\right) &= {M_n:{_qformat_}.{_precision_}{_gformat_}}\n\\end{{aligned}}\n$$",
     "WideFlange_moment_capacity_x": "{M_n_str}"
 }

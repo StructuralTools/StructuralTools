@@ -65,7 +65,7 @@
     },
     "table_25_4_2_5": {
         "types": {"lamb_str": "str", "psi_g_str": "str", "psi_e_str": "str", "psi_s_str": "str", "psi_t_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {lamb_str}\n    \\\\[10pt]\n    {psi_g_str}\n    \\\\[10pt]\n    {psi_e_str}\n    \\\\[10pt]\n    {psi_s_str}\n    \\\\[10pt]\n    {psi_t_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {lamb_str}\n    \\\\[10pt]\n    {psi_g_str}\n    \\\\[10pt]\n    {psi_e_str}\n    \\\\[10pt]\n    {psi_s_str}\n    \\\\[10pt]\n    {psi_t_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "eq_25_4_3_1a": {
         "types": {"f_y": "unit", "psi_e": "float", "psi_r": "float", "psi_o": "float", "psi_c": "float", "lamb": "float", "f_prime_c": "unit", "d_b": "unit", "l_prime_dh": "unit"},
@@ -125,6 +125,6 @@
     },
     "table_25_4_3_2": {
         "types": {"lamb_str": "str", "psi_e_str": "str", "psi_r_str": "str", "psi_o_str": "str", "psi_c_str": "str"},
-        "string": "$$\\begin{{{{aligned}}}}\n    {lamb_str}\n    \\\\[10pt]\n    {psi_e_str}\n    \\\\[10pt]\n    {psi_r_str}\n    \\\\[10pt]\n    {psi_o_str}\n\\end{{{{aligned}}}}$$\n$$\\begin{{{{aligned}}}}\n    {psi_c_str}\n\\end{{{{aligned}}}}$$"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {lamb_str}\n    \\\\[10pt]\n    {psi_e_str}\n    \\\\[10pt]\n    {psi_r_str}\n    \\\\[10pt]\n    {psi_o_str}\n\\end{{{{aligned}}}}\n$$\n$$\n\\begin{{{{aligned}}}}\n    {psi_c_str}\n\\end{{{{aligned}}}}\n$$"
     }
 }

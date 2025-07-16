@@ -16,7 +16,7 @@
 import importlib.resources
 import json
 
-from numpy import pi, sqrt
+from numpy import pi
 
 from structuraltools.unit import Area, Force, Length, Stress
 from structuraltools.utils import fill_template, Result

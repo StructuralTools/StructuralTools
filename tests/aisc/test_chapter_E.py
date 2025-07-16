@@ -49,7 +49,8 @@ def test_sec_E3_inelastic():
     shape = aisc.Plate(12*unit.inch, 1*unit.inch, "A36")
     string, P_n = chapter_E.sec_E3(shape, 3*unit.ft, "y", precision=4)
     assert isclose(P_n, 190.50898212391965*unit.kip)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     F_e &= \frac{\pi^2 \cdot E}{\left(\frac{L_{c_{y}}}{r_{y}}\right)^2} = \frac{\pi^2 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{\left(\frac{3\ \mathrm{ft}}{0.2887\ \mathrm{in}}\right)^2} &= 18.4\ \mathrm{ksi}
     \\[10pt]
     \text{Since, } & \left(\frac{F_y}{F_e} \leq 2.25 \Leftarrow \frac{36\ \mathrm{ksi}}{18.4\ \mathrm{ksi}} \leq 2.25\right):
@@ -57,13 +58,15 @@ def test_sec_E3_inelastic():
     F_n &= \left(0.658^{\frac{F_y}{F_e}}\right) \cdot F_y = \left(0.658^{\frac{36\ \mathrm{ksi}}{18.4\ \mathrm{ksi}}}\right) \cdot 36\ \mathrm{ksi} &=  15.88\ \mathrm{ksi}
     \\[10pt]
     P_n &= F_n \cdot A_g = 15.88\ \mathrm{ksi} \cdot 12\ \mathrm{in}^{2} &= 190.5\ \mathrm{kip}
-\end{aligned}"""
+\end{aligned}
+$$"""
 
 def test_sec_E3_elastic():
     shape = aisc.Plate(12*unit.inch, 1*unit.inch, "A36")
     string, P_n = chapter_E.sec_E3(shape, 4*unit.ft, "y", precision=4)
     assert isclose(P_n, 108.94689615143473*unit.kip)
-    assert string == r"""\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     F_e &= \frac{\pi^2 \cdot E}{\left(\frac{L_{c_{y}}}{r_{y}}\right)^2} = \frac{\pi^2 \cdot 2.9\times 10^{4}\ \mathrm{ksi}}{\left(\frac{4\ \mathrm{ft}}{0.2887\ \mathrm{in}}\right)^2} &= 10.35\ \mathrm{ksi}
     \\[10pt]
     \text{Since, } & \left(\frac{F_y}{F_e} > 2.25 \Leftarrow \frac{36\ \mathrm{ksi}}{10.35\ \mathrm{ksi}} > 2.25\right):
@@ -71,4 +74,5 @@ def test_sec_E3_elastic():
     F_n &= 0.877 \cdot F_e = 0.877 \cdot 10.35\ \mathrm{ksi} &= 9.079\ \mathrm{ksi}
     \\[10pt]
     P_n &= F_n \cdot A_g = 9.079\ \mathrm{ksi} \cdot 12\ \mathrm{in}^{2} &= 108.9\ \mathrm{kip}
-\end{aligned}"""
+\end{aligned}
+$$"""
