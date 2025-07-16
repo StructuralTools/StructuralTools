@@ -81,7 +81,7 @@ def fill_template(
         headers = {
             "_header_": "",
             "_h_start_": f"<h{header_level}>",
-            "_h_end_": f"/h{header_level}>"
+            "_h_end_": f"</h{header_level}>"
         }
     else:
         raise ValueError(f"Unrecognized header type: {header_type}")
