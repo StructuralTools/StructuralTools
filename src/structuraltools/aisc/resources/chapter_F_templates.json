@@ -29,23 +29,23 @@
     },
     "sec_F2_1": {
         "types": {"M_p_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {M_p_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {M_p_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F2_2_plastic": {
         "types": {"L_p_str": "str", "L_b": "unit", "L_p": "unit", "M_p": "unit", "M_ltb": "unit"},
-        "string": "\\begin{{{{aligned}}}}\n    {L_p_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(L_b \\leq L_p \\Leftarrow {L_b} \\leq {L_p}\\right):\n        \\\\[10pt]\n        M_{{{{ltb}}}} &= M_p = {M_p} &= {M_ltb}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {L_p_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(L_b \\leq L_p \\Leftarrow {L_b} \\leq {L_p}\\right):\n        \\\\[10pt]\n        M_{{{{ltb}}}} &= M_p = {M_p} &= {M_ltb}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F2_2_inelastic": {
         "types": {"L_p_str": "str", "L_r_str": "str", "L_p": "unit", "L_b": "unit", "L_r": "unit", "M_ltb_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {L_p_str}\n    \\\\[10pt]\n    {L_r_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(L_p < L_b \\leq L_r \\Leftarrow {L_p} < {L_b} \\leq {L_r}\\right):\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {L_p_str}\n    \\\\[10pt]\n    {L_r_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(L_p < L_b \\leq L_r \\Leftarrow {L_p} < {L_b} \\leq {L_r}\\right):\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F2_2_elastic": {
         "types": {"L_r_str": "str", "L_b": "unit", "L_r": "unit", "F_cr_str": "str", "M_ltb_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {L_r_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(L_b > L_r \\Leftarrow {L_b} > {L_r}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {L_r_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(L_b > L_r \\Leftarrow {L_b} > {L_r}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F2": {
         "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
-        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n$${M_p_str}$$\n<br/>\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n$${M_ltb_str}$$\n<br/>\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
+        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n{M_ltb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
     },
     "eq_F3_1": {
         "types": {"M_p": "unit", "F_y": "unit", "S_x": "unit", "lamb_f": "float", "lamb_pf": "float", "lamb_rf": "float", "M_flb": "unit"},
@@ -61,15 +61,15 @@
     },
     "sec_F3_2_noncompact": {
         "types": {"lamb_pf_str": "str", "lamb_rf_str": "str", "lamb_pf": "float", "lamb_f": "float", "lamb_rf": "float", "M_flb_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {lamb_pf_str}\n    \\\\[10pt]\n    {lamb_rf_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\lambda_{{{{pf}}}} \\leq \\lambda_f < \\lambda_{{{{rf}}}} \\Leftarrow {lamb_pf} \\leq {lamb_f} < {lamb_rf}\\right):\n        \\\\[10pt]\n        {M_flb_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {lamb_pf_str}\n    \\\\[10pt]\n    {lamb_rf_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\lambda_{{{{pf}}}} \\leq \\lambda_f < \\lambda_{{{{rf}}}} \\Leftarrow {lamb_pf} \\leq {lamb_f} < {lamb_rf}\\right):\n        \\\\[10pt]\n        {M_flb_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F3_2_slender": {
         "types": {"lamb_rf_str": "str", "lamb_f": "float", "lamb_rf": "float", "k_c_str": "str", "M_flb_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {lamb_rf_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\lambda_f \\geq \\lambda_{{{{rf}}}} \\Leftarrow {lamb_f} \\geq {lamb_rf}\\right):\n        \\\\[10pt]\n        {k_c_str}\n        \\\\[10pt]\n        {M_flb_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {lamb_rf_str}\n    \\\\[10pt]\n    \\text{{{{Since, }}}} & \\left(\\lambda_f \\geq \\lambda_{{{{rf}}}} \\Leftarrow {lamb_f} \\geq {lamb_rf}\\right):\n        \\\\[10pt]\n        {k_c_str}\n        \\\\[10pt]\n        {M_flb_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F3": {
         "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_flb_str": "str", "M_ltb": "unit", "M_flb": "unit", "M_n": "unit"},
-        "string": "{_header_}{_h_start_}Plastic Moment{_h_end_}\n$${M_p_str}$$\n<br/>\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n$${M_ltb_str}$$\n<br/>\n{_header_}{_h_start_}Compression Flange Local Buckling Moment Capacity{_h_end_}\n$${M_flb_str}$$\n<br/>\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_{{{{ltb}}}},\\ M_{{{{flb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_ltb},\\ {M_flb}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
+        "string": "{_header_}{_h_start_}Plastic Moment{_h_end_}\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n{M_ltb_str}\n\n{_header_}{_h_start_}Compression Flange Local Buckling Moment Capacity{_h_end_}\n{M_flb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_{{{{ltb}}}},\\ M_{{{{flb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_ltb},\\ {M_flb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
     },
     "eq_F11_1": {
         "types": {"F_y": "unit", "Z_x": "unit", "S_x": "unit", "M_p": "unit"},
@@ -89,22 +89,22 @@
     },
     "sec_F11_1_rect": {
         "types": {"M_p_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    {M_p_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {M_p_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F11_2_plastic": {
         "types": {"L_b": "unit", "d": "unit", "t": "unit", "E": "unit", "F_y": "unit", "M_p": "unit", "M_ltb": "unit"},
-        "string": "\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} \\leq \\frac{{{{0.08 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} \\leq \\frac{{{{0.08 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        M_{{{{ltb}}}} &= M_p = {M_p} &= {M_ltb}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} \\leq \\frac{{{{0.08 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} \\leq \\frac{{{{0.08 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        M_{{{{ltb}}}} &= M_p = {M_p} &= {M_ltb}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F11_2_inelastic": {
         "types": {"E": "unit", "F_y": "unit", "L_b": "unit", "d": "unit", "t": "unit", "M_ltb_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{0.08 \\cdot E}}}}{{{{F_y}}}} < \\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} \\leq \\frac{{{{1.9 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{0.08 \\cdot {E}}}}}{{{{{F_y}}}}} < \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} \\leq \\frac{{{{1.9 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{0.08 \\cdot E}}}}{{{{F_y}}}} < \\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} \\leq \\frac{{{{1.9 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{0.08 \\cdot {E}}}}}{{{{{F_y}}}}} < \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} \\leq \\frac{{{{1.9 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F11_2_elastic": {
         "types": {"L_b": "unit", "d": "unit", "t": "unit", "E": "unit", "F_y": "unit", "F_cr_str": "str", "M_ltb_str": "str"},
-        "string": "\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} > \\frac{{{{1.9 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} > \\frac{{{{1.9 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    \\text{{{{Since, }}}} & \\left(\\frac{{{{L_b \\cdot d}}}}{{{{t^2}}}} > \\frac{{{{1.9 \\cdot E}}}}{{{{F_y}}}} \\Leftarrow \\frac{{{{{L_b} \\cdot {d}}}}}{{{{\\left({t}\\right)^2}}}} > \\frac{{{{1.9 \\cdot {E}}}}}{{{{{F_y}}}}}\\right):\n        \\\\[10pt]\n        {F_cr_str}\n        \\\\[10pt]\n        {M_ltb_str}\n\\end{{{{aligned}}}}\n$$"
     },
     "sec_F11": {
         "types": {"_header_": "str", "_h_start_": "str", "_h_end_": "str", "M_p_str": "str", "M_ltb_str": "str", "M_p": "unit", "M_ltb": "unit", "M_n": "unit"},
-        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n$${M_p_str}$$\n<br/>\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n$${M_ltb_str}$$\n<br/>\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}$$"
+        "string": "{_header_}{_h_start_}Plastic Moment Capacity{_h_end_}\n{M_p_str}\n\n{_header_}{_h_start_}Lateral-Torsional Buckling Moment Capacity{_h_end_}\n{M_ltb_str}\n\n{_header_}{_h_start_}Nominal Moment Capacity{_h_end_}\n$$\n\\begin{{{{aligned}}}}\n    M_n &= \\operatorname{{{{min}}}}\\left(M_p,\\ M_{{{{ltb}}}}\\right) = \\operatorname{{{{min}}}}\\left({M_p},\\ {M_ltb}\\right) &= {M_n}\n\\end{{{{aligned}}}}\n$$"
     }
 }

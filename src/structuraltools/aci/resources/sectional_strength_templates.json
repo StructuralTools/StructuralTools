@@ -13,6 +13,6 @@
     },
     "moment_capacity": {
         "types": {"a_str": "str", "M_n_str": "str", "epsilon_t_str": "str", "phi_str": "str"},
-        "string": "$$\\begin{{{{aligned}}}}\n    {a_str}\n    \\\\[10pt]\n    {M_n_str}\n    \\\\[10pt]\n    {epsilon_t_str}\n\\end{{{{aligned}}}}$$\n{phi_str}"
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {a_str}\n    \\\\[10pt]\n    {M_n_str}\n    \\\\[10pt]\n    {epsilon_t_str}\n\\end{{{{aligned}}}}\n$$\n{phi_str}"
     }
 }

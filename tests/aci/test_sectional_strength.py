@@ -59,13 +59,17 @@ def test_moment_capacity():
         n=3,
         return_string=True)
     assert isclose(phiM_n[0]*phiM_n[1], 30.61323529*unit.kipft, atol=1e-8*unit.kipft)
-    assert string == r"""$$\begin{aligned}
+    assert string == r"""$$
+\begin{aligned}
     a &= \frac{A_{st} \cdot f_y}{0.85 \cdot f'_c \cdot b} = \frac{0.6\ \mathrm{in}^{2} \cdot 6\times 10^{4}\ \mathrm{psi}}{0.85 \cdot 4000\ \mathrm{psi} \cdot 8\ \mathrm{in}} &= 1.324\ \mathrm{in}
     \\[10pt]
     M_n &= A_{st} \cdot f_y \cdot \left(d - \frac{a}{2}\right) = 0.6\ \mathrm{in}^{2} \cdot 6\times 10^{4}\ \mathrm{psi} \cdot \left(12\ \mathrm{in} - \frac{1.324\ \mathrm{in}}{2}\right) &= 34.01\ \mathrm{kipft}
     \\[10pt]
     \epsilon_t &= 0.003 \cdot \left(\frac{\beta_1 \cdot d_t}{a} - 1\right) = 0.003 \cdot \left(\frac{0.85 \cdot 12\ \mathrm{in}}{1.324\ \mathrm{in}} - 1\right) &= 0.02012
-\end{aligned}$$
+\end{aligned}
+$$
+$$
 \begin{aligned}
     & \text{Since, } \left(\epsilon_t \geq \epsilon_{ty} +0.003 \Leftarrow 0.02012 \geq 0.005069\right): & \phi &= 0.9
-\end{aligned}"""
+\end{aligned}
+$$"""
