@@ -1,13 +1,25 @@
-# A similar shell.nix got me up and running with an editable install of
-# innerscope, but this is giving me a `ModuleNotFoundError` when I try to import
-# structuraltools.
-
 with import <nixpkgs> {}; (
     let
-        structuraltools = python313Packages.mkPythonEditablePackage {
+        structuraltools = python313.pkgs.buildPythonPackage {
             pname = "structuraltools";
             version = "0.1.0";
-            root = "/home/joebot/git/structuraltools/src/structuraltools";
+            pyproject = true;
+
+            src = ./.;
+
+            build-system = with python313Packages; [
+                setuptools
+                setuptools-scm
+            ];
+
+            doCheck = false;
+
+            dependencies = with python313Packages; [
+                numpy
+                pandas
+                pint
+                sympy
+            ];
         };
     in
     python313.withPackages (
@@ -17,6 +29,7 @@ with import <nixpkgs> {}; (
             pint
             pytest
             ruff
+            setuptools
             sphinx
             sphinx-book-theme
             structuraltools

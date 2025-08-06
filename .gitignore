@@ -30,6 +30,7 @@ env.bak/
 venv.bak/
 .env
 .envrc
+uv.lock
 .venv
 
 # Python files

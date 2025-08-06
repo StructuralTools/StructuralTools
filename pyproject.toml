@@ -3,9 +3,18 @@ name = "structuraltools"
 version = "0.1.0"
 description = "Tools, calculations, and code checks for structural engineering"
 readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+
 authors = [
     { name = "Joe Bears", email = "joe.bears77@gmail.com" }
 ]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
 requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.2.3",
@@ -15,8 +24,19 @@ dependencies = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools",
+    "setuptools-scm",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["./src"]
+include = ["structuraltools*"]
+namespaces = true
 
 [dependency-groups]
 dev = [
