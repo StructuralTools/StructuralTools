@@ -79,10 +79,10 @@ class Plate(Shape):
         Parameters
         ==========
 
-        d : pint length quantity
+        d : Length
             Plate width
 
-        t : pint length quantity
+        t : Length
             Plate thickness
 
         material : str
