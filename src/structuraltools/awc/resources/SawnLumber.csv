@@ -1,0 +1,617 @@
+grade,F_b,F_t,F_v,F_c_perp,F_c,E,E_min,G,grading_agency
+Dimension|Alaska Cedar|Select,1150 psi,625 psi,165 psi,525 psi,1000 psi,1400000 psi,510000 psi,0.47,PLIB
+Dimension|Alaska Cedar|1,975 psi,525 psi,165 psi,525 psi,900 psi,1300000 psi,470000 psi,0.47,PLIB
+Dimension|Alaska Cedar|2,800 psi,425 psi,165 psi,525 psi,750 psi,1200000 psi,440000 psi,0.47,PLIB
+Dimension|Alaska Cedar|3,450 psi,250 psi,165 psi,525 psi,425 psi,1100000 psi,400000 psi,0.47,PLIB
+Dimension|Alaska Cedar|Stud,625 psi,350 psi,165 psi,525 psi,475 psi,1100000 psi,400000 psi,0.47,PLIB
+Dimension|Alaska Cedar|Construction,900 psi,500 psi,165 psi,525 psi,950 psi,1200000 psi,440000 psi,0.47,PLIB
+Dimension|Alaska Cedar|Standard,500 psi,275 psi,165 psi,525 psi,775 psi,1100000 psi,400000 psi,0.47,PLIB
+Dimension|Alaska Cedar|Utility,250 psi,125 psi,165 psi,525 psi,500 psi,1000000 psi,370000 psi,0.47,PLIB
+Dimension|Alaska Hemlock|Select,1300 psi,825 psi,185 psi,440 psi,1200 psi,1700000 psi,620000 psi,0.46,WWPA
+Dimension|Alaska Hemlock|1,900 psi,550 psi,185 psi,440 psi,1100 psi,1600000 psi,580000 psi,0.46,WWPA
+Dimension|Alaska Hemlock|2,825 psi,475 psi,185 psi,440 psi,1050 psi,1500000 psi,550000 psi,0.46,WWPA
+Dimension|Alaska Hemlock|3,475 psi,275 psi,185 psi,440 psi,600 psi,1400000 psi,510000 psi,0.46,WWPA
+Dimension|Alaska Hemlock|Stud,650 psi,375 psi,185 psi,440 psi,650 psi,1400000 psi,510000 psi,0.46,WWPA
+Dimension|Alaska Hemlock|Construction,950 psi,550 psi,185 psi,440 psi,1250 psi,1400000 psi,510000 psi,0.46,WWPA
+Dimension|Alaska Hemlock|Standard,525 psi,300 psi,185 psi,440 psi,1050 psi,1300000 psi,470000 psi,0.46,WWPA
+Dimension|Alaska Hemlock|Utility,250 psi,150 psi,185 psi,440 psi,700 psi,1200000 psi,440000 psi,0.46,WWPA
+Dimension|Alaska Spruce|Select,1400 psi,900 psi,160 psi,330 psi,1200 psi,1600000 psi,580000 psi,0.41,WWPA
+Dimension|Alaska Spruce|1,950 psi,600 psi,160 psi,330 psi,1100 psi,1500000 psi,550000 psi,0.41,WWPA
+Dimension|Alaska Spruce|2,875 psi,500 psi,160 psi,330 psi,1050 psi,1400000 psi,510000 psi,0.41,WWPA
+Dimension|Alaska Spruce|3,500 psi,300 psi,160 psi,330 psi,600 psi,1300000 psi,470000 psi,0.41,WWPA
+Dimension|Alaska Spruce|Stud,675 psi,400 psi,160 psi,330 psi,675 psi,1300000 psi,470000 psi,0.41,WWPA
+Dimension|Alaska Spruce|Construction,1000 psi,575 psi,160 psi,330 psi,1250 psi,1300000 psi,470000 psi,0.41,WWPA
+Dimension|Alaska Spruce|Standard,550 psi,325 psi,160 psi,330 psi,1050 psi,1200000 psi,440000 psi,0.41,WWPA
+Dimension|Alaska Spruce|Utility,275 psi,150 psi,160 psi,330 psi,700 psi,1100000 psi,400000 psi,0.41,WWPA
+Dimension|Alaska Yellow Cedar|Select,1350 psi,800 psi,225 psi,510 psi,1200 psi,1500000 psi,550000 psi,0.46,PLIB/WWPA
+Dimension|Alaska Yellow Cedar|1,900 psi,525 psi,225 psi,510 psi,1050 psi,1400000 psi,510000 psi,0.46,PLIB/WWPA
+Dimension|Alaska Yellow Cedar|2,800 psi,450 psi,225 psi,510 psi,1000 psi,1300000 psi,470000 psi,0.46,PLIB/WWPA
+Dimension|Alaska Yellow Cedar|3,475 psi,250 psi,225 psi,510 psi,575 psi,1200000 psi,440000 psi,0.46,PLIB/WWPA
+Dimension|Alaska Yellow Cedar|Stud,625 psi,350 psi,225 psi,510 psi,625 psi,1200000 psi,440000 psi,0.46,PLIB/WWPA
+Dimension|Alaska Yellow Cedar|Construction,925 psi,500 psi,225 psi,510 psi,1250 psi,1300000 psi,470000 psi,0.46,PLIB/WWPA
+Dimension|Alaska Yellow Cedar|Standard,500 psi,275 psi,225 psi,510 psi,1050 psi,1100000 psi,400000 psi,0.46,PLIB/WWPA
+Dimension|Alaska Yellow Cedar|Utility,250 psi,125 psi,225 psi,510 psi,675 psi,1100000 psi,400000 psi,0.46,PLIB/WWPA
+Dimension|Aspen|Select,875 psi,500 psi,120 psi,265 psi,725 psi,1100000 psi,400000 psi,0.39,NELMA/WWPA
+Dimension|Aspen|1,625 psi,375 psi,120 psi,265 psi,600 psi,1100000 psi,400000 psi,0.39,NELMA/WWPA
+Dimension|Aspen|2,600 psi,350 psi,120 psi,265 psi,450 psi,1000000 psi,370000 psi,0.39,NELMA/WWPA
+Dimension|Aspen|3,350 psi,200 psi,120 psi,265 psi,275 psi,900000 psi,330000 psi,0.39,NELMA/WWPA
+Dimension|Aspen|Stud,475 psi,275 psi,120 psi,265 psi,300 psi,900000 psi,330000 psi,0.39,NELMA/WWPA
+Dimension|Aspen|Construction,700 psi,400 psi,120 psi,265 psi,625 psi,900000 psi,330000 psi,0.39,NELMA/WWPA
+Dimension|Aspen|Standard,375 psi,225 psi,120 psi,265 psi,475 psi,900000 psi,330000 psi,0.39,NELMA/WWPA
+Dimension|Aspen|Utility,175 psi,100 psi,120 psi,265 psi,300 psi,800000 psi,290000 psi,0.39,NELMA/WWPA
+Dimension|Baldcypress|Select,1200 psi,650 psi,160 psi,615 psi,1200 psi,1400000 psi,510000 psi,0.47,SPIB
+Dimension|Baldcypress|1,1000 psi,550 psi,160 psi,615 psi,1050 psi,1400000 psi,510000 psi,0.47,SPIB
+Dimension|Baldcypress|2,825 psi,450 psi,160 psi,615 psi,900 psi,1300000 psi,470000 psi,0.47,SPIB
+Dimension|Baldcypress|3,475 psi,250 psi,160 psi,615 psi,525 psi,1200000 psi,440000 psi,0.47,SPIB
+Dimension|Baldcypress|Stud,650 psi,350 psi,160 psi,615 psi,575 psi,1200000 psi,440000 psi,0.47,SPIB
+Dimension|Baldcypress|Construction,925 psi,500 psi,160 psi,615 psi,1100 psi,1200000 psi,440000 psi,0.47,SPIB
+Dimension|Baldcypress|Standard,525 psi,275 psi,160 psi,615 psi,925 psi,1100000 psi,400000 psi,0.47,SPIB
+Dimension|Baldcypress|Utility,250 psi,125 psi,160 psi,615 psi,600 psi,1000000 psi,370000 psi,0.47,SPIB
+Dimension|Beech-Birch-Hickory|Select,1450 psi,850 psi,195 psi,715 psi,1200 psi,1700000 psi,620000 psi,0.71,NELMA
+Dimension|Beech-Birch-Hickory|1,1050 psi,600 psi,195 psi,715 psi,950 psi,1600000 psi,580000 psi,0.71,NELMA
+Dimension|Beech-Birch-Hickory|2,1000 psi,600 psi,195 psi,715 psi,750 psi,1500000 psi,550000 psi,0.71,NELMA
+Dimension|Beech-Birch-Hickory|3,575 psi,350 psi,195 psi,715 psi,425 psi,1300000 psi,470000 psi,0.71,NELMA
+Dimension|Beech-Birch-Hickory|Stud,775 psi,450 psi,195 psi,715 psi,475 psi,1300000 psi,470000 psi,0.71,NELMA
+Dimension|Beech-Birch-Hickory|Construction,1150 psi,675 psi,195 psi,715 psi,1000 psi,1400000 psi,510000 psi,0.71,NELMA
+Dimension|Beech-Birch-Hickory|Standard,650 psi,375 psi,195 psi,715 psi,775 psi,1300000 psi,470000 psi,0.71,NELMA
+Dimension|Beech-Birch-Hickory|Utility,300 psi,175 psi,195 psi,715 psi,500 psi,1200000 psi,440000 psi,0.71,NELMA
+Dimension|Coast Sitka Spruce|Select,1300 psi,950 psi,125 psi,455 psi,1200 psi,1700000 psi,620000 psi,0.43,NLGA
+Dimension|Coast Sitka Spruce|1,925 psi,550 psi,125 psi,455 psi,1100 psi,1500000 psi,550000 psi,0.43,NLGA
+Dimension|Coast Sitka Spruce|2,925 psi,550 psi,125 psi,455 psi,1100 psi,1500000 psi,550000 psi,0.43,NLGA
+Dimension|Coast Sitka Spruce|3,525 psi,325 psi,125 psi,455 psi,625 psi,1400000 psi,510000 psi,0.43,NLGA
+Dimension|Coast Sitka Spruce|Stud,725 psi,450 psi,125 psi,455 psi,675 psi,1400000 psi,510000 psi,0.43,NLGA
+Dimension|Coast Sitka Spruce|Construction,1050 psi,650 psi,125 psi,455 psi,1300 psi,1400000 psi,510000 psi,0.43,NLGA
+Dimension|Coast Sitka Spruce|Standard,600 psi,350 psi,125 psi,455 psi,1100 psi,1300000 psi,470000 psi,0.43,NLGA
+Dimension|Coast Sitka Spruce|Utility,275 psi,175 psi,125 psi,455 psi,725 psi,1200000 psi,440000 psi,0.43,NLGA
+Dimension|Cottonwood|Select,875 psi,525 psi,125 psi,320 psi,775 psi,1200000 psi,440000 psi,0.41,NELMA
+Dimension|Cottonwood|1,625 psi,375 psi,125 psi,320 psi,625 psi,1200000 psi,440000 psi,0.41,NELMA
+Dimension|Cottonwood|2,625 psi,350 psi,125 psi,320 psi,475 psi,1100000 psi,400000 psi,0.41,NELMA
+Dimension|Cottonwood|3,350 psi,200 psi,125 psi,320 psi,275 psi,1000000 psi,370000 psi,0.41,NELMA
+Dimension|Cottonwood|Stud,475 psi,275 psi,125 psi,320 psi,300 psi,1000000 psi,370000 psi,0.41,NELMA
+Dimension|Cottonwood|Construction,700 psi,400 psi,125 psi,320 psi,650 psi,1000000 psi,370000 psi,0.41,NELMA
+Dimension|Cottonwood|Standard,400 psi,225 psi,125 psi,320 psi,500 psi,900000 psi,330000 psi,0.41,NELMA
+Dimension|Cottonwood|Utility,175 psi,100 psi,125 psi,320 psi,325 psi,900000 psi,330000 psi,0.41,NELMA
+Dimension|Douglas Fir|Select,1500 psi,1000 psi,180 psi,625 psi,1700 psi,1900000 psi,690000 psi,0.41,NELMA
+Dimension|Douglas Fir|1+,1200 psi,800 psi,180 psi,625 psi,1550 psi,1800000 psi,660000 psi,0.41,NELMA
+Dimension|Douglas Fir|1,1000 psi,675 psi,180 psi,625 psi,1500 psi,1700000 psi,620000 psi,0.41,NELMA
+Dimension|Douglas Fir|2,900 psi,575 psi,180 psi,625 psi,1350 psi,1600000 psi,580000 psi,0.41,NELMA
+Dimension|Douglas Fir|3,525 psi,325 psi,180 psi,625 psi,775 psi,1400000 psi,510000 psi,0.41,NELMA
+Dimension|Douglas Fir|Stud,700 psi,450 psi,180 psi,625 psi,850 psi,1400000 psi,510000 psi,0.41,NELMA
+Dimension|Douglas Fir|Construction,1000 psi,650 psi,180 psi,625 psi,1650 psi,1500000 psi,550000 psi,0.41,NELMA
+Dimension|Douglas Fir|Standard,575 psi,375 psi,180 psi,625 psi,1400 psi,1400000 psi,510000 psi,0.41,NELMA
+Dimension|Douglas Fir|Utility,275 psi,175 psi,180 psi,625 psi,900 psi,1300000 psi,470000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|Select,1350 psi,825 psi,180 psi,625 psi,1900 psi,1900000 psi,690000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|1+,1150 psi,750 psi,180 psi,625 psi,1800 psi,1800000 psi,660000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|1,850 psi,500 psi,180 psi,625 psi,1400 psi,1600000 psi,580000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|2,850 psi,500 psi,180 psi,625 psi,1400 psi,1600000 psi,580000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|3,475 psi,300 psi,180 psi,625 psi,825 psi,1400000 psi,510000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|Stud,650 psi,400 psi,180 psi,625 psi,900 psi,1400000 psi,510000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|Construction,950 psi,575 psi,180 psi,625 psi,1800 psi,1500000 psi,550000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|Standard,525 psi,325 psi,180 psi,625 psi,1450 psi,1400000 psi,510000 psi,0.41,NELMA
+Dimension|Douglas Fir (North)|Utility,250 psi,150 psi,180 psi,625 psi,950 psi,1300000 psi,470000 psi,0.41,NELMA
+Dimension|Douglas Fir (South)|Select,1350 psi,900 psi,180 psi,520 psi,1600 psi,1400000 psi,510000 psi,0.46,WWPA
+Dimension|Douglas Fir (South)|1,925 psi,600 psi,180 psi,520 psi,1450 psi,1300000 psi,470000 psi,0.46,WWPA
+Dimension|Douglas Fir (South)|2,850 psi,525 psi,180 psi,520 psi,1350 psi,1200000 psi,440000 psi,0.46,WWPA
+Dimension|Douglas Fir (South)|3,500 psi,300 psi,180 psi,520 psi,775 psi,1100000 psi,400000 psi,0.46,WWPA
+Dimension|Douglas Fir (South)|Stud,675 psi,425 psi,180 psi,520 psi,850 psi,1100000 psi,400000 psi,0.46,WWPA
+Dimension|Douglas Fir (South)|Construction,975 psi,600 psi,180 psi,520 psi,1650 psi,1200000 psi,440000 psi,0.46,WWPA
+Dimension|Douglas Fir (South)|Standard,550 psi,350 psi,180 psi,520 psi,1400 psi,1100000 psi,400000 psi,0.46,WWPA
+Dimension|Douglas Fir (South)|Utility,250 psi,150 psi,180 psi,520 psi,900 psi,1000000 psi,370000 psi,0.46,WWPA
+Dimension|Eastern Hemlock-Balsam Fir|Select,1250 psi,575 psi,140 psi,335 psi,1200 psi,1200000 psi,440000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Balsam Fir|1,775 psi,350 psi,140 psi,335 psi,1000 psi,1100000 psi,400000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Balsam Fir|2,575 psi,275 psi,140 psi,335 psi,825 psi,1100000 psi,400000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Balsam Fir|3,350 psi,150 psi,140 psi,335 psi,475 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Balsam Fir|Stud,450 psi,200 psi,140 psi,335 psi,525 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Balsam Fir|Construction,675 psi,300 psi,140 psi,335 psi,1050 psi,1000000 psi,370000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Balsam Fir|Standard,375 psi,175 psi,140 psi,335 psi,850 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Balsam Fir|Utility,175 psi,75 psi,140 psi,335 psi,550 psi,800000 psi,290000 psi,0.36,NELMA
+Dimension|Eastern Hemlock-Tamarack|Select,1250 psi,575 psi,170 psi,555 psi,1200 psi,1200000 psi,440000 psi,0.41,NELMA
+Dimension|Eastern Hemlock-Tamarack|1,775 psi,350 psi,170 psi,555 psi,1000 psi,1100000 psi,400000 psi,0.41,NELMA
+Dimension|Eastern Hemlock-Tamarack|2,575 psi,275 psi,170 psi,555 psi,825 psi,1100000 psi,400000 psi,0.41,NELMA
+Dimension|Eastern Hemlock-Tamarack|3,350 psi,150 psi,170 psi,555 psi,475 psi,900000 psi,330000 psi,0.41,NELMA
+Dimension|Eastern Hemlock-Tamarack|Stud,450 psi,200 psi,170 psi,555 psi,525 psi,900000 psi,330000 psi,0.41,NELMA
+Dimension|Eastern Hemlock-Tamarack|Construction,675 psi,300 psi,170 psi,555 psi,1050 psi,1000000 psi,370000 psi,0.41,NELMA
+Dimension|Eastern Hemlock-Tamarack|Standard,375 psi,175 psi,170 psi,555 psi,850 psi,900000 psi,330000 psi,0.41,NELMA
+Dimension|Eastern Hemlock-Tamarack|Utility,175 psi,75 psi,170 psi,555 psi,550 psi,800000 psi,290000 psi,0.41,NELMA
+Dimension|Eastern Softwoods|Select,1250 psi,575 psi,140 psi,335 psi,1200 psi,1200000 psi,440000 psi,0.36,NELMA
+Dimension|Eastern Softwoods|1,775 psi,350 psi,140 psi,335 psi,1000 psi,1100000 psi,400000 psi,0.36,NELMA
+Dimension|Eastern Softwoods|2,575 psi,275 psi,140 psi,335 psi,825 psi,1100000 psi,400000 psi,0.36,NELMA
+Dimension|Eastern Softwoods|3,350 psi,150 psi,140 psi,335 psi,475 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern Softwoods|Stud,450 psi,200 psi,140 psi,335 psi,525 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern Softwoods|Construction,675 psi,300 psi,140 psi,335 psi,1050 psi,1000000 psi,370000 psi,0.36,NELMA
+Dimension|Eastern Softwoods|Standard,375 psi,175 psi,140 psi,335 psi,850 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern Softwoods|Utility,175 psi,75 psi,140 psi,335 psi,550 psi,800000 psi,290000 psi,0.36,NELMA
+Dimension|Eastern White Pine|Select,1250 psi,575 psi,135 psi,350 psi,1200 psi,1200000 psi,440000 psi,0.36,NELMA
+Dimension|Eastern White Pine|1,775 psi,350 psi,135 psi,350 psi,1000 psi,1100000 psi,400000 psi,0.36,NELMA
+Dimension|Eastern White Pine|2,575 psi,275 psi,135 psi,350 psi,825 psi,1100000 psi,400000 psi,0.36,NELMA
+Dimension|Eastern White Pine|3,350 psi,150 psi,135 psi,350 psi,475 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern White Pine|Stud,450 psi,200 psi,135 psi,350 psi,525 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern White Pine|Construction,675 psi,300 psi,135 psi,350 psi,1050 psi,1000000 psi,370000 psi,0.36,NELMA
+Dimension|Eastern White Pine|Standard,375 psi,175 psi,135 psi,350 psi,850 psi,900000 psi,330000 psi,0.36,NELMA
+Dimension|Eastern White Pine|Utility,175 psi,75 psi,135 psi,350 psi,550 psi,800000 psi,290000 psi,0.36,NELMA
+Dimension|Hem-Fir|Select,1400 psi,925 psi,150 psi,405 psi,1500 psi,1600000 psi,580000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|1+,1100 psi,725 psi,150 psi,405 psi,1350 psi,1500000 psi,550000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|1,975 psi,625 psi,150 psi,405 psi,1350 psi,1500000 psi,550000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|2,850 psi,525 psi,150 psi,405 psi,1300 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|3,500 psi,300 psi,150 psi,405 psi,725 psi,1200000 psi,440000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|Stud,675 psi,400 psi,150 psi,405 psi,800 psi,1200000 psi,440000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|Construction,975 psi,600 psi,150 psi,405 psi,1550 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|Standard,550 psi,325 psi,150 psi,405 psi,1300 psi,1200000 psi,440000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir|Utility,250 psi,150 psi,150 psi,405 psi,850 psi,1100000 psi,400000 psi,0.43,PLIB/WWPA
+Dimension|Hem-Fir (North)|Select,1300 psi,775 psi,145 psi,405 psi,1700 psi,1700000 psi,620000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|1+,1200 psi,725 psi,145 psi,405 psi,1550 psi,1700000 psi,620000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|1,1000 psi,575 psi,145 psi,405 psi,1450 psi,1600000 psi,580000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|2,1000 psi,575 psi,145 psi,405 psi,1450 psi,1600000 psi,580000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|3,575 psi,325 psi,145 psi,405 psi,850 psi,1400000 psi,510000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|Stud,775 psi,450 psi,145 psi,405 psi,925 psi,1400000 psi,510000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|Construction,1150 psi,650 psi,145 psi,405 psi,1750 psi,1500000 psi,550000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|Standard,650 psi,350 psi,145 psi,405 psi,1500 psi,1400000 psi,510000 psi,0.46,NLGA
+Dimension|Hem-Fir (North)|Utility,300 psi,175 psi,145 psi,405 psi,975 psi,1300000 psi,470000 psi,0.46,NLGA
+Dimension|Mixed Maple|Select,1000 psi,600 psi,195 psi,620 psi,875 psi,1300000 psi,470000 psi,0.55,NELMA
+Dimension|Mixed Maple|1,725 psi,425 psi,195 psi,620 psi,700 psi,1200000 psi,440000 psi,0.55,NELMA
+Dimension|Mixed Maple|2,700 psi,425 psi,195 psi,620 psi,550 psi,1100000 psi,400000 psi,0.55,NELMA
+Dimension|Mixed Maple|3,400 psi,250 psi,195 psi,620 psi,325 psi,1000000 psi,370000 psi,0.55,NELMA
+Dimension|Mixed Maple|Stud,550 psi,325 psi,195 psi,620 psi,350 psi,1000000 psi,370000 psi,0.55,NELMA
+Dimension|Mixed Maple|Construction,800 psi,475 psi,195 psi,620 psi,725 psi,1100000 psi,400000 psi,0.55,NELMA
+Dimension|Mixed Maple|Standard,450 psi,275 psi,195 psi,620 psi,575 psi,1000000 psi,370000 psi,0.55,NELMA
+Dimension|Mixed Maple|Utility,225 psi,125 psi,195 psi,620 psi,375 psi,900000 psi,330000 psi,0.55,NELMA
+Dimension|Mixed Oak|Select,1150 psi,675 psi,170 psi,800 psi,1000 psi,1100000 psi,400000 psi,0.68,NELMA
+Dimension|Mixed Oak|1,825 psi,500 psi,170 psi,800 psi,825 psi,1000000 psi,370000 psi,0.68,NELMA
+Dimension|Mixed Oak|2,800 psi,475 psi,170 psi,800 psi,625 psi,900000 psi,330000 psi,0.68,NELMA
+Dimension|Mixed Oak|3,475 psi,275 psi,170 psi,800 psi,375 psi,800000 psi,290000 psi,0.68,NELMA
+Dimension|Mixed Oak|Stud,625 psi,375 psi,170 psi,800 psi,400 psi,800000 psi,290000 psi,0.68,NELMA
+Dimension|Mixed Oak|Construction,925 psi,550 psi,170 psi,800 psi,850 psi,900000 psi,330000 psi,0.68,NELMA
+Dimension|Mixed Oak|Standard,525 psi,300 psi,170 psi,800 psi,650 psi,800000 psi,290000 psi,0.68,NELMA
+Dimension|Mixed Oak|Utility,250 psi,150 psi,170 psi,800 psi,425 psi,800000 psi,290000 psi,0.68,NELMA
+Dimension|Northern Red Oak|Select,1400 psi,800 psi,220 psi,885 psi,1150 psi,1400000 psi,510000 psi,0.68,NELMA
+Dimension|Northern Red Oak|1,1000 psi,575 psi,220 psi,885 psi,925 psi,1400000 psi,510000 psi,0.68,NELMA
+Dimension|Northern Red Oak|2,975 psi,575 psi,220 psi,885 psi,725 psi,1300000 psi,470000 psi,0.68,NELMA
+Dimension|Northern Red Oak|3,550 psi,325 psi,220 psi,885 psi,425 psi,1200000 psi,440000 psi,0.68,NELMA
+Dimension|Northern Red Oak|Stud,750 psi,450 psi,220 psi,885 psi,450 psi,1200000 psi,440000 psi,0.68,NELMA
+Dimension|Northern Red Oak|Construction,1100 psi,650 psi,220 psi,885 psi,975 psi,1200000 psi,440000 psi,0.68,NELMA
+Dimension|Northern Red Oak|Standard,625 psi,350 psi,220 psi,885 psi,750 psi,1100000 psi,400000 psi,0.68,NELMA
+Dimension|Northern Red Oak|Utility,300 psi,175 psi,220 psi,885 psi,500 psi,1000000 psi,370000 psi,0.68,NELMA
+Dimension|Northern Species|Select,975 psi,425 psi,110 psi,350 psi,1100 psi,1100000 psi,400000 psi,0.35,NLGA
+Dimension|Northern Species|1,625 psi,275 psi,110 psi,350 psi,850 psi,1100000 psi,400000 psi,0.35,NLGA
+Dimension|Northern Species|2,625 psi,275 psi,110 psi,350 psi,850 psi,1100000 psi,400000 psi,0.35,NLGA
+Dimension|Northern Species|3,350 psi,150 psi,110 psi,350 psi,500 psi,1000000 psi,370000 psi,0.35,NLGA
+Dimension|Northern Species|Stud,475 psi,225 psi,110 psi,350 psi,550 psi,1000000 psi,370000 psi,0.35,NLGA
+Dimension|Northern Species|Construction,700 psi,325 psi,110 psi,350 psi,1050 psi,1000000 psi,370000 psi,0.35,NLGA
+Dimension|Northern Species|Standard,400 psi,175 psi,110 psi,350 psi,875 psi,900000 psi,330000 psi,0.35,NLGA
+Dimension|Northern Species|Utility,175 psi,75 psi,110 psi,350 psi,575 psi,900000 psi,330000 psi,0.35,NLGA
+Dimension|Northern White Cedar|Select,775 psi,450 psi,120 psi,370 psi,750 psi,800000 psi,290000 psi,0.31,NELMA
+Dimension|Northern White Cedar|1,575 psi,325 psi,120 psi,370 psi,600 psi,700000 psi,260000 psi,0.31,NELMA
+Dimension|Northern White Cedar|2,550 psi,325 psi,120 psi,370 psi,475 psi,700000 psi,260000 psi,0.31,NELMA
+Dimension|Northern White Cedar|3,325 psi,175 psi,120 psi,370 psi,275 psi,600000 psi,220000 psi,0.31,NELMA
+Dimension|Northern White Cedar|Stud,425 psi,250 psi,120 psi,370 psi,300 psi,600000 psi,220000 psi,0.31,NELMA
+Dimension|Northern White Cedar|Construction,625 psi,375 psi,120 psi,370 psi,625 psi,700000 psi,260000 psi,0.31,NELMA
+Dimension|Northern White Cedar|Standard,350 psi,200 psi,120 psi,370 psi,475 psi,600000 psi,220000 psi,0.31,NELMA
+Dimension|Northern White Cedar|Utility,175 psi,100 psi,120 psi,370 psi,325 psi,600000 psi,220000 psi,0.31,NELMA
+Dimension|Norway Spruce (North)|Select,950 psi,600 psi,190 psi,410 psi,1100 psi,1500000 psi,550000 psi,0.4,NLGA
+Dimension|Norway Spruce (North)|1,650 psi,425 psi,190 psi,410 psi,900 psi,1300000 psi,470000 psi,0.4,NLGA
+Dimension|Norway Spruce (North)|2,650 psi,425 psi,190 psi,410 psi,900 psi,1300000 psi,470000 psi,0.4,NLGA
+Dimension|Norway Spruce (North)|3,375 psi,250 psi,190 psi,410 psi,525 psi,1200000 psi,440000 psi,0.4,NLGA
+Dimension|Norway Spruce (North)|Stud,500 psi,325 psi,190 psi,410 psi,575 psi,1200000 psi,440000 psi,0.4,NLGA
+Dimension|Norway Spruce (North)|Construction,725 psi,475 psi,190 psi,410 psi,1100 psi,1200000 psi,440000 psi,0.4,NLGA
+Dimension|Norway Spruce (North)|Standard,400 psi,275 psi,190 psi,410 psi,925 psi,1100000 psi,400000 psi,0.4,NLGA
+Dimension|Norway Spruce (North)|Utility,200 psi,125 psi,190 psi,410 psi,600 psi,1100000 psi,400000 psi,0.4,NLGA
+Dimension|Red Maple|Select,1300 psi,750 psi,210 psi,615 psi,1100 psi,1700000 psi,620000 psi,0.58,NELMA
+Dimension|Red Maple|1,925 psi,550 psi,210 psi,615 psi,900 psi,1600000 psi,580000 psi,0.58,NELMA
+Dimension|Red Maple|2,900 psi,525 psi,210 psi,615 psi,700 psi,1500000 psi,550000 psi,0.58,NELMA
+Dimension|Red Maple|3,525 psi,300 psi,210 psi,615 psi,400 psi,1300000 psi,470000 psi,0.58,NELMA
+Dimension|Red Maple|Stud,700 psi,425 psi,210 psi,615 psi,450 psi,1300000 psi,470000 psi,0.58,NELMA
+Dimension|Red Maple|Construction,1050 psi,600 psi,210 psi,615 psi,925 psi,1400000 psi,510000 psi,0.58,NELMA
+Dimension|Red Maple|Standard,575 psi,325 psi,210 psi,615 psi,725 psi,1300000 psi,470000 psi,0.58,NELMA
+Dimension|Red Maple|Utility,275 psi,150 psi,210 psi,615 psi,475 psi,1200000 psi,440000 psi,0.58,NELMA
+Dimension|Red Oak|Select,1150 psi,675 psi,170 psi,820 psi,1000 psi,1400000 psi,510000 psi,0.67,NELMA
+Dimension|Red Oak|1,825 psi,500 psi,170 psi,820 psi,825 psi,1300000 psi,470000 psi,0.67,NELMA
+Dimension|Red Oak|2,800 psi,475 psi,170 psi,820 psi,625 psi,1200000 psi,440000 psi,0.67,NELMA
+Dimension|Red Oak|3,475 psi,275 psi,170 psi,820 psi,375 psi,1100000 psi,400000 psi,0.67,NELMA
+Dimension|Red Oak|Stud,625 psi,375 psi,170 psi,820 psi,400 psi,1100000 psi,400000 psi,0.67,NELMA
+Dimension|Red Oak|Construction,925 psi,550 psi,170 psi,820 psi,850 psi,1200000 psi,440000 psi,0.67,NELMA
+Dimension|Red Oak|Standard,525 psi,300 psi,170 psi,820 psi,650 psi,1100000 psi,400000 psi,0.67,NELMA
+Dimension|Red Oak|Utility,250 psi,150 psi,170 psi,820 psi,425 psi,1000000 psi,370000 psi,0.67,NELMA
+Dimension|Redwood|Select,1100 psi,625 psi,160 psi,425 psi,1100 psi,1100000 psi,400000 psi,0.37,RIS
+Dimension|Redwood|1,775 psi,450 psi,160 psi,425 psi,900 psi,1100000 psi,400000 psi,0.37,RIS
+Dimension|Redwood|2,725 psi,425 psi,160 psi,425 psi,700 psi,1000000 psi,370000 psi,0.37,RIS
+Dimension|Redwood|3,425 psi,250 psi,160 psi,425 psi,400 psi,900000 psi,330000 psi,0.37,RIS
+Dimension|Redwood|Stud,575 psi,325 psi,160 psi,425 psi,450 psi,900000 psi,330000 psi,0.37,RIS
+Dimension|Redwood|Construction,825 psi,475 psi,160 psi,425 psi,925 psi,900000 psi,330000 psi,0.37,RIS
+Dimension|Redwood|Standard,450 psi,275 psi,160 psi,425 psi,725 psi,900000 psi,330000 psi,0.37,RIS
+Dimension|Redwood|Utility,225 psi,125 psi,160 psi,425 psi,475 psi,800000 psi,290000 psi,0.37,RIS
+Dimension|Spruce-Pine-Fir|Select,1250 psi,700 psi,135 psi,425 psi,1400 psi,1500000 psi,550000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir|1,875 psi,450 psi,135 psi,425 psi,1150 psi,1400000 psi,510000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir|2,875 psi,450 psi,135 psi,425 psi,1150 psi,1400000 psi,510000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir|3,500 psi,250 psi,135 psi,425 psi,650 psi,1200000 psi,440000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir|Stud,675 psi,350 psi,135 psi,425 psi,725 psi,1200000 psi,440000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir|Construction,1000 psi,500 psi,135 psi,425 psi,1400 psi,1300000 psi,470000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir|Standard,550 psi,275 psi,135 psi,425 psi,1150 psi,1200000 psi,440000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir|Utility,275 psi,125 psi,135 psi,425 psi,750 psi,1100000 psi,400000 psi,0.42,NLGA
+Dimension|Spruce-Pine-Fir (South)|Select,1300 psi,575 psi,135 psi,335 psi,1200 psi,1300000 psi,470000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Spruce-Pine-Fir (South)|1,875 psi,400 psi,135 psi,335 psi,1050 psi,1200000 psi,440000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Spruce-Pine-Fir (South)|2,775 psi,350 psi,135 psi,335 psi,1000 psi,1100000 psi,400000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Spruce-Pine-Fir (South)|3,450 psi,200 psi,135 psi,335 psi,575 psi,1000000 psi,370000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Spruce-Pine-Fir (South)|Stud,600 psi,275 psi,135 psi,335 psi,625 psi,1000000 psi,370000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Spruce-Pine-Fir (South)|Construction,875 psi,400 psi,135 psi,335 psi,1200 psi,1000000 psi,370000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Spruce-Pine-Fir (South)|Standard,500 psi,225 psi,135 psi,335 psi,1000 psi,900000 psi,330000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Spruce-Pine-Fir (South)|Utility,225 psi,100 psi,135 psi,335 psi,675 psi,900000 psi,330000 psi,0.36,NELMA/PLIB/WWPA
+Dimension|Western Cedars|Select,1000 psi,600 psi,155 psi,425 psi,1000 psi,1100000 psi,400000 psi,0.36,PLIB/WWPA
+Dimension|Western Cedars|1,725 psi,425 psi,155 psi,425 psi,825 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Dimension|Western Cedars|2,700 psi,425 psi,155 psi,425 psi,650 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Dimension|Western Cedars|3,400 psi,250 psi,155 psi,425 psi,375 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Dimension|Western Cedars|Stud,550 psi,325 psi,155 psi,425 psi,400 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Dimension|Western Cedars|Construction,800 psi,475 psi,155 psi,425 psi,850 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Dimension|Western Cedars|Standard,450 psi,275 psi,155 psi,425 psi,650 psi,800000 psi,290000 psi,0.36,PLIB/WWPA
+Dimension|Western Cedars|Utility,225 psi,125 psi,155 psi,425 psi,425 psi,800000 psi,290000 psi,0.36,PLIB/WWPA
+Dimension|Western Juniper|Select,925 psi,525 psi,125 psi,770 psi,225 psi,600000 psi,220000 psi,0.42,PLIB
+Dimension|Western Juniper|1,800 psi,425 psi,125 psi,770 psi,200 psi,600000 psi,220000 psi,0.42,PLIB
+Dimension|Western Juniper|2,650 psi,350 psi,125 psi,770 psi,175 psi,500000 psi,180000 psi,0.42,PLIB
+Dimension|Western Juniper|3,375 psi,200 psi,125 psi,770 psi,100 psi,500000 psi,180000 psi,0.42,PLIB
+Dimension|Western Juniper|Stud,500 psi,275 psi,125 psi,770 psi,100 psi,500000 psi,180000 psi,0.42,PLIB
+Dimension|Western Juniper|Construction,750 psi,400 psi,125 psi,770 psi,200 psi,500000 psi,180000 psi,0.42,PLIB
+Dimension|Western Juniper|Standard,425 psi,225 psi,125 psi,770 psi,175 psi,500000 psi,180000 psi,0.42,PLIB
+Dimension|Western Juniper|Utility,200 psi,100 psi,125 psi,770 psi,100 psi,400000 psi,150000 psi,0.42,PLIB
+Dimension|Western Woods|Select,900 psi,400 psi,135 psi,335 psi,1050 psi,1200000 psi,440000 psi,0.36,PLIB/WWPA
+Dimension|Western Woods|1,675 psi,300 psi,135 psi,335 psi,950 psi,1100000 psi,400000 psi,0.36,PLIB/WWPA
+Dimension|Western Woods|2,675 psi,300 psi,135 psi,335 psi,900 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Dimension|Western Woods|3,375 psi,175 psi,135 psi,335 psi,525 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Dimension|Western Woods|Stud,525 psi,225 psi,135 psi,335 psi,575 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Dimension|Western Woods|Construction,775 psi,350 psi,135 psi,335 psi,1100 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Dimension|Western Woods|Standard,425 psi,200 psi,135 psi,335 psi,925 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Dimension|Western Woods|Utility,200 psi,100 psi,135 psi,335 psi,600 psi,800000 psi,290000 psi,0.36,PLIB/WWPA
+Dimension|White Oak|Select,1200 psi,700 psi,220 psi,800 psi,1100 psi,1100000 psi,400000 psi,0.73,NELMA
+Dimension|White Oak|1,875 psi,500 psi,220 psi,800 psi,900 psi,1000000 psi,370000 psi,0.73,NELMA
+Dimension|White Oak|2,850 psi,500 psi,220 psi,800 psi,700 psi,900000 psi,330000 psi,0.73,NELMA
+Dimension|White Oak|3,475 psi,275 psi,220 psi,800 psi,400 psi,800000 psi,290000 psi,0.73,NELMA
+Dimension|White Oak|Stud,650 psi,375 psi,220 psi,800 psi,450 psi,800000 psi,290000 psi,0.73,NELMA
+Dimension|White Oak|Construction,950 psi,550 psi,220 psi,800 psi,925 psi,900000 psi,330000 psi,0.73,NELMA
+Dimension|White Oak|Standard,525 psi,325 psi,220 psi,800 psi,725 psi,800000 psi,290000 psi,0.73,NELMA
+Dimension|White Oak|Utility,250 psi,150 psi,220 psi,800 psi,475 psi,800000 psi,290000 psi,0.73,NELMA
+Dimension|Yellow Cedar|Select,1200 psi,725 psi,175 psi,540 psi,1200 psi,1600000 psi,580000 psi,0.46,NLGA
+Dimension|Yellow Cedar|1,800 psi,475 psi,175 psi,540 psi,1000 psi,1400000 psi,510000 psi,0.46,NLGA
+Dimension|Yellow Cedar|2,800 psi,475 psi,175 psi,540 psi,1000 psi,1400000 psi,510000 psi,0.46,NLGA
+Dimension|Yellow Cedar|3,475 psi,275 psi,175 psi,540 psi,575 psi,1200000 psi,440000 psi,0.46,NLGA
+Dimension|Yellow Cedar|Stud,625 psi,375 psi,175 psi,540 psi,650 psi,1200000 psi,440000 psi,0.46,NLGA
+Dimension|Yellow Cedar|Construction,925 psi,550 psi,175 psi,540 psi,1200 psi,1300000 psi,470000 psi,0.46,NLGA
+Dimension|Yellow Cedar|Standard,525 psi,300 psi,175 psi,540 psi,1050 psi,1200000 psi,440000 psi,0.46,NLGA
+Dimension|Yellow Cedar|Utility,250 psi,150 psi,175 psi,540 psi,675 psi,1100000 psi,400000 psi,0.46,NLGA
+Dimension|Yellow Poplar|Select,1000 psi,575 psi,145 psi,420 psi,900 psi,1500000 psi,550000 psi,0.43,NELMA
+Dimension|Yellow Poplar|1,725 psi,425 psi,145 psi,420 psi,725 psi,1400000 psi,510000 psi,0.43,NELMA
+Dimension|Yellow Poplar|2,700 psi,400 psi,145 psi,420 psi,575 psi,1300000 psi,470000 psi,0.43,NELMA
+Dimension|Yellow Poplar|3,400 psi,225 psi,145 psi,420 psi,325 psi,1200000 psi,440000 psi,0.43,NELMA
+Dimension|Yellow Poplar|Stud,550 psi,325 psi,145 psi,420 psi,350 psi,1200000 psi,440000 psi,0.43,NELMA
+Dimension|Yellow Poplar|Construction,800 psi,475 psi,145 psi,420 psi,750 psi,1300000 psi,470000 psi,0.43,NELMA
+Dimension|Yellow Poplar|Standard,450 psi,250 psi,145 psi,420 psi,575 psi,1100000 psi,400000 psi,0.43,NELMA
+Dimension|Yellow Poplar|Utility,200 psi,125 psi,145 psi,420 psi,375 psi,1100000 psi,400000 psi,0.43,NELMA
+Dimension|Southern Pine|Select+|4,2700 psi,1900 psi,175 psi,660 psi,2050 psi,1900000 psi,690000 psi,0.55,SPIB
+Dimension|Southern Pine|Select|4,2350 psi,1650 psi,175 psi,565 psi,1900 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|Select-|4,2050 psi,1450 psi,175 psi,480 psi,1800 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1+|4,1650 psi,1100 psi,175 psi,660 psi,1750 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|1|4,1500 psi,1000 psi,175 psi,565 psi,1650 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1-|4,1300 psi,875 psi,175 psi,480 psi,1550 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2+|4,1200 psi,750 psi,175 psi,660 psi,1500 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|2|4,1100 psi,675 psi,175 psi,565 psi,1450 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2-|4,1050 psi,600 psi,175 psi,480 psi,1450 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|3|4,650 psi,400 psi,175 psi,565 psi,850 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|Stud|4,650 psi,400 psi,175 psi,565 psi,850 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|Construction|4,875 psi,500 psi,175 psi,565 psi,1600 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|Standard|4,475 psi,275 psi,175 psi,565 psi,1300 psi,1200000 psi,440000 psi,0.55,SPIB
+Dimension|Southern Pine|Utility|4,225 psi,125 psi,175 psi,565 psi,850 psi,1200000 psi,440000 psi,0.55,SPIB
+Dimension|Southern Pine|Select+|6,2400 psi,1650 psi,175 psi,660 psi,1900 psi,1900000 psi,690000 psi,0.55,SPIB
+Dimension|Southern Pine|Select|6,2100 psi,1450 psi,175 psi,565 psi,1800 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|Select-|6,1850 psi,1300 psi,175 psi,480 psi,1700 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1+|6,1500 psi,1000 psi,175 psi,660 psi,1650 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|1|6,1350 psi,875 psi,175 psi,565 psi,1550 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1-|6,1200 psi,775 psi,175 psi,480 psi,1450 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2+|6,1050 psi,650 psi,175 psi,660 psi,1450 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|2|6,1000 psi,600 psi,175 psi,565 psi,1400 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2-|6,950 psi,525 psi,175 psi,480 psi,1350 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|3|6,575 psi,350 psi,175 psi,565 psi,800 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|Stud|6,575 psi,350 psi,175 psi,565 psi,800 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|Select+|8,2200 psi,1550 psi,175 psi,660 psi,1850 psi,1900000 psi,690000 psi,0.55,SPIB
+Dimension|Southern Pine|Select|8,1950 psi,1350 psi,175 psi,565 psi,1700 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|Select-|8,1700 psi,1200 psi,175 psi,480 psi,1650 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1+|8,1350 psi,900 psi,175 psi,660 psi,1600 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|1|8,1250 psi,800 psi,175 psi,565 psi,1500 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1-|8,1100 psi,700 psi,175 psi,480 psi,1400 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2+|8,975 psi,600 psi,175 psi,660 psi,1400 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|2|8,925 psi,550 psi,175 psi,565 psi,1350 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2-|8,875 psi,500 psi,175 psi,480 psi,1300 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|3|8,525 psi,325 psi,175 psi,565 psi,775 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|Select+|10,1950 psi,1300 psi,175 psi,660 psi,1800 psi,1900000 psi,690000 psi,0.55,SPIB
+Dimension|Southern Pine|Select|10,1700 psi,1150 psi,175 psi,565 psi,1650 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|Select-|10,1500 psi,1050 psi,175 psi,480 psi,1600 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1+|10,1200 psi,800 psi,175 psi,660 psi,1550 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|1|10,1050 psi,700 psi,175 psi,565 psi,1450 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1-|10,950 psi,625 psi,175 psi,480 psi,1400 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2+|10,850 psi,525 psi,175 psi,660 psi,1350 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|2|10,800 psi,475 psi,175 psi,565 psi,1300 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2-|10,750 psi,425 psi,175 psi,480 psi,1250 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|3|10,475 psi,275 psi,175 psi,565 psi,750 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|Select+|12,1800 psi,1250 psi,175 psi,660 psi,1750 psi,1900000 psi,690000 psi,0.55,SPIB
+Dimension|Southern Pine|Select|12,1600 psi,1100 psi,175 psi,565 psi,1650 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|Select-|12,1400 psi,975 psi,175 psi,480 psi,1550 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1+|12,1100 psi,750 psi,175 psi,660 psi,1500 psi,1800000 psi,660000 psi,0.55,SPIB
+Dimension|Southern Pine|1|12,1000 psi,650 psi,175 psi,565 psi,1400 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|1-|12,900 psi,575 psi,175 psi,480 psi,1350 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2+|12,800 psi,500 psi,175 psi,660 psi,1300 psi,1600000 psi,580000 psi,0.55,SPIB
+Dimension|Southern Pine|2|12,750 psi,450 psi,175 psi,565 psi,1250 psi,1400000 psi,510000 psi,0.55,SPIB
+Dimension|Southern Pine|2-|12,700 psi,400 psi,175 psi,480 psi,1250 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Southern Pine|3|12,450 psi,250 psi,175 psi,565 psi,725 psi,1300000 psi,470000 psi,0.55,SPIB
+Dimension|Mixed Southern Pine|Select|4,2050 psi,1200 psi,175 psi,565 psi,1800 psi,1600000 psi,580000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|1|4,1450 psi,875 psi,175 psi,565 psi,1650 psi,1500000 psi,550000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|2|4,1100 psi,675 psi,175 psi,565 psi,1450 psi,1400000 psi,510000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|3|4,650 psi,400 psi,175 psi,565 psi,850 psi,1200000 psi,440000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Stud|4,650 psi,400 psi,175 psi,565 psi,850 psi,1200000 psi,440000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Construction|4,875 psi,500 psi,175 psi,565 psi,1600 psi,1300000 psi,470000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Standard|4,475 psi,275 psi,175 psi,565 psi,1300 psi,1200000 psi,440000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Utility|4,225 psi,125 psi,175 psi,565 psi,850 psi,1100000 psi,400000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Select|6,1850 psi,1100 psi,175 psi,565 psi,1700 psi,1600000 psi,580000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|1|6,1300 psi,750 psi,175 psi,565 psi,1550 psi,1500000 psi,550000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|2|6,1000 psi,600 psi,175 psi,565 psi,1400 psi,1400000 psi,510000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|3|6,575 psi,350 psi,175 psi,565 psi,800 psi,1200000 psi,440000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Stud|6,575 psi,350 psi,175 psi,565 psi,800 psi,1200000 psi,440000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Select|8,1750 psi,1000 psi,175 psi,565 psi,1600 psi,1600000 psi,580000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|1|8,1200 psi,700 psi,175 psi,565 psi,1450 psi,1500000 psi,550000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|2|8,925 psi,550 psi,175 psi,565 psi,1350 psi,1400000 psi,510000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|3|8,525 psi,325 psi,175 psi,565 psi,775 psi,1200000 psi,440000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Select|10,1500 psi,875 psi,175 psi,565 psi,1600 psi,1600000 psi,580000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|1|10,1050 psi,600 psi,175 psi,565 psi,1450 psi,1500000 psi,550000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|2|10,800 psi,475 psi,175 psi,565 psi,1300 psi,1400000 psi,510000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|3|10,475 psi,275 psi,175 psi,565 psi,750 psi,1200000 psi,440000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|Select|12,1400 psi,825 psi,175 psi,565 psi,1550 psi,1600000 psi,580000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|1|12,975 psi,575 psi,175 psi,565 psi,1400 psi,1500000 psi,550000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|2|12,750 psi,450 psi,175 psi,565 psi,1250 psi,1400000 psi,510000 psi,0.51,SPIB
+Dimension|Mixed Southern Pine|3|12,450 psi,250 psi,175 psi,565 psi,725 psi,1200000 psi,440000 psi,0.51,SPIB
+Beam|Alaska Cedar|Select,1400 psi,675 psi,155 psi,525 psi,925 psi,1200000 psi,440000 psi,0.47,PLIB
+Beam|Alaska Cedar|1,1150 psi,475 psi,155 psi,525 psi,775 psi,1200000 psi,440000 psi,0.47,PLIB
+Beam|Alaska Cedar|2,750 psi,300 psi,155 psi,525 psi,500 psi,1000000 psi,370000 psi,0.47,PLIB
+Post|Alaska Cedar|Select,1300 psi,700 psi,155 psi,525 psi,975 psi,1200000 psi,440000 psi,0.47,PLIB
+Post|Alaska Cedar|1,1050 psi,575 psi,155 psi,525 psi,850 psi,1200000 psi,440000 psi,0.47,PLIB
+Post|Alaska Cedar|2,625 psi,350 psi,155 psi,525 psi,600 psi,1000000 psi,370000 psi,0.47,PLIB
+Beam|Baldcypress|Select,1150 psi,750 psi,200 psi,615 psi,1050 psi,1300000 psi,470000 psi,0.43,SPIB
+Beam|Baldcypress|1,1000 psi,675 psi,200 psi,615 psi,925 psi,1300000 psi,470000 psi,0.43,SPIB
+Beam|Baldcypress|2,625 psi,425 psi,175 psi,615 psi,600 psi,1000000 psi,370000 psi,0.43,SPIB
+Post|Baldcypress|Select,1150 psi,750 psi,200 psi,615 psi,1050 psi,1300000 psi,470000 psi,0.43,SPIB
+Post|Baldcypress|1,1000 psi,675 psi,200 psi,615 psi,925 psi,1300000 psi,470000 psi,0.43,SPIB
+Post|Baldcypress|2,625 psi,425 psi,175 psi,615 psi,600 psi,1000000 psi,370000 psi,0.43,SPIB
+Beam|Balsam Fir|Select,1350 psi,900 psi,125 psi,305 psi,950 psi,1400000 psi,510000 psi,0.36,NELMA
+Beam|Balsam Fir|1,1100 psi,750 psi,125 psi,305 psi,800 psi,1400000 psi,510000 psi,0.36,NELMA
+Beam|Balsam Fir|2,725 psi,350 psi,125 psi,305 psi,500 psi,1100000 psi,400000 psi,0.36,NELMA
+Post|Balsam Fir|Select,1250 psi,825 psi,125 psi,305 psi,1000 psi,1400000 psi,510000 psi,0.36,NELMA
+Post|Balsam Fir|1,1000 psi,675 psi,125 psi,305 psi,875 psi,1400000 psi,510000 psi,0.36,NELMA
+Post|Balsam Fir|2,575 psi,375 psi,125 psi,305 psi,400 psi,1100000 psi,400000 psi,0.36,NELMA
+Beam|Beech-Birch-Hickory|Select,1650 psi,975 psi,180 psi,715 psi,975 psi,1500000 psi,550000 psi,0.71,NELMA
+Beam|Beech-Birch-Hickory|1,1400 psi,700 psi,180 psi,715 psi,825 psi,1500000 psi,550000 psi,0.71,NELMA
+Beam|Beech-Birch-Hickory|2,900 psi,450 psi,180 psi,715 psi,525 psi,1200000 psi,440000 psi,0.71,NELMA
+Post|Beech-Birch-Hickory|Select,1550 psi,1050 psi,180 psi,715 psi,1050 psi,1500000 psi,550000 psi,0.71,NELMA
+Post|Beech-Birch-Hickory|1,1250 psi,850 psi,180 psi,715 psi,900 psi,1500000 psi,550000 psi,0.71,NELMA
+Post|Beech-Birch-Hickory|2,725 psi,475 psi,180 psi,715 psi,425 psi,1200000 psi,440000 psi,0.71,NELMA
+Beam|Coast Sitka Spruce|Select,1150 psi,675 psi,115 psi,455 psi,775 psi,1500000 psi,550000 psi,0.43,NLGA
+Beam|Coast Sitka Spruce|1,950 psi,475 psi,115 psi,455 psi,650 psi,1500000 psi,550000 psi,0.43,NLGA
+Beam|Coast Sitka Spruce|2,625 psi,325 psi,115 psi,455 psi,425 psi,1200000 psi,440000 psi,0.43,NLGA
+Post|Coast Sitka Spruce|Select,1100 psi,725 psi,115 psi,455 psi,825 psi,1500000 psi,550000 psi,0.43,NLGA
+Post|Coast Sitka Spruce|1,875 psi,575 psi,115 psi,455 psi,725 psi,1500000 psi,550000 psi,0.43,NLGA
+Post|Coast Sitka Spruce|2,525 psi,350 psi,115 psi,455 psi,500 psi,1200000 psi,440000 psi,0.43,NLGA
+Beam|Douglas Fir|Select+,1900 psi,1100 psi,170 psi,730 psi,1300 psi,1700000 psi,620000 psi,0.5,PLIB/WWPA
+Beam|Douglas Fir|Select,1600 psi,950 psi,170 psi,625 psi,1100 psi,1600000 psi,580000 psi,0.5,PLIB/WWPA
+Beam|Douglas Fir|1+,1550 psi,775 psi,170 psi,730 psi,1100 psi,1700000 psi,620000 psi,0.5,PLIB/WWPA
+Beam|Douglas Fir|1,1350 psi,675 psi,170 psi,625 psi,925 psi,1600000 psi,580000 psi,0.5,PLIB/WWPA
+Beam|Douglas Fir|2+,1000 psi,500 psi,170 psi,730 psi,700 psi,1400000 psi,510000 psi,0.5,PLIB/WWPA
+Beam|Douglas Fir|2,875 psi,425 psi,170 psi,625 psi,600 psi,1300000 psi,470000 psi,0.5,PLIB/WWPA
+Post|Douglas Fir|Select+,1750 psi,1150 psi,170 psi,730 psi,1350 psi,1700000 psi,620000 psi,0.5,PLIB/WWPA
+Post|Douglas Fir|Select,1500 psi,1000 psi,170 psi,625 psi,1150 psi,1600000 psi,580000 psi,0.5,PLIB/WWPA
+Post|Douglas Fir|1+,1400 psi,950 psi,170 psi,730 psi,1200 psi,1700000 psi,620000 psi,0.5,PLIB/WWPA
+Post|Douglas Fir|1,1200 psi,825 psi,170 psi,625 psi,1000 psi,1600000 psi,580000 psi,0.5,PLIB/WWPA
+Post|Douglas Fir|2+,850 psi,550 psi,170 psi,730 psi,825 psi,1400000 psi,510000 psi,0.5,PLIB/WWPA
+Post|Douglas Fir|2,750 psi,475 psi,170 psi,625 psi,700 psi,1300000 psi,470000 psi,0.5,PLIB/WWPA
+Beam|Douglas Fir (North)|Select,1600 psi,950 psi,170 psi,625 psi,1100 psi,1600000 psi,580000 psi,0.49,NLGA
+Beam|Douglas Fir (North)|1,1300 psi,675 psi,170 psi,625 psi,925 psi,1600000 psi,580000 psi,0.49,NLGA
+Beam|Douglas Fir (North)|2,875 psi,425 psi,170 psi,625 psi,600 psi,1300000 psi,470000 psi,0.49,NLGA
+Post|Douglas Fir (North)|Select,1500 psi,1000 psi,170 psi,625 psi,1150 psi,1600000 psi,580000 psi,0.49,NLGA
+Post|Douglas Fir (North)|1,1200 psi,825 psi,170 psi,625 psi,1000 psi,1600000 psi,580000 psi,0.49,NLGA
+Post|Douglas Fir (North)|2,725 psi,475 psi,170 psi,625 psi,700 psi,1300000 psi,470000 psi,0.49,NLGA
+Beam|Douglas Fir (South)|Select,1550 psi,900 psi,165 psi,520 psi,1000 psi,1200000 psi,440000 psi,0.46,WWPA
+Beam|Douglas Fir (South)|1,1300 psi,625 psi,165 psi,520 psi,850 psi,1200000 psi,440000 psi,0.46,WWPA
+Beam|Douglas Fir (South)|2,825 psi,425 psi,165 psi,520 psi,550 psi,1000000 psi,370000 psi,0.46,WWPA
+Post|Douglas Fir (South)|Select,1450 psi,950 psi,165 psi,520 psi,1050 psi,1200000 psi,440000 psi,0.46,WWPA
+Post|Douglas Fir (South)|1,1150 psi,775 psi,165 psi,520 psi,925 psi,1200000 psi,440000 psi,0.46,WWPA
+Post|Douglas Fir (South)|2,675 psi,450 psi,165 psi,520 psi,650 psi,1000000 psi,370000 psi,0.46,WWPA
+Beam|Eastern Hemlock|Select,1350 psi,925 psi,155 psi,550 psi,950 psi,1200000 psi,440000 psi,0.41,NELMA
+Beam|Eastern Hemlock|1,1150 psi,775 psi,155 psi,550 psi,800 psi,1200000 psi,440000 psi,0.41,NELMA
+Beam|Eastern Hemlock|2,750 psi,375 psi,155 psi,550 psi,550 psi,900000 psi,330000 psi,0.41,NELMA
+Post|Eastern Hemlock|Select,1250 psi,850 psi,155 psi,550 psi,1000 psi,1200000 psi,440000 psi,0.41,NELMA
+Post|Eastern Hemlock|1,1050 psi,700 psi,155 psi,550 psi,875 psi,1200000 psi,440000 psi,0.41,NELMA
+Post|Eastern Hemlock|2,600 psi,400 psi,155 psi,550 psi,400 psi,900000 psi,330000 psi,0.41,NELMA
+Beam|Eastern Hemlock-Tamarack|Select,1400 psi,925 psi,155 psi,555 psi,950 psi,1200000 psi,440000 psi,0.41,NELMA
+Beam|Eastern Hemlock-Tamarack|1,1150 psi,775 psi,155 psi,555 psi,800 psi,1200000 psi,440000 psi,0.41,NELMA
+Beam|Eastern Hemlock-Tamarack|2,750 psi,375 psi,155 psi,555 psi,500 psi,900000 psi,330000 psi,0.41,NELMA
+Post|Eastern Hemlock-Tamarack|Select,1300 psi,875 psi,155 psi,555 psi,1000 psi,1200000 psi,440000 psi,0.41,NELMA
+Post|Eastern Hemlock-Tamarack|1,1050 psi,700 psi,155 psi,555 psi,875 psi,1200000 psi,440000 psi,0.41,NELMA
+Post|Eastern Hemlock-Tamarack|2,600 psi,400 psi,155 psi,555 psi,400 psi,900000 psi,330000 psi,0.41,NELMA
+Beam|Eastern Hemlock-Tamarack (North)|Select,1450 psi,850 psi,165 psi,555 psi,950 psi,1300000 psi,470000 psi,0.47,NLGA
+Beam|Eastern Hemlock-Tamarack (North)|1,1200 psi,600 psi,165 psi,555 psi,800 psi,1300000 psi,470000 psi,0.47,NLGA
+Beam|Eastern Hemlock-Tamarack (North)|2,775 psi,400 psi,165 psi,555 psi,500 psi,1100000 psi,400000 psi,0.47,NLGA
+Post|Eastern Hemlock-Tamarack (North)|Select,1350 psi,900 psi,165 psi,555 psi,1000 psi,1300000 psi,470000 psi,0.47,NLGA
+Post|Eastern Hemlock-Tamarack (North)|1,1100 psi,725 psi,165 psi,555 psi,875 psi,1300000 psi,470000 psi,0.47,NLGA
+Post|Eastern Hemlock-Tamarack (North)|2,650 psi,425 psi,165 psi,555 psi,600 psi,1100000 psi,400000 psi,0.47,NLGA
+Beam|Eastern Spruce|Select,1050 psi,725 psi,135 psi,390 psi,750 psi,1400000 psi,510000 psi,0.41,NELMA
+Beam|Eastern Spruce|1,900 psi,600 psi,135 psi,390 psi,625 psi,1400000 psi,510000 psi,0.41,NELMA
+Beam|Eastern Spruce|2,575 psi,275 psi,135 psi,390 psi,375 psi,1000000 psi,370000 psi,0.41,NELMA
+Post|Eastern Spruce|Select,1000 psi,675 psi,135 psi,390 psi,775 psi,1400000 psi,510000 psi,0.41,NELMA
+Post|Eastern Spruce|1,800 psi,550 psi,135 psi,390 psi,675 psi,1400000 psi,510000 psi,0.41,NELMA
+Post|Eastern Spruce|2,450 psi,300 psi,135 psi,390 psi,300 psi,1000000 psi,370000 psi,0.41,NELMA
+Beam|Eastern White Pine|Select,1050 psi,700 psi,125 psi,350 psi,675 psi,1100000 psi,400000 psi,0.36,NELMA
+Beam|Eastern White Pine|1,875 psi,600 psi,125 psi,350 psi,575 psi,1100000 psi,400000 psi,0.36,NELMA
+Beam|Eastern White Pine|2,575 psi,275 psi,125 psi,350 psi,400 psi,900000 psi,330000 psi,0.36,NELMA
+Post|Eastern White Pine|Select,975 psi,650 psi,125 psi,350 psi,725 psi,1100000 psi,400000 psi,0.36,NELMA
+Post|Eastern White Pine|1,800 psi,525 psi,125 psi,350 psi,625 psi,1100000 psi,400000 psi,0.36,NELMA
+Post|Eastern White Pine|2,450 psi,300 psi,125 psi,350 psi,325 psi,900000 psi,330000 psi,0.36,NELMA
+Beam|Hem-Fir|Select,1300 psi,750 psi,140 psi,405 psi,925 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Beam|Hem-Fir|1,1050 psi,525 psi,140 psi,405 psi,750 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Beam|Hem-Fir|2,675 psi,350 psi,140 psi,405 psi,500 psi,1100000 psi,400000 psi,0.43,PLIB/WWPA
+Post|Hem-Fir|Select,1200 psi,800 psi,140 psi,405 psi,975 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Post|Hem-Fir|1,975 psi,650 psi,140 psi,405 psi,850 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Post|Hem-Fir|2,575 psi,375 psi,140 psi,405 psi,575 psi,1100000 psi,400000 psi,0.43,PLIB/WWPA
+Beam|Hem-Fir (North)|Select,1250 psi,725 psi,135 psi,405 psi,900 psi,1300000 psi,470000 psi,0.46,NLGA
+Beam|Hem-Fir (North)|1,1000 psi,500 psi,135 psi,405 psi,750 psi,1300000 psi,470000 psi,0.46,NLGA
+Beam|Hem-Fir (North)|2,675 psi,325 psi,135 psi,405 psi,475 psi,1100000 psi,400000 psi,0.46,NLGA
+Post|Hem-Fir (North)|Select,1150 psi,775 psi,135 psi,405 psi,950 psi,1300000 psi,470000 psi,0.46,NLGA
+Post|Hem-Fir (North)|1,925 psi,625 psi,135 psi,405 psi,850 psi,1300000 psi,470000 psi,0.46,NLGA
+Post|Hem-Fir (North)|2,550 psi,375 psi,135 psi,405 psi,575 psi,1100000 psi,400000 psi,0.46,NLGA
+Beam|Mixed Maple|Select,1150 psi,700 psi,180 psi,620 psi,725 psi,1100000 psi,400000 psi,0.55,NELMA
+Beam|Mixed Maple|1,975 psi,500 psi,180 psi,620 psi,600 psi,1100000 psi,400000 psi,0.55,NELMA
+Beam|Mixed Maple|2,625 psi,325 psi,180 psi,620 psi,375 psi,900000 psi,330000 psi,0.55,NELMA
+Post|Mixed Maple|Select,1100 psi,725 psi,180 psi,620 psi,750 psi,1100000 psi,400000 psi,0.55,NELMA
+Post|Mixed Maple|1,875 psi,600 psi,180 psi,620 psi,650 psi,1100000 psi,400000 psi,0.55,NELMA
+Post|Mixed Maple|2,500 psi,350 psi,180 psi,620 psi,300 psi,900000 psi,330000 psi,0.55,NELMA
+Beam|Mixed Oak|Select,1350 psi,800 psi,155 psi,800 psi,825 psi,1000000 psi,370000 psi,0.68,NELMA
+Beam|Mixed Oak|1,1150 psi,550 psi,155 psi,800 psi,700 psi,1000000 psi,370000 psi,0.68,NELMA
+Beam|Mixed Oak|2,725 psi,375 psi,155 psi,800 psi,450 psi,800000 psi,290000 psi,0.68,NELMA
+Post|Mixed Oak|Select,1250 psi,850 psi,155 psi,800 psi,875 psi,1000000 psi,370000 psi,0.68,NELMA
+Post|Mixed Oak|1,1000 psi,675 psi,155 psi,800 psi,775 psi,1000000 psi,370000 psi,0.68,NELMA
+Post|Mixed Oak|2,575 psi,400 psi,155 psi,800 psi,350 psi,800000 psi,290000 psi,0.68,NELMA
+Beam|Mixed Southern Pine|Select,1500 psi,1000 psi,165 psi,375 psi,900 psi,1300000 psi,470000 psi,0.51,SPIB
+Beam|Mixed Southern Pine|1,1350 psi,900 psi,165 psi,375 psi,800 psi,1300000 psi,470000 psi,0.51,SPIB
+Beam|Mixed Southern Pine|2,850 psi,550 psi,165 psi,375 psi,525 psi,1000000 psi,370000 psi,0.51,SPIB
+Post|Mixed Southern Pine|Select,1500 psi,1000 psi,165 psi,375 psi,900 psi,1300000 psi,470000 psi,0.51,SPIB
+Post|Mixed Southern Pine|1,1350 psi,900 psi,165 psi,375 psi,800 psi,1300000 psi,470000 psi,0.51,SPIB
+Post|Mixed Southern Pine|2,850 psi,550 psi,165 psi,375 psi,525 psi,1000000 psi,370000 psi,0.51,SPIB
+Beam|Mountain Hemlock|Select,1350 psi,775 psi,170 psi,570 psi,875 psi,1100000 psi,400000 psi,0.47,PLIB/WWPA
+Beam|Mountain Hemlock|1,1100 psi,550 psi,170 psi,570 psi,725 psi,1100000 psi,400000 psi,0.47,PLIB/WWPA
+Beam|Mountain Hemlock|2,725 psi,375 psi,170 psi,570 psi,475 psi,900000 psi,330000 psi,0.47,PLIB/WWPA
+Post|Mountain Hemlock|Select,1250 psi,825 psi,170 psi,570 psi,925 psi,1100000 psi,400000 psi,0.47,PLIB/WWPA
+Post|Mountain Hemlock|1,1000 psi,675 psi,170 psi,570 psi,800 psi,1100000 psi,400000 psi,0.47,PLIB/WWPA
+Post|Mountain Hemlock|2,625 psi,400 psi,170 psi,570 psi,550 psi,900000 psi,330000 psi,0.47,PLIB/WWPA
+Beam|Northern Pine|Select,1250 psi,850 psi,135 psi,435 psi,850 psi,1300000 psi,470000 psi,0.42,NELMA
+Beam|Northern Pine|1,1050 psi,700 psi,135 psi,435 psi,725 psi,1300000 psi,470000 psi,0.42,NELMA
+Beam|Northern Pine|2,675 psi,350 psi,135 psi,435 psi,450 psi,1000000 psi,370000 psi,0.42,NELMA
+Post|Northern Pine|Select,1150 psi,800 psi,135 psi,435 psi,900 psi,1300000 psi,470000 psi,0.42,NELMA
+Post|Northern Pine|1,950 psi,650 psi,135 psi,435 psi,800 psi,1300000 psi,470000 psi,0.42,NELMA
+Post|Northern Pine|2,550 psi,375 psi,135 psi,435 psi,375 psi,1000000 psi,370000 psi,0.42,NELMA
+Beam|Northern Red Oak|Select,1600 psi,950 psi,205 psi,885 psi,950 psi,1300000 psi,470000 psi,0.68,NELMA
+Beam|Northern Red Oak|1,1350 psi,675 psi,205 psi,885 psi,800 psi,1300000 psi,470000 psi,0.68,NELMA
+Beam|Northern Red Oak|2,875 psi,425 psi,205 psi,885 psi,500 psi,1000000 psi,370000 psi,0.68,NELMA
+Post|Northern Red Oak|Select,1500 psi,1000 psi,205 psi,885 psi,1000 psi,1300000 psi,470000 psi,0.68,NELMA
+Post|Northern Red Oak|1,1200 psi,800 psi,205 psi,885 psi,875 psi,1300000 psi,470000 psi,0.68,NELMA
+Post|Northern Red Oak|2,700 psi,475 psi,205 psi,885 psi,400 psi,1000000 psi,370000 psi,0.68,NELMA
+Beam|Northern White Cedar|Select,900 psi,600 psi,115 psi,370 psi,600 psi,700000 psi,260000 psi,0.31,NELMA
+Beam|Northern White Cedar|1,750 psi,500 psi,115 psi,370 psi,500 psi,700000 psi,260000 psi,0.31,NELMA
+Beam|Northern White Cedar|2,500 psi,250 psi,115 psi,370 psi,325 psi,600000 psi,220000 psi,0.31,NELMA
+Post|Northern White Cedar|Select,850 psi,575 psi,115 psi,370 psi,650 psi,700000 psi,260000 psi,0.31,NELMA
+Post|Northern White Cedar|1,675 psi,450 psi,115 psi,370 psi,550 psi,700000 psi,260000 psi,0.31,NELMA
+Post|Northern White Cedar|2,400 psi,250 psi,115 psi,370 psi,250 psi,600000 psi,220000 psi,0.31,NELMA
+Beam|Ponderosa Pine|Select,1100 psi,725 psi,130 psi,535 psi,750 psi,1100000 psi,400000 psi,0.43,NLGA
+Beam|Ponderosa Pine|1,925 psi,500 psi,130 psi,535 psi,625 psi,1100000 psi,400000 psi,0.43,NLGA
+Beam|Ponderosa Pine|2,600 psi,300 psi,130 psi,535 psi,400 psi,900000 psi,330000 psi,0.43,NLGA
+Post|Ponderosa Pine|Select,1000 psi,675 psi,130 psi,535 psi,800 psi,1100000 psi,400000 psi,0.43,NLGA
+Post|Ponderosa Pine|1,825 psi,550 psi,130 psi,535 psi,700 psi,1100000 psi,400000 psi,0.43,NLGA
+Post|Ponderosa Pine|2,475 psi,325 psi,130 psi,535 psi,325 psi,900000 psi,330000 psi,0.43,NLGA
+Beam|Red Maple|Select,1500 psi,875 psi,195 psi,615 psi,900 psi,1500000 psi,550000 psi,0.58,NELMA
+Beam|Red Maple|1,1250 psi,625 psi,195 psi,615 psi,750 psi,1500000 psi,550000 psi,0.58,NELMA
+Beam|Red Maple|2,800 psi,400 psi,195 psi,615 psi,475 psi,1200000 psi,440000 psi,0.58,NELMA
+Post|Red Maple|Select,1400 psi,925 psi,195 psi,615 psi,950 psi,1500000 psi,550000 psi,0.58,NELMA
+Post|Red Maple|1,1150 psi,750 psi,195 psi,615 psi,825 psi,1500000 psi,550000 psi,0.58,NELMA
+Post|Red Maple|2,650 psi,425 psi,195 psi,615 psi,375 psi,1200000 psi,440000 psi,0.58,NELMA
+Beam|Red Oak|Select,1350 psi,800 psi,155 psi,820 psi,825 psi,1200000 psi,440000 psi,0.67,NELMA
+Beam|Red Oak|1,1150 psi,550 psi,155 psi,820 psi,700 psi,1200000 psi,440000 psi,0.67,NELMA
+Beam|Red Oak|2,725 psi,375 psi,155 psi,820 psi,450 psi,1000000 psi,370000 psi,0.67,NELMA
+Post|Red Oak|Select,1250 psi,850 psi,155 psi,820 psi,875 psi,1200000 psi,440000 psi,0.67,NELMA
+Post|Red Oak|1,1000 psi,675 psi,155 psi,820 psi,775 psi,1200000 psi,440000 psi,0.67,NELMA
+Post|Red Oak|2,575 psi,400 psi,155 psi,820 psi,350 psi,1000000 psi,370000 psi,0.67,NELMA
+Beam|Red Pine|Select,1050 psi,625 psi,130 psi,440 psi,725 psi,1100000 psi,400000 psi,0.44,NLGA
+Beam|Red Pine|1,875 psi,450 psi,130 psi,440 psi,600 psi,1100000 psi,400000 psi,0.44,NLGA
+Beam|Red Pine|2,575 psi,300 psi,130 psi,440 psi,375 psi,900000 psi,330000 psi,0.44,NLGA
+Post|Red Pine|Select,1000 psi,675 psi,130 psi,440 psi,775 psi,1100000 psi,400000 psi,0.44,NLGA
+Post|Red Pine|1,800 psi,550 psi,130 psi,440 psi,675 psi,1100000 psi,400000 psi,0.44,NLGA
+Post|Red Pine|2,475 psi,325 psi,130 psi,440 psi,475 psi,900000 psi,330000 psi,0.44,NLGA
+Beam|Redwood|Select,1100 psi,750 psi,145 psi,420 psi,900 psi,1000000 psi,370000 psi,0.37,RIS
+Beam|Redwood|1,950 psi,650 psi,145 psi,420 psi,800 psi,1000000 psi,370000 psi,0.37,RIS
+Beam|Redwood|2,750 psi,400 psi,145 psi,420 psi,650 psi,900000 psi,330000 psi,0.37,RIS
+Post|Redwood|Select,1100 psi,750 psi,145 psi,420 psi,900 psi,1000000 psi,370000 psi,0.37,RIS
+Post|Redwood|1,950 psi,650 psi,145 psi,420 psi,800 psi,1000000 psi,370000 psi,0.37,RIS
+Post|Redwood|2,750 psi,400 psi,145 psi,420 psi,650 psi,900000 psi,330000 psi,0.37,RIS
+Beam|Sitka Spruce|Select,1200 psi,675 psi,140 psi,435 psi,825 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Beam|Sitka Spruce|1,1000 psi,500 psi,140 psi,435 psi,675 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Beam|Sitka Spruce|2,650 psi,325 psi,140 psi,435 psi,450 psi,1000000 psi,370000 psi,0.43,PLIB/WWPA
+Post|Sitka Spruce|Select,1150 psi,750 psi,140 psi,435 psi,875 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Post|Sitka Spruce|1,925 psi,600 psi,140 psi,435 psi,750 psi,1300000 psi,470000 psi,0.43,PLIB/WWPA
+Post|Sitka Spruce|2,550 psi,350 psi,140 psi,435 psi,525 psi,1000000 psi,370000 psi,0.43,PLIB/WWPA
+Beam|Southern Pine|Select+,1750 psi,1200 psi,165 psi,440 psi,1100 psi,1600000 psi,580000 psi,0.55,SPIB
+Beam|Southern Pine|Select,1500 psi,1000 psi,165 psi,375 psi,950 psi,1500000 psi,550000 psi,0.55,SPIB
+Beam|Southern Pine|1+,1550 psi,1050 psi,165 psi,440 psi,975 psi,1600000 psi,580000 psi,0.55,SPIB
+Beam|Southern Pine|1,1350 psi,900 psi,165 psi,375 psi,825 psi,1500000 psi,550000 psi,0.55,SPIB
+Beam|Southern Pine|2+,975 psi,650 psi,165 psi,440 psi,625 psi,1300000 psi,470000 psi,0.55,SPIB
+Beam|Southern Pine|2,850 psi,550 psi,165 psi,375 psi,525 psi,1200000 psi,440000 psi,0.55,SPIB
+Beam|Southern Pine|Select+86,2100 psi,1400 psi,165 psi,440 psi,1300 psi,1600000 psi,580000 psi,0.55,SPIB
+Beam|Southern Pine|Select+72,1750 psi,1200 psi,165 psi,440 psi,1100 psi,1600000 psi,580000 psi,0.55,SPIB
+Beam|Southern Pine|Select+65,1600 psi,1050 psi,165 psi,440 psi,1000 psi,1600000 psi,580000 psi,0.55,SPIB
+Post|Southern Pine|Select+,1750 psi,1200 psi,165 psi,440 psi,1100 psi,1600000 psi,580000 psi,0.55,SPIB
+Post|Southern Pine|Select,1500 psi,1000 psi,165 psi,375 psi,950 psi,1500000 psi,550000 psi,0.55,SPIB
+Post|Southern Pine|1+,1550 psi,1050 psi,165 psi,440 psi,975 psi,1600000 psi,580000 psi,0.55,SPIB
+Post|Southern Pine|1,1350 psi,900 psi,165 psi,375 psi,825 psi,1500000 psi,550000 psi,0.55,SPIB
+Post|Southern Pine|2+,975 psi,650 psi,165 psi,440 psi,625 psi,1300000 psi,470000 psi,0.55,SPIB
+Post|Southern Pine|2,850 psi,550 psi,165 psi,375 psi,525 psi,1200000 psi,440000 psi,0.55,SPIB
+Post|Southern Pine|Select+86,2100 psi,1400 psi,165 psi,440 psi,1300 psi,1600000 psi,580000 psi,0.55,SPIB
+Post|Southern Pine|Select+72,1750 psi,1200 psi,165 psi,440 psi,1100 psi,1600000 psi,580000 psi,0.55,SPIB
+Post|Southern Pine|Select+65,1600 psi,1050 psi,165 psi,440 psi,1000 psi,1600000 psi,580000 psi,0.55,SPIB
+Beam|Spruce-Pine-Fir|Select,1100 psi,650 psi,125 psi,425 psi,775 psi,1300000 psi,470000 psi,0.42,NLGA
+Beam|Spruce-Pine-Fir|1,900 psi,450 psi,125 psi,425 psi,625 psi,1300000 psi,470000 psi,0.42,NLGA
+Beam|Spruce-Pine-Fir|2,600 psi,300 psi,125 psi,425 psi,425 psi,1000000 psi,370000 psi,0.42,NLGA
+Post|Spruce-Pine-Fir|Select,1050 psi,700 psi,125 psi,425 psi,800 psi,1300000 psi,470000 psi,0.42,NLGA
+Post|Spruce-Pine-Fir|1,850 psi,550 psi,125 psi,425 psi,700 psi,1300000 psi,470000 psi,0.42,NLGA
+Post|Spruce-Pine-Fir|2,500 psi,325 psi,125 psi,425 psi,500 psi,1000000 psi,370000 psi,0.42,NLGA
+Beam|Spruce-Pine-Fir (South)|Select,1050 psi,625 psi,125 psi,335 psi,675 psi,1200000 psi,440000 psi,0.36,NELMA/PLIB/WWPA
+Beam|Spruce-Pine-Fir (South)|1,900 psi,450 psi,125 psi,335 psi,550 psi,1200000 psi,440000 psi,0.36,NELMA/PLIB/WWPA
+Beam|Spruce-Pine-Fir (South)|2,575 psi,300 psi,125 psi,335 psi,375 psi,1000000 psi,370000 psi,0.36,NELMA/PLIB/WWPA
+Post|Spruce-Pine-Fir (South)|Select,1000 psi,675 psi,125 psi,335 psi,700 psi,1200000 psi,440000 psi,0.36,NELMA/PLIB/WWPA
+Post|Spruce-Pine-Fir (South)|1,800 psi,550 psi,125 psi,335 psi,625 psi,1200000 psi,440000 psi,0.36,NELMA/PLIB/WWPA
+Post|Spruce-Pine-Fir (South)|2,475 psi,325 psi,125 psi,335 psi,425 psi,1000000 psi,370000 psi,0.36,NELMA/PLIB/WWPA
+Beam|Western Cedars|Select,1150 psi,675 psi,140 psi,425 psi,875 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Beam|Western Cedars|1,975 psi,475 psi,140 psi,425 psi,725 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Beam|Western Cedars|2,625 psi,325 psi,140 psi,425 psi,475 psi,800000 psi,290000 psi,0.36,PLIB/WWPA
+Post|Western Cedars|Select,1100 psi,725 psi,140 psi,425 psi,925 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Post|Western Cedars|1,875 psi,600 psi,140 psi,425 psi,800 psi,1000000 psi,370000 psi,0.36,PLIB/WWPA
+Post|Western Cedars|2,550 psi,350 psi,140 psi,425 psi,550 psi,800000 psi,290000 psi,0.36,PLIB/WWPA
+Beam|Western Cedars (North)|Select,1150 psi,675 psi,130 psi,425 psi,850 psi,1000000 psi,370000 psi,0.35,NLGA
+Beam|Western Cedars (North)|1,925 psi,475 psi,130 psi,425 psi,700 psi,1000000 psi,370000 psi,0.35,NLGA
+Beam|Western Cedars (North)|2,625 psi,300 psi,130 psi,425 psi,450 psi,800000 psi,290000 psi,0.35,NLGA
+Post|Western Cedars (North)|Select,1050 psi,700 psi,130 psi,425 psi,900 psi,1000000 psi,370000 psi,0.35,NLGA
+Post|Western Cedars (North)|1,875 psi,575 psi,130 psi,425 psi,800 psi,1000000 psi,370000 psi,0.35,NLGA
+Post|Western Cedars (North)|2,500 psi,350 psi,130 psi,425 psi,550 psi,800000 psi,290000 psi,0.35,NLGA
+Beam|Western Hemlock|Select,1400 psi,825 psi,170 psi,410 psi,1000 psi,1400000 psi,510000 psi,0.47,PLIB/WWPA
+Beam|Western Hemlock|1,1150 psi,575 psi,170 psi,410 psi,850 psi,1400000 psi,510000 psi,0.47,PLIB/WWPA
+Beam|Western Hemlock|2,750 psi,375 psi,170 psi,410 psi,550 psi,1100000 psi,400000 psi,0.47,PLIB/WWPA
+Post|Western Hemlock|Select,1300 psi,875 psi,170 psi,410 psi,1100 psi,1400000 psi,510000 psi,0.47,PLIB/WWPA
+Post|Western Hemlock|1,1050 psi,700 psi,170 psi,410 psi,950 psi,1400000 psi,510000 psi,0.47,PLIB/WWPA
+Post|Western Hemlock|2,650 psi,425 psi,170 psi,410 psi,650 psi,1100000 psi,400000 psi,0.47,PLIB/WWPA
+Beam|Western Hemlock (North)|Select,1400 psi,825 psi,135 psi,410 psi,1000 psi,1400000 psi,510000 psi,0.46,NLGA
+Beam|Western Hemlock (North)|1,1150 psi,575 psi,135 psi,410 psi,850 psi,1400000 psi,510000 psi,0.46,NLGA
+Beam|Western Hemlock (North)|2,750 psi,375 psi,135 psi,410 psi,550 psi,1100000 psi,400000 psi,0.46,NLGA
+Post|Western Hemlock (North)|Select,1300 psi,875 psi,135 psi,410 psi,1100 psi,1400000 psi,510000 psi,0.46,NLGA
+Post|Western Hemlock (North)|1,1050 psi,700 psi,135 psi,410 psi,950 psi,1400000 psi,510000 psi,0.46,NLGA
+Post|Western Hemlock (North)|2,650 psi,425 psi,135 psi,410 psi,650 psi,1100000 psi,400000 psi,0.46,NLGA
+Beam|Western Juniper|Select,1300 psi,650 psi,115 psi,770 psi,325 psi,500000 psi,180000 psi,0.42,PLIB
+Beam|Western Juniper|1,1100 psi,450 psi,115 psi,770 psi,275 psi,500000 psi,180000 psi,0.42,PLIB
+Beam|Western Juniper|2,650 psi,350 psi,115 psi,770 psi,175 psi,400000 psi,150000 psi,0.42,PLIB
+Post|Western Juniper|Select,1300 psi,675 psi,115 psi,770 psi,350 psi,500000 psi,180000 psi,0.42,PLIB
+Post|Western Juniper|1,1000 psi,550 psi,115 psi,770 psi,300 psi,500000 psi,180000 psi,0.42,PLIB
+Post|Western Juniper|2,600 psi,325 psi,115 psi,770 psi,225 psi,400000 psi,150000 psi,0.42,PLIB
+Beam|Western White Pine|Select,1050 psi,600 psi,120 psi,375 psi,775 psi,1300000 psi,470000 psi,0.4,NLGA
+Beam|Western White Pine|1,850 psi,425 psi,120 psi,375 psi,625 psi,1300000 psi,470000 psi,0.4,NLGA
+Beam|Western White Pine|2,550 psi,275 psi,120 psi,375 psi,400 psi,1000000 psi,370000 psi,0.4,NLGA
+Post|Western White Pine|Select,975 psi,650 psi,120 psi,375 psi,800 psi,1300000 psi,470000 psi,0.4,NLGA
+Post|Western White Pine|1,775 psi,525 psi,120 psi,375 psi,700 psi,1300000 psi,470000 psi,0.4,NLGA
+Post|Western White Pine|2,450 psi,300 psi,120 psi,375 psi,500 psi,1000000 psi,370000 psi,0.4,NLGA
+Beam|Western Woods|Select,1050 psi,625 psi,125 psi,345 psi,750 psi,1100000 psi,400000 psi,0.36,PLIB/WWPA
+Beam|Western Woods|1,900 psi,450 psi,125 psi,345 psi,625 psi,1100000 psi,400000 psi,0.36,PLIB/WWPA
+Beam|Western Woods|2,575 psi,300 psi,125 psi,345 psi,425 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Post|Western Woods|Select,1000 psi,675 psi,125 psi,345 psi,800 psi,1100000 psi,400000 psi,0.36,PLIB/WWPA
+Post|Western Woods|1,800 psi,525 psi,125 psi,345 psi,700 psi,1100000 psi,400000 psi,0.36,PLIB/WWPA
+Post|Western Woods|2,475 psi,325 psi,125 psi,345 psi,475 psi,900000 psi,330000 psi,0.36,PLIB/WWPA
+Beam|White Oak|Select,1400 psi,825 psi,205 psi,800 psi,900 psi,1000000 psi,370000 psi,0.73,NELMA
+Beam|White Oak|1,1200 psi,575 psi,205 psi,800 psi,775 psi,1000000 psi,370000 psi,0.73,NELMA
+Beam|White Oak|2,750 psi,375 psi,205 psi,800 psi,475 psi,800000 psi,290000 psi,0.73,NELMA
+Post|White Oak|Select,1300 psi,875 psi,205 psi,800 psi,950 psi,1000000 psi,370000 psi,0.73,NELMA
+Post|White Oak|1,1050 psi,700 psi,205 psi,800 psi,825 psi,1000000 psi,370000 psi,0.73,NELMA
+Post|White Oak|2,600 psi,400 psi,205 psi,800 psi,400 psi,800000 psi,290000 psi,0.73,NELMA
