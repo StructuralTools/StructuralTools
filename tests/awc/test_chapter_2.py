@@ -17,4 +17,6 @@ from structuraltools.awc import chapter_2
 
 
 def test_sec_2_3_3():
-    assert False
+    C_t = chapter_2.sec_2_3_3(temperature=125, wet_service=True)
+    assert C_t == {"F_b": 0.7, "F_t": 0.9, "F_v": 0.7, "F_c": 0.7,
+                   "F_c_perp": 0.7, "E": 0.9, "E_min": 0.9}

@@ -215,8 +215,12 @@ def round_to(value: Numeric, to: Numeric) -> Numeric:
         Rounding target"""
     to = abs(to)
     if isinstance(value, Quantity):
-        return to*(abs(value.to(to.units).magnitude)//to.magnitude+1)*sign(value)
-    return to*(abs(value)//to+1)*sign(value)
+        if abs(value.to(to.units).magnitude)%to.magnitude:
+            value = to*(abs(value.to(to.units).magnitude)//to.magnitude+1)*sign(value)
+    else:
+        if abs(value)%to:
+            value = to*(abs(value)//to+1)*sign(value)
+    return value
 
 def convert_to_unit(value: any) -> any:
     """Attempts to convert the given value to a Quantity if it is a string.
