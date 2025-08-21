@@ -255,3 +255,18 @@ def read_data_table(filepath: str) -> pd.DataFrame:
     data_table = data_table.map(convert_to_unit)
     data_table = data_table.set_index(data_table.columns[0], drop=True)
     return data_table
+
+def pivot_dict_table(table: dict[any, dict[any, any]]) -> dict[any, dict[any, any]]:
+    """Pivot a table made of nested dictionaries
+
+    Parameters
+    ==========
+
+    table : dict[any, dict[any, any]]
+        Table to pivot"""
+    result = {}
+    for out_key, dictionary in table.items():
+        for in_key, value in dictionary.items():
+            result.update({in_key: result.get(in_key, {})})
+            result[in_key].update({out_key: value})
+    return result

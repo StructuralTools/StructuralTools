@@ -72,3 +72,7 @@ def test_read_data_table():
     filepath = resources.joinpath("steel_materials.csv")
     steel_table = utils.read_data_table(filepath)
     assert steel_table.at["A36", "F_y"] == 36*unit.ksi
+
+def test_pivot_dict_table():
+    result = utils.pivot_dict_table({"a": {"1": 1, "2": 2}, "b": {"1": 3, "2": 4}})
+    assert result == {"1": {"a": 1, "b": 3}, "2": {"a": 2, "b": 4}}

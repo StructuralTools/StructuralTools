@@ -46,7 +46,7 @@ def sec_4_1_3(t_nom: int, d_nom: int) -> str:
         return "Dimension"
 
 
-def sec_4_3_3(wet_service: bool, F_b: Stress, F_c: Stress, C_F: float,
+def sec_4_3_3(wet_service: bool, F_b: Stress, F_c: Stress, C_F: dict[str, float],
         classification: str, species: str) -> dict[str: float]:
     """Determine the wet service factors for sawn lumber according to
     Section 4.3.3 of the 2024 NDS
@@ -63,8 +63,8 @@ def sec_4_3_3(wet_service: bool, F_b: Stress, F_c: Stress, C_F: float,
     F_c : Stress
         Unmodified compression stress of the wood
 
-    C_F : float
-        Size factor for flexure
+    C_F : dict[str, float]
+        Size factor dictionary
 
     classification : str
         One of "Dimension", "Beam", or "Post" indicating the lumber classification
@@ -73,9 +73,9 @@ def sec_4_3_3(wet_service: bool, F_b: Stress, F_c: Stress, C_F: float,
         Wood species"""
     if wet_service:
         C_M = copy(chapter_4_data["C_M"][classification])
-        if classification == "Dimension" and F_b*C_F <= 1150*unit.psi:
+        if classification == "Dimension" and F_b*C_F["F_b"] <= 1150*unit.psi:
             C_M.update({"F_b": 1})
-        if classification == "Dimension" and F_c <= 750*unit.psi:
+        if classification == "Dimension" and F_c*C_F["F_c"] <= 750*unit.psi:
             C_M.update({"F_c": 1})
         if classification in ["Beam", "Post"] and "Southern Pine" in species:
             C_M.update({"F_c": 1, "F_c_perp": 1})

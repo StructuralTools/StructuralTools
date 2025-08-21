@@ -17,9 +17,9 @@ import importlib.resources
 
 from numpy import ceil, sqrt
 
-from structuraltools.awc import chapter_4
+from structuraltools.awc import chapter_2, chapter_4
 from structuraltools.unit import Length
-from structuraltools.utils import read_data_table, Result, round_to
+from structuraltools.utils import pivot_dict_table, read_data_table, Result, round_to
 
 
 resources = importlib.resources.files("structuraltools.awc.resources")
@@ -56,6 +56,12 @@ class SawnLumber:
             the grade designation to indicate "Dense" or "& Btr" and a "-" can
             be appended to indicate "Non-Dense".
 
+        t : Length
+            Member thickness
+
+        d : Length
+            Member width
+
         wet_service : bool
             Boolean indicating if the wet service factor should be applied
 
@@ -72,8 +78,8 @@ class SawnLumber:
         # Calculate section properties
         self.d = abs(d.to("inch"))
         self.t = abs(t.to("inch"))
-        self.d_nom = ceil(self.d.magnitude)
-        self.t_nom = ceil(self.t.magnitude)
+        self.d_nom = int(ceil(self.d.magnitude))
+        self.t_nom = int(ceil(self.t.magnitude))
         self.A = (self.d*self.t).to("inch**2")
         self.S_x = (self.t*self.d**2/6).to("inch**3")
         self.I_x = (self.t*self.d**3/12).to("inch**4")
@@ -102,3 +108,14 @@ class SawnLumber:
 
 
         # Modification factors
+        C_F = chapter_4.sec_4_3_6(self.classification, self.species, self.grade,
+            self.t_nom, self.d_nom)
+        C_M = chapter_4.sec_4_3_3(wet_service, self.F_b, self.F_c, C_F,
+            self.classification, self.species)
+        C_t = chapter_2.sec_2_3_3(temperature, wet_service)
+        C_fu = chapter_4.sec_4_3_7(self.classification, self.grade,
+            self.t_nom, self.d_nom)
+        C_i = chapter_4.sec_4_3_8(incising)
+        self.modifiers = pivot_dict_table(
+            {"C_F": C_F, "C_M": C_M, "C_t": C_t, "C_fu": C_fu, "C_i": C_i})
+        print(self.modifiers)

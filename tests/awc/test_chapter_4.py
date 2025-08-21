@@ -35,7 +35,7 @@ def test_sec_4_3_3():
         wet_service=True,
         F_b=1000*unit.psi,
         F_c=600*unit.psi,
-        C_F=1.1,
+        C_F={"F_b": 1.1, "F_c": 1.1},
         classification="Dimension",
         species="Southern Pine")
     assert C_M == {"F_b": 1, "F_t": 1, "F_v": 0.97, "F_c": 1,
