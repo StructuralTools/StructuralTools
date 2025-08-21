@@ -18,7 +18,6 @@ import importlib.resources
 import json
 
 from structuraltools.unit import unit, Stress
-from structuraltools.utils import read_data_table
 
 
 resources = importlib.resources.files("structuraltools.awc.resources")

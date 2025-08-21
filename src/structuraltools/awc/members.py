@@ -14,12 +14,11 @@
 
 
 import importlib.resources
-import json
 
 from numpy import ceil, sqrt
 
 from structuraltools.awc import chapter_4
-from structuraltools.unit import unit, Length
+from structuraltools.unit import Length
 from structuraltools.utils import read_data_table, Result, round_to
 
 
@@ -96,7 +95,7 @@ class SawnLumber:
             else:
                 index = f"{self.classification}|{self.species}|{self.grade}"
             material = self.materials.loc[index, :].to_dict()
-            for attribute, value in materials.items():
+            for attribute, value in material.items():
                 setattr(self, attribute, value)
         except KeyError:
             raise ValueError(f"Unsupported classification/species/grade/width: {index}")

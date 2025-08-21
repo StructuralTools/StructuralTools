@@ -15,7 +15,7 @@
 
 from collections.abc import Iterable
 import importlib.resources
-from itertools import product, starmap
+from itertools import product
 import json
 from typing import NamedTuple
 
