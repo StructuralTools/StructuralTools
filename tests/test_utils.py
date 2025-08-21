@@ -37,8 +37,14 @@ def test_linterp_dicts():
 def test_round_to_float():
     assert utils.round_to(3.5, 5) == 5
 
+def test_round_to_float_no_rounding_needed():
+    assert utils.round_to(125, 25) == 125
+
 def test_round_to_Quantity():
     assert isclose(utils.round_to(-0.1713*unit.kip, 10*unit.lb), -180*unit.lb)
+
+def test_round_to_Quantity_no_rounding_needed():
+    assert utils.round_to(100*unit.lb, 10*unit.lb) == 100*unit.lb
 
 def test_convert_to_unit_Quantity_string():
     assert utils.convert_to_unit("1 ft") == 1*unit.ft

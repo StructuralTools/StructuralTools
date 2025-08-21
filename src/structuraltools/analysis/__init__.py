@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import beam, loads
+from . import beam
 
 __all__ = (
-    beam,
-    loads
+    beam
 )
