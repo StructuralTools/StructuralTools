@@ -15,6 +15,7 @@
 
 from collections.abc import Iterable
 from itertools import product, starmap
+from typing import NamedTuple
 
 from numpy import maximum, minimum, sign
 import pandas as pd
@@ -67,6 +68,69 @@ def reduce_combs(combs: pd.DataFrame) -> pd.DataFrame:
         if add_to_reduced:
             reduced_combs.loc[current_name, :] = current
     return reduced_combs
+
+
+class LoadCase(NamedTuple):
+    kind: str
+    case: str
+
+
+class LoadCombResult(NamedTuple):
+    name: str
+    time_factor: float
+    factors: dict[LoadCase, float]
+    result: Numeric | NumericArray
+
+
+class LoadComb:
+    """Class to represent a single load combination"""
+    def __init__(self, name: str, time_factor: float, **factors):
+        """Create a new load combination
+
+        Parameters
+        ==========
+
+        name : str
+            Load combination name
+
+        time_factor : float
+            Time effect factor for load duration sensitive materials
+
+        factors : float
+            Load factors to use with each load kind"""
+        self.name = name
+        self.time_factor = time_factor
+        self.factors = factors
+
+    def eval_loads(
+            self,
+            loads: dict[str, dict[str, Numeric | NumericArray]],
+            case_combs: list[list[LoadCase]]
+            ) -> dict[str, LoadCombResult]:
+        """Use the load combination to evaluate the provided loads
+
+        Parameters
+        ==========
+
+        loads : dict[str, dict[str, Numeric | NumericArray]]
+            Dictionary of load kinds and associated load cases provided by a
+            LoadCollector
+
+        case_combs : list[list[LoadCase]]
+            Product expansion of the loads dictionary keys provided by the
+            LoadCollector"""
+        comb_results = []
+        for case_comb in case_combs:
+            factors = {}
+            results = []
+            for case in case_comb:
+                factor = self.factors.get(case.kind)
+                if factor:
+                    factors.update({case: factor})
+                    results.append(loads[case.kind][case.case]*factor)
+            result = sum(results)
+            comb_results.append(LoadCombResult(self.name, self.time_factor, factors, result))
+        return comb_results
 
 
 class LoadCollector:
@@ -133,51 +197,67 @@ class LoadCollector:
            combs : iterable
                Iterable of load combinations. Each load combination should
                be a dictionary with keys that match the load kinds"""
-        # Expand the provided load combinations
-        full_keys = map(lambda x: tuple(product({x[0]}, x[1].keys())), self.loads.items())
-        to_merge = product(product(*full_keys), combs)
+        # Generate an exhaustive list of list of LoadCase from the load
+        # dictionary that includes all relevant combinations of load cases.
+        load_kinds = []
+        for kind, cases in self.loads.items():
+            load_cases = []
+            for case in cases.keys():
+                load_cases.append(LoadCase(kind, case))
+            load_kinds.append(load_cases)
+        case_combs = list(product(*load_kinds))
 
-        def merge_factors(keys: tuple[str, str], factors: dict[str, float]
-                          ) -> tuple[tuple[tuple[str, str], float], ...]:
-            return tuple((key, x) for key in keys if (x := factors.get(key[0])))
-        combs = set(filter(None, starmap(merge_factors, to_merge)))
-
-        # Analyze each load combination and store extreme values
-        extremes = {}
-        self.combs = {}
+        # The supplied load cases have a method to evaluate themselves for all
+        # of the case combinations provided and return all of the raw results
+        # as a list of LoadCombResult.
+        combs_results = []
         for comb in combs:
-            result = sum(map(lambda x: self.loads[x[0][0]][x[0][1]]*x[1], comb))
-            self.combs.update({comb: result})
-            if isinstance(getattr(result, "magnitude", result), Iterable):
-                extremes.update({"max_envelope":
-                    maximum(extremes.get("max_envelope", result), result)})
-                extremes.update({"min_envelope":
-                    minimum(extremes.get("min_envelope", result), result)})
-                max_value = max(result)
-                min_value = min(result)
-            else:
-                max_value = result
-                min_value = result
-            if max_value >= extremes.get("max_value", max_value):
-                extremes.update({"max_value": max_value, "max_comb": comb})
-            if min_value <= extremes.get("min_value", min_value):
-                extremes.update({"min_value": min_value, "min_comb": comb})
+            combs_results = combs_results+comb.eval_loads(self.loads, case_combs)
 
-        # Calculate absolute max values
-        if extremes.get("max_envelope") is not None:
-            extremes.update({"abs_max_envelope": maximum(
-                abs(extremes["max_envelope"]), abs(extremes["min_envelope"]))})
-        if abs(extremes["max_value"]) >= abs(extremes["min_value"]):
-            extremes.update({
-                "abs_max_value": abs(extremes["max_value"]),
-                "abs_max_comb": extremes["max_comb"]
+        # Check if the loads in the load collector are array like
+        try:
+            _ = combs_results[0]
+            array_like = True
+        except TypeError:
+            array_like = False
+
+        # Envelope the load combination results
+        factored_load = {}
+        for comb in combs_results:
+            if array_like:
+                factored_load.update({"max_envelope": maximum(
+                    factored_load.get("max_envelope", comb.result), comb.result)})
+                factored_load.update({"min_envelope", minimum(
+                    factored_load.get("min_envelope", comb.result), comb.result)})
+                max_value = max(comb.result)
+                min_value = min(comb.result)
+            else:
+                max_value = comb.result
+                min_value = comb.result
+            if max_value >= factored_load.get("max_comb", comb).result:
+                factored_load.update({"max_value": max_value, "max_comb": comb})
+            if min_value <= factored_load.get("min_comb", comb).result:
+                factored_load.update({"min_value": min_value, "min_comb": comb})
+
+        if abs(factored_load["max_value"]) >= abs(factored_load["min_value"]):
+            factored_load.update({
+                "abs_max_value": abs(factored_load["max_value"]),
+                "abs_max_comb": factored_load["max_comb"]
             })
         else:
-            extremes.update({
-                "abs_max_value": abs(extremes["min_value"]),
-                "abs_max_comb": extremes["min_comb"]
+            factored_load.update({
+                "abs_max_value": abs(factored_load["min_value"]),
+                "abs_max_comb": factored_load["min_comb"]
             })
 
-        # Store results as attributes
-        for attr, value in extremes.items():
-            setattr(self, attr, value)
+        if array_like:
+            factored_load.update({"abs_max_envelope": maximum(
+                abs(factored_load["max_envelope"]), abs(factored_load["min_envelope"]))})
+        else:
+            factored_load.update({
+                "max_envelope": [factored_load["max_value"]],
+                "min_envelope": [factored_load["min_value"]],
+                "abs_max_envelope": [factored_load["abs_max_value"]]
+            })
+
+        return factored_load
