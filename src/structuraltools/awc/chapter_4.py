@@ -72,13 +72,16 @@ def sec_4_3_3(wet_service: bool, F_b: Stress, F_c: Stress, C_F: float,
 
     species : str
         Wood species"""
-    C_M = copy(chapter_4_data["C_M"][classification])
-    if classification == "Dimension" and F_b*C_f <= 1150*unit.psi:
-        C_M.update({"F_b": 1})
-    if classification == "Dimension" and F_c <= 750*unit.psi:
-        C_M.update({"F_c": 1})
-    if classification in ["Beam", "Post"] and "Southern Pine" in species:
-        C_M.update({"F_c": 1, "F_c_perp": 1})
+    if wet_service:
+        C_M = copy(chapter_4_data["C_M"][classification])
+        if classification == "Dimension" and F_b*C_F <= 1150*unit.psi:
+            C_M.update({"F_b": 1})
+        if classification == "Dimension" and F_c <= 750*unit.psi:
+            C_M.update({"F_c": 1})
+        if classification in ["Beam", "Post"] and "Southern Pine" in species:
+            C_M.update({"F_c": 1, "F_c_perp": 1})
+    else:
+        C_M = {"F_b": 1, "F_t": 1, "F_v": 1, "F_c": 1, "F_c_perp": 1, "E": 1, "E_min": 1}
     return C_M
 
 def sec_4_3_6(
@@ -118,7 +121,7 @@ def sec_4_3_6(
     elif classification == "Dimension":
         grade = grade.replace("+", "").replace("-", "")
         try:
-            C_F.update(copy(chapter_4_data["C_F"][grade][t_nom][d_nom]))
+            C_F.update(copy(chapter_4_data["C_F"][grade][str(t_nom)][str(d_nom)]))
         except KeyError:
             raise ValueError(f"Unsupported grade ({grade})/width ({d_nom}) combination")
     return C_F
@@ -143,15 +146,17 @@ def sec_4_3_7(classification: str, grade: str, t_nom: int, d_nom: int) -> dict[s
         Nominal width of the member"""
     if classification == "Dimension":
         try:
-            C_fu = copy(chapter_4_data["C_fu"][classification][t_nom][d_nom])
+            C_fu = copy(chapter_4_data["C_fu"][classification][str(t_nom)][str(d_nom)])
         except KeyError:
             raise ValueError(f"Unsupported dimensions: {t_nom}x{d_nom}")
-    else:
+    elif classification == "Beam":
         grade = grade.replace("+", "").replace("-", "")
         try:
             C_fu = copy(chapter_4_data["C_fu"][classification][grade])
         except KeyError:
             raise ValueError(f"Unsupported grade ({grade}) for classification {classification}")
+    else:
+        C_fu = {"F_b": 1, "F_t": 1, "F_v": 1, "F_c": 1, "F_c_perp": 1, "E": 1, "E_min": 1}
     return C_fu
 
 def sec_4_3_8(incising: bool) -> dict[str: float]:

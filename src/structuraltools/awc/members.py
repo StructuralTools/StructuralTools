@@ -86,7 +86,7 @@ class SawnLumber:
 
         # Look up wood properties
         self.species = species
-        self.grade = "3" if grade == "Stud" and self.d_nom >= 8 else grade
+        self.grade = "3" if grade == "Stud" and self.d_nom >= 8 else str(grade)
         self.classification = chapter_4.sec_4_1_3(self.d_nom, self.t_nom)
 
         try:

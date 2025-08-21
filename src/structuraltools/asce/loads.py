@@ -14,7 +14,9 @@
 
 
 from collections.abc import Iterable
+import importlib.resources
 from itertools import product, starmap
+import json
 from typing import NamedTuple
 
 from numpy import maximum, minimum, sign
@@ -24,6 +26,7 @@ from structuraltools.unit import Numeric, NumericArray
 
 
 pd.options.mode.copy_on_write = True
+resources = importlib.resources.files("structuraltools.asce.resources")
 
 
 def _does_not_control(testing: pd.Series, other: pd.Series) -> bool:
@@ -74,17 +77,21 @@ class LoadCase(NamedTuple):
     kind: str
     case: str
 
+class LoadCaseFactor(NamedTuple):
+    kind: str
+    case: str
+    factor: float
 
 class LoadCombResult(NamedTuple):
     name: str
     time_factor: float
-    factors: dict[LoadCase, float]
+    factors: tuple[LoadCaseFactor, ...]
     result: Numeric | NumericArray
 
 
 class LoadComb:
     """Class to represent a single load combination"""
-    def __init__(self, name: str, time_factor: float, **factors):
+    def __init__(self, name: str, time_factor: float = 1, **factors):
         """Create a new load combination
 
         Parameters
@@ -106,7 +113,7 @@ class LoadComb:
             self,
             loads: dict[str, dict[str, Numeric | NumericArray]],
             case_combs: list[list[LoadCase]]
-            ) -> dict[str, LoadCombResult]:
+            ) -> list[LoadCombResult]:
         """Use the load combination to evaluate the provided loads
 
         Parameters
@@ -119,17 +126,23 @@ class LoadComb:
         case_combs : list[list[LoadCase]]
             Product expansion of the loads dictionary keys provided by the
             LoadCollector"""
-        comb_results = []
+        case_combs_with_factors = set()
         for case_comb in case_combs:
-            factors = {}
-            results = []
+            factors = []
             for case in case_comb:
-                factor = self.factors.get(case.kind)
-                if factor:
-                    factors.update({case: factor})
-                    results.append(loads[case.kind][case.case]*factor)
-            result = sum(results)
-            comb_results.append(LoadCombResult(self.name, self.time_factor, factors, result))
+                if (factor := self.factors.get(case.kind)):
+                    factors.append(LoadCaseFactor(case.kind, case.case, factor))
+            if factors:
+                case_combs_with_factors.add(tuple(factors))
+
+        comb_results = []
+        for case_comb in case_combs_with_factors:
+            comb_results.append(LoadCombResult(
+                self.name,
+                self.time_factor,
+                case_comb,
+                sum(loads[case.kind][case.case]*case.factor for case in case_comb)
+            ))
         return comb_results
 
 
@@ -156,8 +169,8 @@ class LoadCollector:
             at this level, so any load cases contained in this kind will use the
             load factor assigned to the kind. It is expected that this level
             will be used to organize loads by dead, live, wind, etc. If kind is
-            an iterable it is zipped with case if case is also an iterable; if
-            case is not an iterable the product of kind and case is taken.
+            a non-string iterable the load is added to all results of the
+            product of kind and case.
 
         case : str or Iterable[str]
             String identifier for second level load organization. All load cases
@@ -165,13 +178,13 @@ class LoadCollector:
             used to apply separate instances of a kind of load. It is expected
             that this level will be used to distinguish between dead load and
             uplift dead load, positive and negative wind loads, etc. If case is
-            an iterable and kind is not an iterable the product of kind and case
-            is taken.
+            a non-string iterable the load is added to all results of the
+            product of kind and case.
 
         value : Numeric or NumericArray
             Value to add to the load case. This can take a number of different
-            types, but the type must be consistent across all values add to the
-            LoadCollector."""
+            types, but the type must be consistent across all values added to
+            the LoadCollector."""
         if isinstance(kind, str) and isinstance(case, str):
             self.loads.update({kind: self.loads.get(kind, {})})
             self.loads[kind].update({case: self.loads[kind].get(case, 0)+value})
@@ -181,7 +194,7 @@ class LoadCollector:
             elif isinstance(case, str):
                 kind_case = product(kind, {case})
             else:
-                kind_case = zip(kind, case)
+                kind_case = product(kind, case)
             for kind, case in kind_case:
                 self.add_load(kind, case, value)
 
@@ -209,16 +222,14 @@ class LoadCollector:
 
         # The supplied load cases have a method to evaluate themselves for all
         # of the case combinations provided and return all of the raw results
-        # as a list of LoadCombResult.
+        # as a set of LoadCombResult.
         factored_load = {"combs": []}
         for comb in combs:
-            factored_load.update({
-                "combs": factored_load["combs"]+comb.eval_loads(self.loads, case_combs)
-            })
+            factored_load["combs"].extend(comb.eval_loads(self.loads, case_combs))
 
         # Check if the loads in the load collector are array like
         try:
-            _ = factored_load["combs"][0]
+            _ = factored_load["combs"][0].result[0]
             array_like = True
         except TypeError:
             array_like = False
@@ -228,16 +239,16 @@ class LoadCollector:
             if array_like:
                 factored_load.update({"max_envelope": maximum(
                     factored_load.get("max_envelope", comb.result), comb.result)})
-                factored_load.update({"min_envelope", minimum(
+                factored_load.update({"min_envelope": minimum(
                     factored_load.get("min_envelope", comb.result), comb.result)})
                 max_value = max(comb.result)
                 min_value = min(comb.result)
             else:
                 max_value = comb.result
                 min_value = comb.result
-            if max_value >= factored_load.get("max_comb", comb).result:
+            if max_value >= factored_load.get("max_value", max_value):
                 factored_load.update({"max_value": max_value, "max_comb": comb})
-            if min_value <= factored_load.get("min_comb", comb).result:
+            if min_value <= factored_load.get("min_value", min_value):
                 factored_load.update({"min_value": min_value, "min_comb": comb})
 
         if abs(factored_load["max_value"]) >= abs(factored_load["min_value"]):
@@ -262,3 +273,10 @@ class LoadCollector:
             })
 
         return factored_load
+
+
+load_combs = {}
+with open(resources.joinpath("load_combinations.json")) as file:
+    for group, combs in json.load(file).items():
+        group_combs = [LoadComb(**comb) for comb in combs]
+        load_combs.update({group: group_combs})
