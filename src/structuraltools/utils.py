@@ -238,14 +238,6 @@ def convert_to_unit(value: any) -> any:
                 warnings.warn(f"'{value}' was not evaluated as a unit")
     return value
 
-def isiterable(item: any) -> bool:
-    try:
-        for member in item:
-            pass
-        return True
-    except TypeError:
-        return False
-
 def read_data_table(filepath: str) -> pd.DataFrame:
     """Reads a .csv file and returns a pandas DataFrame with the first column
     set as the index and convert_to_unit run on all values

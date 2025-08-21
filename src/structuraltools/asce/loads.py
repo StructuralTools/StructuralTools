@@ -210,20 +210,21 @@ class LoadCollector:
         # The supplied load cases have a method to evaluate themselves for all
         # of the case combinations provided and return all of the raw results
         # as a list of LoadCombResult.
-        combs_results = []
+        factored_load = {"combs": []}
         for comb in combs:
-            combs_results = combs_results+comb.eval_loads(self.loads, case_combs)
+            factored_load.update({
+                "combs": factored_load["combs"]+comb.eval_loads(self.loads, case_combs)
+            })
 
         # Check if the loads in the load collector are array like
         try:
-            _ = combs_results[0]
+            _ = factored_load["combs"][0]
             array_like = True
         except TypeError:
             array_like = False
 
         # Envelope the load combination results
-        factored_load = {}
-        for comb in combs_results:
+        for comb in factored_load["combs"]:
             if array_like:
                 factored_load.update({"max_envelope": maximum(
                     factored_load.get("max_envelope", comb.result), comb.result)})
