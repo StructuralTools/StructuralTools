@@ -442,12 +442,12 @@ class MainWindServer:
 
         pressures = []
         for C_p in (coefs["c1"], coefs["c2"]):
+            p_sign = sign(C_p) if sign(C_p) else 1
             if element == "parapet":
                 p = q_z*self.K_d*C_p
             else:
-                p_sign = sign(C_p) if sign(C_p) else 1
                 p = q_z*self.K_d*self.G[axis]*C_p+self.q_h*self.K_d*self.GC_pi*p_sign
-            pressures.append(max(abs(p), p_min)*sign(p))
+            pressures.append(max(abs(p), p_min)*p_sign)
         return pressures
 
 
