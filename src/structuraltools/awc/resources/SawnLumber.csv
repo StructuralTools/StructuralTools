@@ -71,24 +71,24 @@ Dimension|Cottonwood|Stud,475 psi,275 psi,125 psi,320 psi,300 psi,1000000 psi,37
 Dimension|Cottonwood|Construction,700 psi,400 psi,125 psi,320 psi,650 psi,1000000 psi,370000 psi,0.41,NELMA
 Dimension|Cottonwood|Standard,400 psi,225 psi,125 psi,320 psi,500 psi,900000 psi,330000 psi,0.41,NELMA
 Dimension|Cottonwood|Utility,175 psi,100 psi,125 psi,320 psi,325 psi,900000 psi,330000 psi,0.41,NELMA
-Dimension|Douglas Fir|Select,1500 psi,1000 psi,180 psi,625 psi,1700 psi,1900000 psi,690000 psi,0.41,NELMA
-Dimension|Douglas Fir|1+,1200 psi,800 psi,180 psi,625 psi,1550 psi,1800000 psi,660000 psi,0.41,NELMA
-Dimension|Douglas Fir|1,1000 psi,675 psi,180 psi,625 psi,1500 psi,1700000 psi,620000 psi,0.41,NELMA
-Dimension|Douglas Fir|2,900 psi,575 psi,180 psi,625 psi,1350 psi,1600000 psi,580000 psi,0.41,NELMA
-Dimension|Douglas Fir|3,525 psi,325 psi,180 psi,625 psi,775 psi,1400000 psi,510000 psi,0.41,NELMA
-Dimension|Douglas Fir|Stud,700 psi,450 psi,180 psi,625 psi,850 psi,1400000 psi,510000 psi,0.41,NELMA
-Dimension|Douglas Fir|Construction,1000 psi,650 psi,180 psi,625 psi,1650 psi,1500000 psi,550000 psi,0.41,NELMA
-Dimension|Douglas Fir|Standard,575 psi,375 psi,180 psi,625 psi,1400 psi,1400000 psi,510000 psi,0.41,NELMA
-Dimension|Douglas Fir|Utility,275 psi,175 psi,180 psi,625 psi,900 psi,1300000 psi,470000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|Select,1350 psi,825 psi,180 psi,625 psi,1900 psi,1900000 psi,690000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|1+,1150 psi,750 psi,180 psi,625 psi,1800 psi,1800000 psi,660000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|1,850 psi,500 psi,180 psi,625 psi,1400 psi,1600000 psi,580000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|2,850 psi,500 psi,180 psi,625 psi,1400 psi,1600000 psi,580000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|3,475 psi,300 psi,180 psi,625 psi,825 psi,1400000 psi,510000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|Stud,650 psi,400 psi,180 psi,625 psi,900 psi,1400000 psi,510000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|Construction,950 psi,575 psi,180 psi,625 psi,1800 psi,1500000 psi,550000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|Standard,525 psi,325 psi,180 psi,625 psi,1450 psi,1400000 psi,510000 psi,0.41,NELMA
-Dimension|Douglas Fir (North)|Utility,250 psi,150 psi,180 psi,625 psi,950 psi,1300000 psi,470000 psi,0.41,NELMA
+Dimension|Douglas Fir|Select,1500 psi,1000 psi,180 psi,625 psi,1700 psi,1900000 psi,690000 psi,0.5,NELMA
+Dimension|Douglas Fir|1+,1200 psi,800 psi,180 psi,625 psi,1550 psi,1800000 psi,660000 psi,0.5,NELMA
+Dimension|Douglas Fir|1,1000 psi,675 psi,180 psi,625 psi,1500 psi,1700000 psi,620000 psi,0.5,NELMA
+Dimension|Douglas Fir|2,900 psi,575 psi,180 psi,625 psi,1350 psi,1600000 psi,580000 psi,0.5,NELMA
+Dimension|Douglas Fir|3,525 psi,325 psi,180 psi,625 psi,775 psi,1400000 psi,510000 psi,0.5,NELMA
+Dimension|Douglas Fir|Stud,700 psi,450 psi,180 psi,625 psi,850 psi,1400000 psi,510000 psi,0.5,NELMA
+Dimension|Douglas Fir|Construction,1000 psi,650 psi,180 psi,625 psi,1650 psi,1500000 psi,550000 psi,0.5,NELMA
+Dimension|Douglas Fir|Standard,575 psi,375 psi,180 psi,625 psi,1400 psi,1400000 psi,510000 psi,0.5,NELMA
+Dimension|Douglas Fir|Utility,275 psi,175 psi,180 psi,625 psi,900 psi,1300000 psi,470000 psi,0.5,NELMA
+Dimension|Douglas Fir (North)|Select,1350 psi,825 psi,180 psi,625 psi,1900 psi,1900000 psi,690000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|1+,1150 psi,750 psi,180 psi,625 psi,1800 psi,1800000 psi,660000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|1,850 psi,500 psi,180 psi,625 psi,1400 psi,1600000 psi,580000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|2,850 psi,500 psi,180 psi,625 psi,1400 psi,1600000 psi,580000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|3,475 psi,300 psi,180 psi,625 psi,825 psi,1400000 psi,510000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|Stud,650 psi,400 psi,180 psi,625 psi,900 psi,1400000 psi,510000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|Construction,950 psi,575 psi,180 psi,625 psi,1800 psi,1500000 psi,550000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|Standard,525 psi,325 psi,180 psi,625 psi,1450 psi,1400000 psi,510000 psi,0.49,NELMA
+Dimension|Douglas Fir (North)|Utility,250 psi,150 psi,180 psi,625 psi,950 psi,1300000 psi,470000 psi,0.49,NELMA
 Dimension|Douglas Fir (South)|Select,1350 psi,900 psi,180 psi,520 psi,1600 psi,1400000 psi,510000 psi,0.46,WWPA
 Dimension|Douglas Fir (South)|1,925 psi,600 psi,180 psi,520 psi,1450 psi,1300000 psi,470000 psi,0.46,WWPA
 Dimension|Douglas Fir (South)|2,850 psi,525 psi,180 psi,520 psi,1350 psi,1200000 psi,440000 psi,0.46,WWPA
