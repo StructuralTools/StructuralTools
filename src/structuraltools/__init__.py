@@ -14,10 +14,10 @@
 
 
 from structuraltools.unit import unit
-from structuraltools.utils import linterp, round_to
+from structuraltools.utils import convert_to_unit, linterp, round_to
 
 
 __all__ = (
-    linterp, round_to,
+    convert_to_unit, linterp, round_to,
     unit
 )
