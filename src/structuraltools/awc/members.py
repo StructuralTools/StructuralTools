@@ -76,6 +76,7 @@ class SawnLumber:
 
 
         # Calculate section properties
+        self.c = 0.8  # Adjustment used when calculating the column stability factor
         self.d = abs(d.to("inch"))
         self.t = abs(t.to("inch"))
         self.d_nom = int(ceil(self.d.magnitude))
@@ -118,4 +119,3 @@ class SawnLumber:
         C_i = chapter_4.sec_4_3_8(incising)
         self.modifiers = pivot_dict_table(
             {"C_F": C_F, "C_M": C_M, "C_t": C_t, "C_fu": C_fu, "C_i": C_i})
-        print(self.modifiers)
