@@ -198,7 +198,7 @@ class LoadCollector:
             for kind, case in kind_case:
                 self.add_load(kind, case, value)
 
-    def eval_combs(self, combs: Iterable[dict[str, float]]) -> None:
+    def eval_combs(self, combs: Iterable[LoadComb]) -> None:
         """Calculates the maximum and minimum factored values and envelopes for
            the specified list of load combinitions and stores the associated
            load combinations. Note: Envelopes are only calculated for
