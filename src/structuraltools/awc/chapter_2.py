@@ -38,7 +38,6 @@ def sec_2_3_3(temperature: float, wet_service: bool) -> dict[str: float]:
     wet_service : bool
         Boolean indicating if the wet service factor should be applied"""
     temperature = str(min(max(100, round_to(temperature, 25)), 150))
-    print(temperature)
     wet_service = "wet" if wet_service else "dry"
     C_t = copy(chapter_2_data["C_t"][wet_service][temperature])
     return C_t
