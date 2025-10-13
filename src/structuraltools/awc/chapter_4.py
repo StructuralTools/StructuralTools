@@ -18,9 +18,12 @@ import importlib.resources
 import json
 
 from structuraltools.unit import unit, Stress
+from structuraltools.utils import fill_template, Result
 
 
 resources = importlib.resources.files("structuraltools.awc.resources")
+with open(resources.joinpath("chapter_4_templates_processed.json")) as file:
+    templates = json.load(file)
 with open(resources.joinpath("chapter_4_data.json")) as file:
     chapter_4_data = json.load(file)
 
@@ -45,6 +48,211 @@ def sec_4_1_3(t_nom: int, d_nom: int) -> str:
     else:
         return "Dimension"
 
+def table_4_3_1_b(F_b: Stress, C_M: float, C_t: float, C_L: float, C_F: float,
+        C_fu: float, C_i: float, C_r: float, lamb: float, **string_options) -> Result[Stress]:
+    """Calculate the ultimate bending stress capacity according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    F_b : Stress
+        Reference design bending stress
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_L : float
+        Beam stability factor
+
+    C_F : float
+        Size factor
+
+    C_fu : float
+        Flat use factor
+
+    C_i : float
+        Incising factor
+
+    C_r : float
+        Repetitive member factor
+
+    lamb : float
+        Time effect factor"""
+    K_F = 2.54
+    phi = 0.85
+    F_prime_b = F_b*C_M*C_t*C_L*C_F*C_fu*C_i*C_r*K_F*phi*lamb
+    return fill_template(F_prime_b, templates["table_4_3_1_b"], locals(), **string_options)
+
+def table_4_3_1_t(F_t: Stress, C_M: float, C_t: float, C_F: float, C_i: float,
+        lamb: float, **string_options) -> Result[Stress]:
+    """Calculate the ultimate tensile stress capacity according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    F_t : Stress
+        Reference design tensile stress
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_F : float
+        Size effect factor
+
+    C_i : float
+        Incising factor
+
+    lamb : float
+        Time effect factor"""
+    K_F = 2.7
+    phi = 0.8
+    F_prime_t = F_t*C_M*C_t*C_F*C_i*K_F*phi*lamb
+    return fill_template(F_prime_t, templates["table_4_3_1_t"], locals(), **string_options)
+
+def table_4_3_1_v(F_v: Stress, C_M: float, C_t: float, C_i: float, lamb: float,
+        **string_options) -> Result[Stress]:
+    """Calculate the ultimate shear stress capacity according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    F_v : Stress
+        Reference design shear stress
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_i : float
+        Incising factor
+
+    lamb : float
+        Time effect factor"""
+    K_F = 2.88
+    phi = 0.75
+    F_prime_v = F_v*C_M*C_t*C_i*K_F*phi*lamb
+    return fill_template(F_prime_v, templates["table_4_3_1_v"], locals(), **string_options)
+
+def table_4_3_1_c(F_c: Stress, C_M: float, C_t: float, C_F: float, C_i: float,
+        C_P: float, lamb: float, **string_options) -> Result[Stress]:
+    """Calculate the ultimate compression stress capacity according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    F_c : Stress
+        Reference design compression stress
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_F : float
+        Size factor
+
+    C_i : float
+        Incising factor
+
+    C_P : float
+        Column stability factor
+
+    lamb : float
+        Time effect factor"""
+    K_F = 2.4
+    phi = 0.9
+    F_prime_c = F_c*C_M*C_t*C_F*C_i*C_P*K_F*phi*lamb
+    return fill_template(F_prime_c, templates["table_4_3_1_c"], locals(), **string_options)
+
+def table_4_3_1_c_perp(F_c_perp: Stress, C_M: float, C_t: float, C_i: float,
+        C_b: float, **string_options) -> Result[Stress]:
+    """Calculate the ultimate compression stress capacity perpendicular to the
+    grain according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    F_c_perp : Stress
+        Reference design compression stress perpendicular to the grain
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_i : float
+        Incising factor
+
+    C_b : float
+        Bearing area factor"""
+    K_F = 1.67
+    phi = 0.9
+    F_prime_c_perp = F_c_perp*C_M*C_t*C_i*C_b*K_F*phi
+    template = templates["table_4_3_1_c_perp"]
+    return fill_template(F_prime_c_perp, template, locals(), **string_options)
+
+def table_4_3_1_E(E: Stress, C_M: float, C_t: float, C_fu: float, C_i: float,
+        **string_options) -> Result[Stress]:
+    """Calculate the modulus of elasticity according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    E : Stress
+        Reference design modulus of elasticity
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_fu : float
+        Flat use factor
+
+    C_i : float
+        Incising factor"""
+    E_prime = E*C_M*C_t*C_fu*C_i
+    return fill_template(E_prime, templates["table_4_3_1_E"], locals(), **string_options)
+
+def table_4_3_1_E_min(E_min: Stress, C_M: float, C_t: float, C_fu: float,
+        C_i: float, C_T: float, **string_options) -> Result[Stress]:
+    """Calculate the lower bound modulus of elasticity according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    E_min : Stress
+        Reference design lower bound modulus of elasticity
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_fu : float
+        Flat use factor
+
+    C_i : float
+        Incising factor
+
+    C_T : float
+        Buckling stiffness factor"""
+    K_F = 1.76
+    phi = 0.85
+    E_prime_min = E_min*C_M*C_t*C_fu*C_i*C_T*K_F*phi
+    return fill_template(E_prime_min, templates["table_4_3_1_E_min"], locals(), **string_options)
 
 def sec_4_3_3(wet_service: bool, F_b: Stress, F_c: Stress, C_F: dict[str, float],
         classification: str, species: str) -> dict[str: float]:

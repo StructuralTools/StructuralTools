@@ -18,7 +18,8 @@ import json
 
 from numpy import sqrt
 
-from structuraltools.unit import Length, Moment, MomentOfInertia, SectionModulus, Stress
+from structuraltools.unit import (Force, Length, Moment, MomentOfInertia,
+    SectionModulus, Stress)
 from structuraltools.utils import fill_template, Result
 
 
@@ -26,6 +27,28 @@ resources = importlib.resources.files("structuraltools.awc.resources")
 with open(resources.joinpath("chapter_3_templates_processed.json")) as file:
     templates = json.load(file)
 
+
+def eq_3_3_1(
+        F_prime_b: Stress,
+        S: SectionModulus,
+        axis: str,
+        **string_options) -> Result[Moment]:
+    """AWC NDS-2024 Equation 3.3-1
+
+    Parameters
+    ==========
+
+    F_prime_b : Stress
+        Adjusted reference design bending stress
+
+    S : SectionModulus
+        Elastic section modulus
+
+    axis : str
+        String indicating the bending axis. Use "x" for strong axis bending and
+        "y" for weak axis bending."""
+    phiM_n = (F_prime_b*S).to("lbft")
+    return fill_template(phiM_n, templates["eq_3_3_1"], locals(), **string_options)
 
 def eq_3_3_5(L_e: Length, d: Length, b: Length, **string_options) -> Result[float]:
     """AWC NDS-2024 Equation 3.3-5
@@ -73,3 +96,39 @@ def eq_3_3_6a(E_prime_min: Stress, R_B: float, **string_options) -> Result[Stres
         Slenderness ratio for bending"""
     F_bE = 1.2*E_prime_min/R_B**2
     return fill_template(F_bE, templates["eq_3_3_6a"], locals(), **string_options)
+
+def eq_3_4_2(F_prime_v: Stress, b: Length, d: Length, **string_options) -> Result[Force]:
+    """AWC NDS-2024 Equation 3.4-2
+
+    Parameters
+    ==========
+
+    F_prime_v : Stress
+        Adjusted reference design shear stress
+
+    b : Length
+        Member thickness
+
+    d : Length
+        Member depth"""
+    V_u = (2*F_prime_v*b*d/3).to("lb")
+    return fill_template(V_u, templates["eq_3_4_2"], locals(), **string_options)
+
+def eq_3_7_1(F_cE: Stress, F_star_c: Stress, c: float, **string_options) -> Result[float]:
+    """AWC NDS-2024 Equation 3.7-1
+
+    Parameters
+    ==========
+
+    F_cE : Stress
+        Critical buckling design value for compression members
+
+    F_star_c : Stress
+        Reference compression design value multiplied by all applicable
+        adjustment factors except C_P
+
+    c : float
+        Adjustment factor for wood type"""
+    C_P = ((1+F_cE/F_star_c)/(2*c)-sqrt(((1+F_cE/F_star_c)/(2*c))**2-(F_cE/F_star_c)/c))
+    C_P = C_P.to("dimensionless").magnitude
+    return fill_template(C_P, templates["eq_3_7_1"], locals(), **string_options)
