@@ -75,4 +75,4 @@ def test_eq_3_4_2():
         d=5.5*unit.inch,
         precision=4)
     assert isclose(V_u, 1650*unit.lb)
-    assert string == r"V_u &= \frac{2 \cdot F'_v \cdot b \cdot d}{3} = \frac{2 \cdot 300\ \mathrm{psi} \cdot 1.5\ \mathrm{in} \cdot 5.5\ \mathrm{in}}{3} &= 1650\ \mathrm{lb}"
+    assert string == r"\phi V_n &= \frac{2 \cdot F'_v \cdot b \cdot d}{3} = \frac{2 \cdot 300\ \mathrm{psi} \cdot 1.5\ \mathrm{in} \cdot 5.5\ \mathrm{in}}{3} &= 1650\ \mathrm{lb}"

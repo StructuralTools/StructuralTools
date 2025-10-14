@@ -20,8 +20,8 @@
         "string": "{R_B_str}\n    \\\\[10pt]\n    {F_bE_str}\n    \\\\[10pt]\n    {C_L_str}"
     },
     "eq_3_4_2": {
-        "types": {"F_prime_v": "unit", "b": "unit", "d": "unit", "V_u": "unit"},
-        "string": "V_u &= \\frac{{{{2 \\cdot F'_v \\cdot b \\cdot d}}}}{{{{3}}}} = \\frac{{{{2 \\cdot {F_prime_v} \\cdot {b} \\cdot {d}}}}}{{{{3}}}} &= {V_u}"
+        "types": {"F_prime_v": "unit", "b": "unit", "d": "unit", "phiV_n": "unit"},
+        "string": "\\phi V_n &= \\frac{{{{2 \\cdot F'_v \\cdot b \\cdot d}}}}{{{{3}}}} = \\frac{{{{2 \\cdot {F_prime_v} \\cdot {b} \\cdot {d}}}}}{{{{3}}}} &= {phiV_n}"
     },
     "eq_3_7_1": {
         "types": {"F_cE": "unit", "F_star_c": "unit", "c": "float", "C_P": "float"},

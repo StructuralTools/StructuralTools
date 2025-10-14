@@ -133,8 +133,8 @@ def eq_3_4_2(F_prime_v: Stress, b: Length, d: Length, **string_options) -> Resul
 
     d : Length
         Member depth"""
-    V_u = (2*F_prime_v*b*d/3).to("lb")
-    return fill_template(V_u, templates["eq_3_4_2"], locals(), **string_options)
+    phiV_n = (2*F_prime_v*b*d/3).to("lb")
+    return fill_template(phiV_n, templates["eq_3_4_2"], locals(), **string_options)
 
 def eq_3_7_1(F_cE: Stress, F_star_c: Stress, c: float, **string_options) -> Result[float]:
     """AWC NDS-2024 Equation 3.7-1

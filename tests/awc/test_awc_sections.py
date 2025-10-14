@@ -110,3 +110,9 @@ class TestSawnLumber:
             axis="x",
             precision=4)
         assert isclose(phiM_n, 33558.06785*unit.lbin, atol=1e-5*unit.lbin)
+
+    def test_shear_capacity(self):
+        string, phiV_n = self.sawn_lumber.shear_capacity(
+            lamb=0.8,
+            precision=4)
+        assert isclose(phiV_n, 2192.4*unit.lb)

@@ -19,7 +19,7 @@ import json
 from numpy import ceil, sqrt
 
 from structuraltools.awc import chapter_2, chapter_3, chapter_4
-from structuraltools.unit import unit, Length, Moment, Stress
+from structuraltools.unit import unit, Force, Length, Moment, Stress
 from structuraltools.utils import (fill_template, pivot_dict_table,
     read_data_table, Result, round_to)
 
@@ -142,7 +142,7 @@ class SawnLumber:
 
     def moment_capacity(self, lamb: float, C_r: float = 1, C_T: float = 1,
             l_e: Length = 0*unit.inch, axis: str = "x", **string_options) -> Result[Moment]:
-        """Calculate the nominal moment capacity
+        """Calculate the ultimate moment capacity
 
         Parameters
         ==========
@@ -184,3 +184,18 @@ class SawnLumber:
             b_mods["C_i"], C_r, lamb, **string_options)
         phiM_n_str, phiM_n = chapter_3.eq_3_3_1(F_prime_b, self.S_x, axis, **string_options)
         return fill_template(phiM_n, template, locals(), **string_options)
+
+    def shear_capacity(self, lamb: float, **string_options) -> Result[Force]:
+        """Calculate the ultimate shear capacity
+
+        Parameters
+        ==========
+
+        lamb : float
+            Time effect factor"""
+        mods = self.modifiers["F_v"]
+        F_prime_v_str, F_prime_v = chapter_4.table_4_3_1_v(self.F_v,
+            mods["C_M"], mods["C_t"], mods["C_i"], lamb, **string_options)
+        phiV_n_str, phiV_n = chapter_3.eq_3_4_2(F_prime_v, self.b, self.d, **string_options)
+        template = templates["SawnLumber_shear_capacity"]
+        return fill_template(phiV_n, template, locals(), **string_options)
