@@ -25,6 +25,11 @@ from pint.errors import UndefinedUnitError
 from structuraltools.unit import unit, Numeric
 
 
+resources = importlib.resources.files("structuraltools.resources")
+with open(resources.joinpath("utils_templates_processed.json")) as file:
+    templates = json.load(file)
+
+
 class Result[ValueType](NamedTuple):
     string: str
     value: ValueType
@@ -270,3 +275,40 @@ def pivot_dict_table(table: dict[any, dict[any, any]]) -> dict[any, dict[any, an
             result.update({in_key: result.get(in_key, {})})
             result[in_key].update({out_key: value})
     return result
+
+def check_utilization(demand: Numeric, capacity: Numeric,
+        demand_sym: str = "\\textrm{demand}", capacity_sym: str = "\\textrm{capacity}",
+        utilization_sym: str = "U", **string_options) -> Result[float]:
+    """Compare a demand and capacity value and assert that the utilization is
+    less than 1
+
+    Parameters
+    ==========
+
+    demand : Numeric
+        Demand value
+
+    capacity : Numeric
+        Capacity value
+
+    demand_sym : str
+        Symbol to use for demand
+
+    capacity_sym : str
+        Symbol to use for capacity
+
+    utilization_sym : str
+        Symbol to use for utilization"""
+    demand = abs(demand)
+    capacity = abs(capacity)
+    utilization = demand/capacity
+    if isinstance(utilization, Quantity):
+        utilization = utilization.to("dimensionless").magnitude
+        template = templates["check_utilization_quantity"]
+    else:
+        template = templates["check_utilization"]
+    try:
+        assert utilization < 1
+    except AssertionError:
+        raise ValueError(f"Utilization ({utilization}) is greater than 1.")
+    return fill_template(utilization, template, locals(), **string_options)

@@ -1,0 +1,4 @@
+{
+    "check_utilization": "$$\n\\begin{{aligned}}\n    {utilization_sym} &= \\frac{{{demand_sym}}}{{{capacity_sym}}} = \\frac{{{demand:.{_precision_}{_gformat_}}}}{{{capacity:.{_precision_}{_gformat_}}}} &= {utilization:.{_precision_}{_gformat_}}\n\\end{{aligned}}\n$$",
+    "check_utilization_quantity": "$$\n\\begin{{aligned}}\n    {utilization_sym} &= \\frac{{{demand_sym}}}{{{capacity_sym}}} = \\frac{{{demand:{_qformat_}.{_precision_}{_gformat_}}}}{{{capacity:{_qformat_}.{_precision_}{_gformat_}}}} &= {utilization:.{_precision_}{_gformat_}}\n\\end{{aligned}}\n$$"
+}
