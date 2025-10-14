@@ -87,13 +87,13 @@ def eq_E3_4(E: Stress, L_c: Length, r: Length, axis: str, **string_options
     F_e = ((pi**2*E)/((L_c/r)**2)).to("ksi")
     return fill_template(F_e, templates["eq_E3_4"], locals(), **string_options)
 
-def sec_E3(shape, L_c: Length, axis: str, **string_options) -> Result[Force]:
+def sec_E3(section, L_c: Length, axis: str, **string_options) -> Result[Force]:
     """AISC 360-22 Section E3
 
     Parameters
     ==========
 
-    shape : aisc.Shape
+    section : aisc.Shape
         Shape to calculate the flexural buckling capacity of
 
     L_c : Length
@@ -101,15 +101,15 @@ def sec_E3(shape, L_c: Length, axis: str, **string_options) -> Result[Force]:
 
     axis : str
         String inicating which member axis is being considered"""
-    F_y = shape.F_y
-    r = shape.r_x if axis == "x" else shape.r_y
+    F_y = section.F_y
+    r = section.r_x if axis == "x" else section.r_y
 
-    F_e_str, F_e = eq_E3_4(shape.E, L_c, r, axis, **string_options)
+    F_e_str, F_e = eq_E3_4(section.E, L_c, r, axis, **string_options)
     if F_y/F_e <= 2.25:
         F_n_str, F_n = eq_E3_2(F_y, F_e, **string_options)
         template = templates["sec_E3_inelastic"]
     else:
         F_n_str, F_n = eq_E3_3(F_e, **string_options)
         template = templates["sec_E3_elastic"]
-    P_n_str, P_n = eq_E3_1(F_n, shape.A, **string_options)
+    P_n_str, P_n = eq_E3_1(F_n, section.A, **string_options)
     return fill_template(P_n, template, locals(), **string_options)

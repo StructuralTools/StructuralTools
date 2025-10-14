@@ -26,11 +26,11 @@ from structuraltools.utils import fill_template, read_data_table, Result
 
 resources = importlib.resources.files("structuraltools.aisc.resources")
 materials = read_data_table(resources.joinpath("steel_materials.csv"))
-with open(resources.joinpath("shapes_templates_processed.json")) as file:
+with open(resources.joinpath("sections_templates_processed.json")) as file:
     templates = json.load(file)
 
 
-class Shape:
+class Section:
     """Base class for AISC steel shapes"""
     def __init__(self, size: str, material: Optional[str] = None):
         """Create an instance from the specified database
@@ -54,19 +54,19 @@ class Shape:
             setattr(self, attribute, value)
 
 
-class Angle(Shape):
+class Angle(Section):
     """Class to represent angle shapes"""
     database = read_data_table(resources.joinpath("Angle.csv"))
     default_material = "A572Gr50"
 
 
-class Channel(Shape):
+class Channel(Section):
     """Class to represent channel shapes"""
     database = read_data_table(resources.joinpath("Channel.csv"))
     default_material = "A992"
 
 
-class Plate(Shape):
+class Plate(Section):
     """Class for calculating steel plate strength. For consistency with the
     other shapes the x-axis intersects the width of the plate (b) and
     represents the strong axis for bending."""
@@ -156,13 +156,13 @@ class Plate(Shape):
         return fill_template((phi_b, M_n), template, locals(), **string_options)
 
 
-class RectHSS(Shape):
+class RectHSS(Section):
     """Class to represent rectangular HSS shapes"""
     database = read_data_table(resources.joinpath("RectHSS.csv"))
     default_material = "A500GrC"
 
 
-class RoundHSS(Shape):
+class RoundHSS(Section):
     """Class to represent round HSS shapes"""
     database = read_data_table(resources.joinpath("RoundHSS.csv"))
     RoundHSS_default_material = "A500GrC"
@@ -193,7 +193,7 @@ class RoundHSS(Shape):
             setattr(self, attribute, value)
 
 
-class WideFlange(Shape):
+class WideFlange(Section):
     """Class to represent wide-flange shapes"""
     database = read_data_table(resources.joinpath("WideFlange.csv"))
     default_material = "A992"

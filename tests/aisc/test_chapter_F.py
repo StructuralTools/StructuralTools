@@ -113,8 +113,8 @@ def test_eq_F2_8b():
     assert string == r"c &= \frac{h_o}{2} \cdot \sqrt{\frac{I_y}{C_w}} = \frac{9.56\ \mathrm{in}}{2} \cdot \sqrt{\frac{2.8\ \mathrm{in}^{4}}{56.9\ \mathrm{in}^{6}}} &= 1.06"
 
 def test_sec_F2_1():
-    shape = aisc.WideFlange("W12X22", "A992")
-    string, M_p = chapter_F.sec_F2_1(shape, precision=4)
+    section = aisc.WideFlange("W12X22", "A992")
+    string, M_p = chapter_F.sec_F2_1(section, precision=4)
     assert isclose(M_p, 122.0833333*unit.kipft, atol=1e-7*unit.kipft)
     assert M_p.units == "kipft"
     assert string == r"""$$
@@ -124,10 +124,10 @@ def test_sec_F2_1():
 $$"""
 
 def test_sec_F2_2_plastic_WideFlange():
-    shape = aisc.WideFlange("W12X22", "A992")
-    _, M_p = chapter_F.sec_F2_1(shape)
+    section = aisc.WideFlange("W12X22", "A992")
+    _, M_p = chapter_F.sec_F2_1(section)
     string, M_ltb = chapter_F.sec_F2_2(
-        shape=shape,
+        section=section,
         L_b=2*unit.ft,
         M_p=M_p,
         C_b=1,
@@ -145,10 +145,10 @@ def test_sec_F2_2_plastic_WideFlange():
 $$"""
 
 def test_sec_F2_2_inelastic_WideFlange():
-    shape = aisc.WideFlange("W12X22", "A992")
-    _, M_p = chapter_F.sec_F2_1(shape)
+    section = aisc.WideFlange("W12X22", "A992")
+    _, M_p = chapter_F.sec_F2_1(section)
     string, M_ltb = chapter_F.sec_F2_2(
-        shape=shape,
+        section=section,
         L_b=7*unit.ft,
         M_p=M_p,
         C_b=1,
@@ -176,10 +176,10 @@ def test_sec_F2_2_inelastic_WideFlange():
 $$"""
 
 def test_sec_F2_2_elastic_WideFlange():
-    shape = aisc.WideFlange("W12X22", "A992")
-    _, M_p = chapter_F.sec_F2_1(shape)
+    section = aisc.WideFlange("W12X22", "A992")
+    _, M_p = chapter_F.sec_F2_1(section)
     string, M_ltb = chapter_F.sec_F2_2(
-        shape=shape,
+        section=section,
         L_b=15*unit.ft,
         M_p=M_p,
         C_b=1,
@@ -207,9 +207,9 @@ def test_sec_F2_2_elastic_WideFlange():
 $$"""
 
 def test_sec_F2():
-    shape = aisc.WideFlange("W12X22", "A992")
+    section = aisc.WideFlange("W12X22", "A992")
     string, M_n = chapter_F.sec_F2(
-        shape=shape,
+        section=section,
         L_b=7*unit.ft,
         C_b=1,
         precision=4)
@@ -297,8 +297,8 @@ def test_eq_F3_2a_high():
     assert string == r"k_c &= \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{\lambda_w}}\right),\ 0.76\right) = \operatorname{min}\left(\operatorname{max}\left(0.35,\ \frac{4}{\sqrt{20}}\right),\ 0.76\right) &= 0.76"
 
 def test_sec_F3_2_noncompact():
-    shape = aisc.WideFlange("W10X12", "A992")
-    string, M_flb = chapter_F.sec_F3_2(shape, 52.5*unit.kipft, precision=4)
+    section = aisc.WideFlange("W10X12", "A992")
+    string, M_flb = chapter_F.sec_F3_2(section, 52.5*unit.kipft, precision=4)
     assert isclose(M_flb, 52.11390857*unit.kipft, atol=1e-8*unit.kipft)
     assert string == r"""$$
 \begin{aligned}
@@ -320,9 +320,9 @@ def test_sec_F3_2_slender():
     """This test fakes a slender flange, and doesn't actually calculate the
     moment capacity of an actual steel section. Ideally this is updated to use a
     custom section."""
-    shape = aisc.WideFlange("W10X12", "A992")
-    shape.lamb_f = 26.4
-    string, M_flb = chapter_F.sec_F3_2(shape, 52.5*unit.kipft, precision=4)
+    section = aisc.WideFlange("W10X12", "A992")
+    section.lamb_f = 26.4
+    string, M_flb = chapter_F.sec_F3_2(section, 52.5*unit.kipft, precision=4)
     assert isclose(M_flb, 19.93172738*unit.kipft, atol=1e-8*unit.kipft)
     assert string == r"""$$
 \begin{aligned}
@@ -337,8 +337,8 @@ def test_sec_F3_2_slender():
 $$"""
 
 def test_sec_F3():
-    shape = aisc.WideFlange("W10X12", "A992")
-    string, M_n = chapter_F.sec_F3(shape, 0*unit.ft, 1, precision=4)
+    section = aisc.WideFlange("W10X12", "A992")
+    string, M_n = chapter_F.sec_F3(section, 0*unit.ft, 1, precision=4)
     assert isclose(M_n, 52.11390857*unit.kipft, atol=1e-8*unit.kipft)
     assert string == r"""#### Plastic Moment
 
@@ -429,8 +429,8 @@ def test_eq_F11_5():
     assert string == r"F_{cr} &= \frac{1.9 \cdot E \cdot C_b}{\frac{L_b \cdot d}{t^2}} = \frac{1.9 \cdot 2.9\times 10^{4}\ \mathrm{ksi} \cdot 1}{\frac{120\ \mathrm{in} \cdot 12\ \mathrm{in}}{\left(1\ \mathrm{in}\right)^2}} &= 38.26\ \mathrm{ksi}"
 
 def test_sec_F11_1_rect():
-    shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
-    string, M_p = chapter_F.sec_F11_1(shape, precision=4)
+    section = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
+    string, M_p = chapter_F.sec_F11_1(section, precision=4)
     assert isclose(M_p, 12*unit.kipft)
     assert string == r"""$$
 \begin{aligned}
@@ -439,10 +439,10 @@ def test_sec_F11_1_rect():
 $$"""
 
 def test_sec_F11_2_plastic():
-    shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
-    _, M_p = chapter_F.sec_F11_1(shape)
+    section = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
+    _, M_p = chapter_F.sec_F11_1(section)
     string, M_ltb = chapter_F.sec_F11_2(
-        shape=shape,
+        section=section,
         L_b=12*unit.inch,
         M_p=M_p,
         C_b=1,
@@ -457,10 +457,10 @@ def test_sec_F11_2_plastic():
 $$"""
 
 def test_sec_F11_2_inelastic():
-    shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
-    _, M_p = chapter_F.sec_F11_1(shape)
+    section = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
+    _, M_p = chapter_F.sec_F11_1(section)
     string, M_ltb = chapter_F.sec_F11_2(
-        shape=shape,
+        section=section,
         L_b=24*unit.inch,
         M_p=M_p,
         C_b=1,
@@ -479,10 +479,10 @@ def test_sec_F11_2_inelastic():
 $$"""
 
 def test_sec_F11_2_elastic():
-    shape = aisc.Plate(12*unit.inch, 1*unit.inch, "A36")
-    _, M_p = chapter_F.sec_F11_1(shape)
+    section = aisc.Plate(12*unit.inch, 1*unit.inch, "A36")
+    _, M_p = chapter_F.sec_F11_1(section)
     string, M_ltb = chapter_F.sec_F11_2(
-        shape=shape,
+        section=section,
         L_b=130*unit.inch,
         M_p=M_p,
         C_b=1,
@@ -499,9 +499,9 @@ def test_sec_F11_2_elastic():
 $$"""
 
 def test_sec_F11():
-    shape = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
+    section = aisc.Plate(4*unit.inch, 1*unit.inch, "A36")
     string, M_n = chapter_F.sec_F11(
-        shape=shape,
+        section=section,
         L_b=24*unit.inch,
         C_b=1,
         precision=4)

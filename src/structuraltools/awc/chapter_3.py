@@ -97,6 +97,10 @@ def eq_3_3_6a(E_prime_min: Stress, R_B: float, **string_options) -> Result[Stres
     F_bE = 1.2*E_prime_min/R_B**2
     return fill_template(F_bE, templates["eq_3_3_6a"], locals(), **string_options)
 
+def sec_3_3_3(section, l_e: Length, F_star_b: Stress, E_prime_min: Stress) -> Result[float]:
+    """Calculate the beam stability factor (C_L) according to NDS 2024 Section 3.3.3"""
+    pass
+
 def eq_3_4_2(F_prime_v: Stress, b: Length, d: Length, **string_options) -> Result[Force]:
     """AWC NDS-2024 Equation 3.4-2
 

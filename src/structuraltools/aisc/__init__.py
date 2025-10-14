@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from structuraltools.aisc.shapes import Angle, Channel, Plate, RectHSS, RoundHSS, WideFlange
+from structuraltools.aisc.sections import Angle, Channel, Plate, RectHSS, RoundHSS, WideFlange
 
 
 __all__ = (

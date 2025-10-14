@@ -19,13 +19,13 @@ import json
 from numpy import ceil, sqrt
 
 from structuraltools.awc import chapter_2, chapter_3, chapter_4
-from structuraltools.unit import Length, Moment
+from structuraltools.unit import Length, Moment, Stress
 from structuraltools.utils import (fill_template, pivot_dict_table,
     read_data_table, Result, round_to)
 
 
 resources = importlib.resources.files("structuraltools.awc.resources")
-with open(resources.joinpath("members_templates_processed.json")) as file:
+with open(resources.joinpath("sections_templates_processed.json")) as file:
     templates = json.load(file)
 
 
@@ -124,6 +124,22 @@ class SawnLumber:
         self.modifiers = pivot_dict_table(
             {"C_F": C_F, "C_M": C_M, "C_t": C_t, "C_fu": C_fu, "C_i": C_i})
 
+    def get_E_prime(self, axis: str = "x", **string_options) -> Result[Stress]:
+        """Get the adjusted design modulus of elasticity for bending or buckling
+        about the given axis.
+
+        Parameters
+        ==========
+
+        axis : str
+            Member local axis to get the modulus of elasticity for"""
+        mods = self.modifiers["E"]
+        C_fu = 1 if axis == "x" else mods.get("C_fu", 1)
+        E_prime_str, E_prime = chapter_4.table_4_3_1_E(self.E, mods["C_M"],
+            mods["C_t"], C_fu, mods["C_i"], **string_options)
+        template = templates["SawnLumber_get_E_prime"]
+        return fill_template(E_prime, template, locals(), **string_options)
+
     def moment_capacity(self, lamb: float, C_r: float = 1, C_L: float = 1,
             axis: str = "x", **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity
@@ -143,7 +159,7 @@ class SawnLumber:
         axis : str
             Member local axis to calculate the moment capacity about"""
         mods = self.modifiers["F_b"]
-        C_fu = 1 if axis == "x" else mods["C_fu"]
+        C_fu = 1 if axis == "x" else mods.get("C_fu", 1)
         F_prime_b_str, F_prime_b = chapter_4.table_4_3_1_b(self.F_b,
             mods["C_M"], mods["C_t"], C_L, mods["C_F"], C_fu, mods["C_i"], C_r,
             lamb, **string_options)

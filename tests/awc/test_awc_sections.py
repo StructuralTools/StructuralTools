@@ -15,12 +15,12 @@
 
 from numpy import isclose
 
-from structuraltools.awc import members
+from structuraltools import awc
 from structuraltools.unit import unit
 
 
 def test_SawnLumber_init_Dimensioned():
-    member = members.SawnLumber(
+    member = awc.SawnLumber(
         species="Douglas Fir",
         grade="Select",
         b=1.5*unit.inch,
@@ -55,7 +55,7 @@ def test_SawnLumber_init_Dimensioned():
     }
 
 def test_SawnLumber_init_Dimensioned_Southern_Pine():
-    member = members.SawnLumber(
+    member = awc.SawnLumber(
         species="Southern Pine",
         grade="1+",
         b=1.5*unit.inch,
@@ -81,11 +81,15 @@ def test_SawnLumber_init_Dimensioned_Southern_Pine():
 
 class TestSawnLumber:
     def setup_method(self, method):
-        self.sawn_lumber = members.SawnLumber(
+        self.sawn_lumber = awc.SawnLumber(
             species="Southern Pine",
             grade="1+",
             b=1.5*unit.inch,
             d=7.25*unit.inch)
+
+    def test_get_E_prime(self):
+        string, E_prime = self.sawn_lumber.get_E_prime(axis="y", precision=4)
+        assert isclose(E_prime, 1800000*unit.psi)
 
     def test_moment_capacity(self):
         string, phiM_n = self.sawn_lumber.moment_capacity(

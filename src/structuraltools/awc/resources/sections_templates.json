@@ -1,0 +1,10 @@
+{
+    "SawnLumber_get_E_prime": {
+        "types": {"E_prime_str": "str"},
+        "string": "\\begin{{{{aligned}}}}\n    {E_prime_str}\n\\end{{{{aligned}}}}"
+    },
+    "SawnLumber_moment_capacity": {
+        "types": {"F_prime_b_str": "str", "phiM_n_str": "str"},
+        "string": "\\begin{{{{aligned}}}}\n    {F_prime_b_str}\n    \\\\[10pt]    \n{phiM_n_str}\n\\end{{{{aligned}}}}"
+    }
+}
