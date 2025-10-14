@@ -15,20 +15,20 @@
 
 from numpy import isclose
 
-from structuraltools.awc import members
+from structuraltools import awc
 from structuraltools.unit import unit
 
 
 def test_SawnLumber_init_Dimensioned():
-    member = members.SawnLumber(
+    member = awc.SawnLumber(
         species="Douglas Fir",
         grade="Select",
-        t=1.5*unit.inch,
+        b=1.5*unit.inch,
         d=7.25*unit.inch,
         temperature=125,
         incising=True)
     assert member.d_nom == 8
-    assert member.t_nom == 2
+    assert member.b_nom == 2
     assert isclose(member.A, 10.875*unit.inch**2)
     assert isclose(member.S_x, 13.140625*unit.inch**3)
     assert isclose(member.I_x, 47.63476563*unit.inch**4, atol=1e-8*unit.inch**4)
@@ -55,10 +55,10 @@ def test_SawnLumber_init_Dimensioned():
     }
 
 def test_SawnLumber_init_Dimensioned_Southern_Pine():
-    member = members.SawnLumber(
+    member = awc.SawnLumber(
         species="Southern Pine",
         grade="1+",
-        t=1.5*unit.inch,
+        b=1.5*unit.inch,
         d=5.5*unit.inch,
         wet_service=True)
     assert member.F_b == 1500*unit.psi
@@ -79,3 +79,40 @@ def test_SawnLumber_init_Dimensioned_Southern_Pine():
         "E_min": {"C_F": 1, "C_M": 0.9, "C_t": 1, "C_fu": 1, "C_i": 1}
     }
 
+class TestSawnLumber:
+    def setup_method(self, method):
+        self.sawn_lumber = awc.SawnLumber(
+            species="Southern Pine",
+            grade="1+",
+            b=1.5*unit.inch,
+            d=7.25*unit.inch)
+
+    def test_get_E_prime(self):
+        string, E_prime = self.sawn_lumber.get_E_prime(axis="y", precision=4)
+        assert isclose(E_prime, 1800000*unit.psi)
+
+    def test_moment_capacity(self):
+        string, phiM_n = self.sawn_lumber.moment_capacity(
+            lamb=0.8,
+            C_r=1.15,
+            C_T=1,
+            l_e=0*unit.inch,
+            axis="x",
+            precision=4)
+        assert isclose(phiM_n, 35236.29684*unit.lbin, atol=1e-5*unit.lbin)
+
+    def test_moment_capacity_C_L(self):
+        string, phiM_n = self.sawn_lumber.moment_capacity(
+            lamb=0.8,
+            C_r=1.15,
+            C_T=1,
+            l_e=72*unit.inch,
+            axis="x",
+            precision=4)
+        assert isclose(phiM_n, 33558.06785*unit.lbin, atol=1e-5*unit.lbin)
+
+    def test_shear_capacity(self):
+        string, phiV_n = self.sawn_lumber.shear_capacity(
+            lamb=0.8,
+            precision=4)
+        assert isclose(phiV_n, 2192.4*unit.lb)

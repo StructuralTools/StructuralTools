@@ -1,0 +1,18 @@
+{
+    "SawnLumber_get_E_prime": {
+        "types": {"E_prime_str": "str"},
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {E_prime_str}\n\\end{{{{aligned}}}}\n$$"
+    },
+    "SawnLumber_moment_capacity": {
+        "types": {"F_prime_b_str": "str", "phiM_n_str": "str"},
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {F_prime_b_str}\n    \\\\[10pt]\n    {phiM_n_str}\n\\end{{{{aligned}}}}\n$$"
+    },
+    "SawnLumber_moment_capacity_C_L": {
+        "types": {"F_star_b_str": "str", "E_prime_min_str": "str", "C_L_str": "str", "F_prime_b_str": "str", "phiM_n_str": "str"},
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {F_star_b_str}\n    \\\\[10pt]\n    {E_prime_min_str}\n    \\\\[10pt]\n    {C_L_str}\n    \\\\[10pt]\n    {F_prime_b_str}\n    \\\\[10pt]\n    {phiM_n_str}\n\\end{{{{aligned}}}}\n$$"
+    },
+    "SawnLumber_shear_capacity": {
+        "types": {"F_prime_v_str": "str", "phiV_n_str": "str"},
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {F_prime_v_str}\n    \\\\[10pt]\n    {phiV_n_str}\n\\end{{{{aligned}}}}\n$$"
+    }
+}
