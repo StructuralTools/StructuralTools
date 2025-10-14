@@ -50,13 +50,13 @@ def eq_3_3_1(
     phiM_n = (F_prime_b*S).to("lbft")
     return fill_template(phiM_n, templates["eq_3_3_1"], locals(), **string_options)
 
-def eq_3_3_5(L_e: Length, d: Length, b: Length, **string_options) -> Result[float]:
+def eq_3_3_5(l_e: Length, d: Length, b: Length, **string_options) -> Result[float]:
     """AWC NDS-2024 Equation 3.3-5
 
     Parameters
     ==========
 
-    L_e : Length
+    l_e : Length
         Effective length for bending
 
     d : Length
@@ -64,7 +64,7 @@ def eq_3_3_5(L_e: Length, d: Length, b: Length, **string_options) -> Result[floa
 
     b : Length
         Member thickness"""
-    R_B = sqrt(L_e*d/b**2).to("dimensionless").magnitude
+    R_B = sqrt(l_e*d/b**2).to("dimensionless").magnitude
     return fill_template(R_B, templates["eq_3_3_5"], locals(), **string_options)
 
 def eq_3_3_6(F_bE: Stress, F_star_b: Stress, **string_options) -> Result[float]:
@@ -97,9 +97,27 @@ def eq_3_3_6a(E_prime_min: Stress, R_B: float, **string_options) -> Result[Stres
     F_bE = 1.2*E_prime_min/R_B**2
     return fill_template(F_bE, templates["eq_3_3_6a"], locals(), **string_options)
 
-def sec_3_3_3(section, l_e: Length, F_star_b: Stress, E_prime_min: Stress) -> Result[float]:
-    """Calculate the beam stability factor (C_L) according to NDS 2024 Section 3.3.3"""
-    pass
+def sec_3_3_3(section, l_e: Length, F_star_b: Stress, E_prime_min: Stress,
+        **string_options) -> Result[float]:
+    """Calculate the beam stability factor (C_L) according to NDS 2024 Section 3.3.3
+
+    Parameters
+    ==========
+
+    l_e : Length
+        Effective length from NDS 2024 Table 3.3.3
+
+    F_star_b : Stress
+        Reference bending design value multiplied by all applicable adjustment
+        factors except C_fu, C_V (when C_V <= 1), and C_L
+
+    E_prime_min : Stress
+        Adjusted lower bound modulus of elasticity"""
+    R_B_str, R_B = eq_3_3_5(l_e, section.d, section.b, **string_options)
+    assert R_B <= 50  # Slenderness limit. See NDS 2024 Section 3.3.3.7
+    F_bE_str, F_bE = eq_3_3_6a(E_prime_min, R_B, **string_options)
+    C_L_str, C_L = eq_3_3_6(F_bE, F_star_b, **string_options)
+    return fill_template(C_L, templates["sec_3_3_3"], locals(), **string_options)
 
 def eq_3_4_2(F_prime_v: Stress, b: Length, d: Length, **string_options) -> Result[Force]:
     """AWC NDS-2024 Equation 3.4-2

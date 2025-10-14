@@ -86,6 +86,40 @@ def table_4_3_1_b(F_b: Stress, C_M: float, C_t: float, C_L: float, C_F: float,
     F_prime_b = F_b*C_M*C_t*C_L*C_F*C_fu*C_i*C_r*K_F*phi*lamb
     return fill_template(F_prime_b, templates["table_4_3_1_b"], locals(), **string_options)
 
+def table_4_3_1_b_star(F_b: Stress, C_M: float, C_t: float, C_F: float,
+        C_i: float, C_r: float, lamb: float, **string_options) -> Result[Stress]:
+    """Calculate the reference design bending stress multiplied by all
+    applicable adjustment factors according to NDS 2024 Table 4.3.1 except C_fu
+    and C_L.
+
+    Parameters
+    ==========
+
+    F_b : Stress
+        Reference design bending stress
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_F : float
+        Size factor
+
+    C_i : float
+        Incising factor
+
+    C_r : float
+        Repetitive member factor
+
+    lamb : float
+        Time effect factor"""
+    K_F = 2.54
+    phi = 0.85
+    F_star_b = F_b*C_M*C_t*C_F*C_i*C_r*K_F*phi*lamb
+    return fill_template(F_star_b, templates["table_4_3_1_b_star"], locals(), **string_options)
+
 def table_4_3_1_t(F_t: Stress, C_M: float, C_t: float, C_F: float, C_i: float,
         lamb: float, **string_options) -> Result[Stress]:
     """Calculate the ultimate tensile stress capacity according to NDS 2024 Table 4.3.1
@@ -227,7 +261,8 @@ def table_4_3_1_E(E: Stress, C_M: float, C_t: float, C_fu: float, C_i: float,
 
 def table_4_3_1_E_min(E_min: Stress, C_M: float, C_t: float, C_fu: float,
         C_i: float, C_T: float, **string_options) -> Result[Stress]:
-    """Calculate the lower bound modulus of elasticity according to NDS 2024 Table 4.3.1
+    """Calculate the adjusted lower bound modulus of elasticity according to
+    NDS 2024 Table 4.3.1
 
     Parameters
     ==========

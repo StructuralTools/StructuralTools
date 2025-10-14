@@ -95,6 +95,18 @@ class TestSawnLumber:
         string, phiM_n = self.sawn_lumber.moment_capacity(
             lamb=0.8,
             C_r=1.15,
-            C_L=0.7,
+            C_T=1,
+            l_e=0*unit.inch,
+            axis="x",
             precision=4)
-        assert isclose(phiM_n, 24665.40779*unit.lbin, atol=1e-5*unit.lbin)
+        assert isclose(phiM_n, 35236.29684*unit.lbin, atol=1e-5*unit.lbin)
+
+    def test_moment_capacity_C_L(self):
+        string, phiM_n = self.sawn_lumber.moment_capacity(
+            lamb=0.8,
+            C_r=1.15,
+            C_T=1,
+            l_e=72*unit.inch,
+            axis="x",
+            precision=4)
+        assert isclose(phiM_n, 33558.06785*unit.lbin, atol=1e-5*unit.lbin)

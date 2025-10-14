@@ -4,8 +4,8 @@
         "string": "\\phi M_n &= F'_b \\cdot S_{{{{{axis}}}}} = {F_prime_b} \\cdot {S} &= {phiM_n}"
     },
     "eq_3_3_5": {
-        "types": {"L_e": "unit", "d": "unit", "b": "unit", "R_B": "float"},
-        "string": "R_B &= \\sqrt{{{{\\frac{{{{L_e \\cdot d}}}}{{{{b^2}}}}}}}} = \\sqrt{{{{\\frac{{{{{L_e} \\cdot {d}}}}}{{{{\\left({b}\\right)^2}}}}}}}} &= {R_B}"
+        "types": {"l_e": "unit", "d": "unit", "b": "unit", "R_B": "float"},
+        "string": "R_B &= \\sqrt{{{{\\frac{{{{l_e \\cdot d}}}}{{{{b^2}}}}}}}} = \\sqrt{{{{\\frac{{{{{l_e} \\cdot {d}}}}}{{{{\\left({b}\\right)^2}}}}}}}} &= {R_B}"
     },
     "eq_3_3_6": {
         "types": {"F_bE": "unit", "F_star_b": "unit", "C_L": "float"},
@@ -14,6 +14,10 @@
     "eq_3_3_6a": {
         "types": {"E_prime_min": "unit", "R_B": "float", "F_bE": "unit"},
         "string": "F_{{{{bE}}}} &= \\frac{{{{1.2 \\cdot E'_{{{{min}}}}}}}}{{{{R_B^2}}}} = \\frac{{{{1.2 \\cdot {E_prime_min}}}}}{{{{\\left({R_B})\\right)^2}}}} &= {F_bE}"
+    },
+    "sec_3_3_3": {
+        "types": {"R_B_str": "str", "F_bE_str": "str", "C_L_str": "str"},
+        "string": "{R_B_str}\n    \\\\[10pt]\n    {F_bE_str}\n    \\\\[10pt]\n    {C_L_str}"
     },
     "eq_3_4_2": {
         "types": {"F_prime_v": "unit", "b": "unit", "d": "unit", "V_u": "unit"},

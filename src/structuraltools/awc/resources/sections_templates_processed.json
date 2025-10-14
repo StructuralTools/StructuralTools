@@ -1,4 +1,5 @@
 {
-    "SawnLumber_get_E_prime": "\\begin{{aligned}}\n    {E_prime_str}\n\\end{{aligned}}",
-    "SawnLumber_moment_capacity": "\\begin{{aligned}}\n    {F_prime_b_str}\n    \\\\[10pt]    \n{phiM_n_str}\n\\end{{aligned}}"
+    "SawnLumber_get_E_prime": "$$\n\\begin{{aligned}}\n    {E_prime_str}\n\\end{{aligned}}\n$$",
+    "SawnLumber_moment_capacity": "$$\n\\begin{{aligned}}\n    {F_prime_b_str}\n    \\\\[10pt]\n    {phiM_n_str}\n\\end{{aligned}}\n$$",
+    "SawnLumber_moment_capacity_C_L": "$$\n\\begin{{aligned}}\n    {F_star_b_str}\n    \\\\[10pt]\n    {E_prime_min_str}\n    \\\\[10pt]\n    {C_L_str}\n    \\\\[10pt]\n    {F_prime_b_str}\n    \\\\[10pt]\n    {phiM_n_str}\n\\end{{aligned}}\n$$"
 }

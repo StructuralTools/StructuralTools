@@ -49,6 +49,23 @@ def test_table_4_3_1_b():
 \\
 &= 1858\ \mathrm{psi}"""
 
+def test_table_4_3_1_b_star():
+    string, F_star_b = chapter_4.table_4_3_1_b_star(
+        F_b=1500*unit.psi,
+        C_M=0.9,
+        C_t=0.8,
+        C_F=1.1,
+        C_i=0.6,
+        C_r=1.15,
+        lamb=1.25,
+        precision=4)
+    assert isclose(F_star_b, 2212.21935*unit.psi, atol=1e-5*unit.psi)
+    assert string == r"""F^*_b &= F_b \cdot C_M \cdot C_t \cdot C_F \cdot C_i \cdot C_r \cdot K_F \cdot \phi \cdot \lambda
+\\
+&= 1500\ \mathrm{psi} \cdot 0.9 \cdot 0.8 \cdot 1.1 \cdot 0.6 \cdot 1.15 \cdot 2.54 \cdot 0.85 \cdot 1.25
+\\
+&= 2212\ \mathrm{psi}"""
+
 def test_table_4_3_1_t():
     string, F_prime_t = chapter_4.table_4_3_1_t(
         F_t=1000*unit.psi,

@@ -19,7 +19,7 @@ import json
 from numpy import ceil, sqrt
 
 from structuraltools.awc import chapter_2, chapter_3, chapter_4
-from structuraltools.unit import Length, Moment, Stress
+from structuraltools.unit import unit, Length, Moment, Stress
 from structuraltools.utils import (fill_template, pivot_dict_table,
     read_data_table, Result, round_to)
 
@@ -140,8 +140,8 @@ class SawnLumber:
         template = templates["SawnLumber_get_E_prime"]
         return fill_template(E_prime, template, locals(), **string_options)
 
-    def moment_capacity(self, lamb: float, C_r: float = 1, C_L: float = 1,
-            axis: str = "x", **string_options) -> Result[Moment]:
+    def moment_capacity(self, lamb: float, C_r: float = 1, C_T: float = 1,
+            l_e: Length = 0*unit.inch, axis: str = "x", **string_options) -> Result[Moment]:
         """Calculate the nominal moment capacity
 
         Parameters
@@ -153,16 +153,34 @@ class SawnLumber:
         C_r : float
             Repetitive member factor
 
-        C_L : float
-            Beam stability factor
+        C_T : float
+            Buckling stiffness factor
+
+        l_e : Length
+            Effective length from NDS 2024 Table 3.3.3
 
         axis : str
             Member local axis to calculate the moment capacity about"""
-        mods = self.modifiers["F_b"]
-        C_fu = 1 if axis == "x" else mods.get("C_fu", 1)
+        b_mods = self.modifiers["F_b"]
+        E_min_mods = self.modifiers["E_min"]
+
+        if l_e:
+            F_star_b_str, F_star_b = chapter_4.table_4_3_1_b_star(self.F_b,
+                b_mods["C_M"], b_mods["C_t"], b_mods["C_F"], b_mods["C_i"],
+                C_r, lamb, **string_options)
+            C_fu = 1 if axis == "y" else E_min_mods.get("C_fu", 1)  # See NDS 2024 Section 3.3.3.8
+            E_prime_min_str, E_prime_min = chapter_4.table_4_3_1_E_min(
+                self.E_min, E_min_mods["C_M"], E_min_mods["C_t"], C_fu,
+                E_min_mods["C_i"], C_T, **string_options)
+            C_L_str, C_L = chapter_3.sec_3_3_3(self, l_e, F_star_b, E_prime_min, **string_options)
+            template = templates["SawnLumber_moment_capacity_C_L"]
+        else:
+            C_L = 1
+            template = templates["SawnLumber_moment_capacity"]
+
+        C_fu = 1 if axis == "x" else b_mods.get("C_fu", 1)
         F_prime_b_str, F_prime_b = chapter_4.table_4_3_1_b(self.F_b,
-            mods["C_M"], mods["C_t"], C_L, mods["C_F"], C_fu, mods["C_i"], C_r,
-            lamb, **string_options)
+            b_mods["C_M"], b_mods["C_t"], C_L, b_mods["C_F"], C_fu,
+            b_mods["C_i"], C_r, lamb, **string_options)
         phiM_n_str, phiM_n = chapter_3.eq_3_3_1(F_prime_b, self.S_x, axis, **string_options)
-        template = templates["SawnLumber_moment_capacity"]
         return fill_template(phiM_n, template, locals(), **string_options)
