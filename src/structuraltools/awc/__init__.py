@@ -13,13 +13,9 @@
 # limitations under the License.
 
 
-from . import chapter_2
-from . import chapter_4
-from . import members
+from structuraltools.awc.sections import SawnLumber
 
 
 __all__ = (
-    chapter_2,
-    chapter_4,
-    members
+    SawnLumber
 )

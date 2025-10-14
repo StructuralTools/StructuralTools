@@ -1,0 +1,10 @@
+{
+    "check_utilization": {
+        "types": {"demand": "float", "capacity": "float", "utilization": "float", "demand_sym": "str", "capacity_sym": "str", "utilization_sym": "str"},
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {utilization_sym} &= \\frac{{{{{demand_sym}}}}}{{{{{capacity_sym}}}}} = \\frac{{{{{demand}}}}}{{{{{capacity}}}}} &= {utilization}\n\\end{{{{aligned}}}}\n$$"
+    },
+    "check_utilization_quantity": {
+        "types": {"demand": "unit", "capacity": "unit", "utilization": "float", "demand_sym": "str", "capacity_sym": "str", "utilization_sym": "str"},
+        "string": "$$\n\\begin{{{{aligned}}}}\n    {utilization_sym} &= \\frac{{{{{demand_sym}}}}}{{{{{capacity_sym}}}}} = \\frac{{{{{demand}}}}}{{{{{capacity}}}}} &= {utilization}\n\\end{{{{aligned}}}}\n$$"
+    }
+}

@@ -1,0 +1,34 @@
+{
+    "table_4_3_1_b": {
+        "types": {"F_b": "unit", "C_M": "float", "C_t": "float", "C_L": "float", "C_F": "float", "C_fu": "float", "C_i": "float", "C_r": "float", "K_F": "float", "phi": "float", "lamb": "float", "F_prime_b": "unit"},
+        "string": "F'_b &= F_b \\cdot C_M \\cdot C_t \\cdot C_L \\cdot C_F \\cdot C_{{{{fu}}}} \\cdot C_i \\cdot C_r \\cdot K_F \\cdot \\phi \\cdot \\lambda\n\\\\\n&= {F_b} \\cdot {C_M} \\cdot {C_t} \\cdot {C_L} \\cdot {C_F} \\cdot {C_fu} \\cdot {C_i} \\cdot {C_r} \\cdot {K_F} \\cdot {phi} \\cdot {lamb}\n\\\\\n&= {F_prime_b}"
+    },
+    "table_4_3_1_b_star": {
+        "types": {"F_b": "unit", "C_M": "float", "C_t": "float", "C_F": "float", "C_i": "float", "C_r": "float", "K_F": "float", "phi": "float", "lamb": "float", "F_star_b": "unit"},
+        "string": "F^*_b &= F_b \\cdot C_M \\cdot C_t \\cdot C_F \\cdot C_i \\cdot C_r \\cdot K_F \\cdot \\phi \\cdot \\lambda\n\\\\\n&= {F_b} \\cdot {C_M} \\cdot {C_t} \\cdot {C_F} \\cdot {C_i} \\cdot {C_r} \\cdot {K_F} \\cdot {phi} \\cdot {lamb}\n\\\\\n&= {F_star_b}"
+    },
+    "table_4_3_1_t": {
+        "types": {"F_t": "unit", "C_M": "float", "C_t": "float", "C_F": "float", "C_i": "float", "K_F": "float", "phi": "float", "lamb": "float", "F_prime_t": "unit"},
+        "string": "F'_t &= F_t \\cdot C_M \\cdot C_t \\cdot C_F \\cdot C_i \\cdot K_F \\cdot \\phi \\cdot \\lambda\n\\\\\n&= {F_t} \\cdot {C_M} \\cdot {C_t} \\cdot {C_F} \\cdot {C_i} \\cdot {K_F} \\cdot {phi} \\cdot {lamb}\n\\\\\n&= {F_prime_t}"
+    },
+    "table_4_3_1_v": {
+        "types": {"F_v": "unit", "C_M": "float", "C_t": "float", "C_i": "float", "K_F": "float", "phi": "float", "lamb": "float", "F_prime_v": "unit"},
+        "string": "F'_v &= F_v \\cdot C_M \\cdot C_t \\cdot C_i \\cdot K_F \\cdot \\phi \\cdot \\lambda\n\\\\\n&= {F_v} \\cdot {C_M} \\cdot {C_t} \\cdot {C_i} \\cdot {K_F} \\cdot {phi} \\cdot {lamb}\n\\\\\n&= {F_prime_v}"
+    },
+    "table_4_3_1_c": {
+        "types": {"F_c": "unit", "C_M": "float", "C_t": "float", "C_F": "float", "C_i": "float", "C_P": "float", "K_F": "float", "phi": "float", "lamb": "float", "F_prime_c": "unit"},
+        "string": "F'_c &= F_c \\cdot C_M \\cdot C_t \\cdot C_F \\cdot C_i \\cdot C_P \\cdot K_F \\cdot \\phi \\cdot \\lambda\n\\\\\n&= {F_c} \\cdot {C_M} \\cdot {C_t} \\cdot {C_F} \\cdot {C_i} \\cdot {C_P} \\cdot {K_F} \\cdot {phi} \\cdot {lamb}\n\\\\\n&= {F_prime_c}"
+    },
+    "table_4_3_1_c_perp": {
+        "types": {"F_c_perp": "unit", "C_M": "float", "C_t": "float", "C_i": "float", "C_b": "float", "K_F": "float", "phi": "float", "F_prime_c_perp": "unit"},
+        "string": "F'_{{{{c_{{{{perp}}}}}}}} &= F_{{{{c_{{{{perp}}}}}}}} \\cdot C_M \\cdot C_t \\cdot C_i \\cdot C_b \\cdot K_F \\cdot \\phi\n\\\\\n&= {F_c_perp} \\cdot {C_M} \\cdot {C_t} \\cdot {C_i} \\cdot {C_b} \\cdot {K_F} \\cdot {phi}\n\\\\\n&= {F_prime_c_perp}"
+    },
+    "table_4_3_1_E": {
+        "types": {"E": "unit", "C_M": "float", "C_t": "float", "C_fu": "float", "C_i": "float", "E_prime": "unit"},
+        "string": "E' &= E \\cdot C_M \\cdot C_t \\cdot C_{{{{fu}}}} \\cdot C_i\n\\\\\n&= {E} \\cdot {C_M} \\cdot {C_t} \\cdot {C_fu} \\cdot {C_i}\n\\\\\n&= {E_prime}"
+    },
+    "table_4_3_1_E_min": {
+        "types": {"E_min": "unit", "C_M": "float", "C_t": "float", "C_fu": "float", "C_i": "float", "C_T": "float", "K_F": "float", "phi": "float", "E_prime_min": "unit"},
+        "string": "E'_{{{{min}}}} &= E_{{{{min}}}} \\cdot C_M \\cdot C_t \\cdot C_{{{{fu}}}} \\cdot C_i \\cdot C_T \\cdot K_F \\cdot \\phi\n\\\\\n&= {E_min} \\cdot {C_M} \\cdot {C_t} \\cdot {C_fu} \\cdot {C_i} \\cdot {C_T} \\cdot {K_F} \\cdot {phi}\n\\\\\n&= {E_prime_min}"
+    }
+}
