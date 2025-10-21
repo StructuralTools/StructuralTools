@@ -231,7 +231,7 @@ class LoadCollector:
         try:
             _ = factored_load["combs"][0].result[0]
             array_like = True
-        except TypeError:
+        except (IndexError, TypeError):
             array_like = False
 
         # Envelope the load combination results
