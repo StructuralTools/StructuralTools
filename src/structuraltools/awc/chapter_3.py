@@ -18,8 +18,7 @@ import json
 
 from numpy import sqrt
 
-from structuraltools.unit import (Force, Length, Moment, MomentOfInertia,
-    SectionModulus, Stress)
+from structuraltools.unit import Force, Length, Moment, SectionModulus, Stress
 from structuraltools.utils import fill_template, Result
 
 
