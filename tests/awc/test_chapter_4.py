@@ -114,6 +114,22 @@ def test_table_4_3_1_c():
 \\
 &= 1347\ \mathrm{psi}"""
 
+def test_table_4_3_1_c_star():
+    string, F_c_star = chapter_4.table_4_3_1_c_star(
+        F_c=1500*unit.psi,
+        C_M=0.9,
+        C_t=0.8,
+        C_F=1.1,
+        C_i=0.7,
+        lamb=1.25,
+        precision=4)
+    assert isclose(F_c_star, 2245.32*unit.psi)
+    assert string == r"""F^*_c &= F_c \cdot C_M \cdot C_t \cdot C_F \cdot C_i \cdot K_F \cdot \phi \cdot \lambda
+\\
+&= 1500\ \mathrm{psi} \cdot 0.9 \cdot 0.8 \cdot 1.1 \cdot 0.7 \cdot 2.4 \cdot 0.9 \cdot 1.25
+\\
+&= 2245\ \mathrm{psi}"""
+
 def test_table_4_3_1_c_perp():
     string, F_prime_c_perp = chapter_4.table_4_3_1_c_perp(
         F_c_perp=660*unit.psi,

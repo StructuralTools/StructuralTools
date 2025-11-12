@@ -207,6 +207,35 @@ def table_4_3_1_c(F_c: Stress, C_M: float, C_t: float, C_F: float, C_i: float,
     F_prime_c = F_c*C_M*C_t*C_F*C_i*C_P*K_F*phi*lamb
     return fill_template(F_prime_c, templates["table_4_3_1_c"], locals(), **string_options)
 
+def table_4_3_1_c_star(F_c: Stress, C_M: float, C_t: float, C_F: float, C_i: float,
+        lamb: float, **string_options) -> Result[Stress]:
+    """Calculate the ultimate compression stress capacity according to NDS 2024 Table 4.3.1
+
+    Parameters
+    ==========
+
+    F_c : Stress
+        Reference design compression stress
+
+    C_M : float
+        Wet service factor
+
+    C_t : float
+        Temperature factor
+
+    C_F : float
+        Size factor
+
+    C_i : float
+        Incising factor
+
+    lamb : float
+        Time effect factor"""
+    K_F = 2.4
+    phi = 0.9
+    F_c_star = F_c*C_M*C_t*C_F*C_i*K_F*phi*lamb
+    return fill_template(F_c_star, templates["table_4_3_1_c_star"], locals(), **string_options)
+
 def table_4_3_1_c_perp(F_c_perp: Stress, C_M: float, C_t: float, C_i: float,
         C_b: float, **string_options) -> Result[Stress]:
     """Calculate the ultimate compression stress capacity perpendicular to the
